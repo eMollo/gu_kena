@@ -24,7 +24,7 @@ function cambioTablaGrafico(opcion, valor){
 }
 function llamadaAjax(){
 $.ajax({
-        url: 'e20160517/'+json,
+        url: 'e20180522/'+json,
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -53,8 +53,7 @@ function actualizarGrafico(data){
                         backgroundColor: arregloTotal[0],
                         borderColor: arregloTotal[1],
                         borderWidth: arregloTotal[2],
-                        data: data.total,
-                        xAxisID:'id',
+                        data: data.total
                       }]
            },
     options:{
