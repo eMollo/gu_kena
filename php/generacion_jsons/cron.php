@@ -1163,7 +1163,7 @@ class cron {
                 from (
                     select id_nro_lista, lista as Lista, sigla_lista, vl.claustro, 
                     sum(cast(votos_lista as real)/votos_validos)*ponderacion pond,
-                    sum(votos_lista) votos,
+                    sum(votos_lista) votos, sum(empadronados) empadronados,
                     sum(total_votos_blancos) total_votos_blancos, 
                     sum(total_votos_nulos) total_votos_nulos, sum(total_votos_recurridos) total_votos_recurridos
                     from(
