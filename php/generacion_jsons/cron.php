@@ -610,6 +610,10 @@ class cron {
                 $r['lista'] = 'Recurridos';
                 foreach($data as $key => $value){
                     foreach($claustros as $k => $v){
+                        $b[$k] = isset($b[$k])?$b[$k]:0;
+                        $n[$k] = isset($n[$k])?$n[$k]:0;
+                        $r[$k] = isset($r[$k])?$r[$k]:0;
+                        
                         if(isset($fila_total[$k]))
                             $fila_total[$k] += 
                                 ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
