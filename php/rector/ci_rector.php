@@ -1522,7 +1522,14 @@ class ci_rector extends toba_ci {
             $json['data'] = $data;
             $json['columns'] = $columns;
             //print_r($total);
+            
             $total2['sigla_lista'] = 'Votantes';
+            $bnr['Blancos']['sigla_lista'] = 'Blancos';
+            $bnr['Nulos']['sigla_lista'] = 'Nulos';
+            $bnr['Recurridos']['sigla_lista'] = 'Recurridos';
+            $data2[] = $bnr['Blancos'];
+            $data2[] = $bnr['Nulos'];
+            $data2[] = $bnr['Recurridos'];
             $data2[] = $total2;
             $empadronados['sigla_lista'] = 'Empadronados';
             $data2[] = $empadronados;
