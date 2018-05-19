@@ -292,7 +292,9 @@ class ci_rector extends toba_ci {
                     cl.descripcion as claustro, cl.id id_claustro,
                     l.id_nro_lista, l.nombre as lista,
                     s.sigla as sede, m.nro_mesa,
-                    l.sigla as sigla_lista, vl.cant_votos, total.total $cargos
+                    l.sigla as sigla_lista, vl.cant_votos, total.total,
+                    total.votos_blancos, total.votos_nulos, total.votos_recurridos
+                    $cargos
                 from acta a 
                 inner join mesa m on m.id_mesa = a.de
                 inner join claustro cl on cl.id = m.id_claustro
@@ -303,7 +305,10 @@ class ci_rector extends toba_ci {
                 inner join (
                     select m.id_claustro, s.id_ue,
                             vl.id_lista,  
-                            sum(vl.cant_votos) total
+                            sum(vl.cant_votos) total,  
+                            sum(total_votos_blancos) votos_blancos,
+                            sum(total_votos_nulos) votos_nulos,
+                            sum(total_votos_recurridos) votos_recurridos
                     from acta a 
                     inner join mesa m on m.id_mesa = a.de
                     inner join $tabla_voto vl on vl.id_acta = a.id_acta
@@ -355,6 +360,10 @@ class ci_rector extends toba_ci {
         $m_confirmadas = null;
         $m_total = null;
         
+        $bnr = array();
+        $b['lista'] = 'Blancos';
+        $n['lista'] = 'Nulos';
+        $rc['lista'] = 'Recurridos';
         foreach($datos as $un_registro){
             if($nro_lista != null && $nro_lista != $un_registro['id_nro_lista']){
                 $labels[] = $lista['sigla_lista'];
@@ -367,6 +376,10 @@ class ci_rector extends toba_ci {
                 foreach($sedes as $sigla_sede => $cant_votos){
                     $r[$sigla_sede] = $cant_votos;
                     $columns_sedes[$sigla_sede] = $sigla_sede;
+                    
+                    $b[$sigla_sede] = $bnr['blancos'][$sigla_sede];
+                    $n[$sigla_sede] = $bnr['nulos'][$sigla_sede];
+                    $rc[$sigla_sede] = $bnr['recurridos'][$sigla_sede];
                 }
                 $r['total'] = $lista['total'];
                 $data[] = $r;
@@ -384,7 +397,13 @@ class ci_rector extends toba_ci {
                         $columns[] = array('field' => 'total', 'title' => 'Total');
 
                         $json['columns'] = $columns;
+                        
+                        $data[] = $b;
+                        $data[] = $n;
+                        $data[] = $rc;
+                
                         $json['data'] = $data;
+                        
                         $json['labels'] = $labels;
                         $json['total'] = $total;
                         
@@ -444,6 +463,10 @@ class ci_rector extends toba_ci {
             $m_enviadas = $un_registro['m_enviadas'];
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
+            
+            $bnr['blancos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_blancos'];
+            $bnr['nulos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_nulos'];
+            $bnr['recurridos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_recurridos'];
         }
         
         if(sizeof($data) > 0){//Solo si existen datos finales ent crea el json
@@ -457,6 +480,12 @@ class ci_rector extends toba_ci {
             $columns[] = array('field' => 'total', 'title' => 'Total');
 
             $json['columns'] = $columns;
+            
+            $data[] = $b;
+            $data[] = $n;
+            $data[] = $rc;
+                
+                
             $json['data'] = $data;
             $json['labels'] = $labels;
             $json['total'] = $total;
@@ -495,7 +524,8 @@ class ci_rector extends toba_ci {
                     trim(cl.descripcion) as claustro, 
                     l.id_nro_lista, trim(l.nombre) as lista,
                     s.sigla as sede, m.nro_mesa,
-                    trim(l.sigla) as sigla_lista, vl.cant_votos, total.total
+                    trim(l.sigla) as sigla_lista, vl.cant_votos, total.total,
+                    total.votos_blancos, total.votos_nulos, total.votos_recurridos
                 from acta a 
                 inner join mesa m on m.id_mesa = a.de
                 inner join claustro cl on cl.id = m.id_claustro
@@ -506,17 +536,18 @@ class ci_rector extends toba_ci {
                 inner join (
                     select m.id_claustro, s.id_ue,
                             vl.id_lista,  
-                            sum(vl.cant_votos) total
+                            sum(vl.cant_votos) total, sum(total_votos_blancos) votos_blancos,
+                            sum(total_votos_nulos) votos_nulos, sum(total_votos_recurridos) votos_recurridos
                     from acta a 
                     inner join mesa m on m.id_mesa = a.de
                     inner join voto_lista_rector vl on vl.id_acta = a.id_acta
                     inner join sede s on s.id_sede = a.id_sede
-                    where m.fecha = '".$fecha."'
+                    where m.fecha = '$fecha'
                     group by s.id_ue, m.id_claustro, vl.id_lista 
                 ) total on total.id_claustro = cl.id
                         and total.id_lista = l.id_nro_lista
                         and total.id_ue = s.id_ue
-                where l.fecha = '".$fecha."'
+                where l.fecha = '$fecha'
                 order by unidad_electoral, claustro, lista, sede
             ) datos
             inner join (select count(distinct(m.id_mesa))  as m_total, s.id_ue from mesa m
@@ -547,6 +578,8 @@ class ci_rector extends toba_ci {
         $m_enviadas = null;
         $m_confirmadas = null;
         $m_total = null;
+        
+        $bnr = array();
         foreach($datos as $un_registro){
             if($nom_ue != null && $nom_ue != $un_registro['sigla_ue']){
                 $json = array();
@@ -561,6 +594,10 @@ class ci_rector extends toba_ci {
         
                 $fila_total = array();//Ultima fila que contiene los totales de cada columna
                 $fila_total['lista'] = 'TOTAL'; 
+                
+                $b['lista'] = 'Blancos';
+                $n['lista'] = 'Nulos';
+                $r['lista'] = 'Recurridos';
                 foreach($data as $key => $value){
                     foreach($claustros as $k => $v)
                         $fila_total[$k] += $value[$k];
@@ -570,6 +607,18 @@ class ci_rector extends toba_ci {
                     $json['labels'][] = $value['sigla_lista'];
                     $json['total'][] = $value['total'];
                 }
+                foreach($claustros as $k => $v){
+                    $b[$k] = $bnr['blancos'][$k];
+                    $n[$k] = $bnr['nulos'][$k];
+                    $r[$k] = $bnr['recurridos'][$k];
+
+                    $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                }
+                
+                $json['data'][] = $b;
+                $json['data'][] = $n;
+                $json['data'][] = $r;
+                
                 $json['data'][] = $fila_total;
                 $json['columns'] = $columns;
                 $json['fecha'] = date('d/m/Y G:i:s');
@@ -601,6 +650,10 @@ class ci_rector extends toba_ci {
             $m_enviadas = $un_registro['m_enviadas'];
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
+            
+            $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
+            $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
+            $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
@@ -616,6 +669,10 @@ class ci_rector extends toba_ci {
 
             $fila_total = array();//Ultima fila que contiene los totales de cada columna
             $fila_total['lista'] = 'TOTAL'; 
+            
+            $b['lista'] = 'Blancos';
+            $n['lista'] = 'Nulos';
+            $r['lista'] = 'Recurridos';
             foreach($data as $key => $value){
                 foreach($claustros as $k => $v)
                     $fila_total[$k] += $value[$k];
@@ -625,6 +682,18 @@ class ci_rector extends toba_ci {
                 $json['labels'][] = $value['sigla_lista'];
                 $json['total'][] = $value['total'];
             }
+            foreach($claustros as $k => $v){
+                $b[$k] = $bnr['blancos'][$k];
+                $n[$k] = $bnr['nulos'][$k];
+                $r[$k] = $bnr['recurridos'][$k];
+
+                $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+            }
+
+            $json['data'][] = $b;
+            $json['data'][] = $n;
+            $json['data'][] = $r;
+                
             $json['data'][] = $fila_total;
             $json['columns'] = $columns;
             $json['fecha'] = date('d/m/Y G:i:s');
@@ -656,7 +725,8 @@ class ci_rector extends toba_ci {
                     trim(cl.descripcion) as claustro, 
                     l.id_nro_lista, trim(l.nombre) as lista,
                     s.sigla as sede, m.nro_mesa,
-                    trim(l.sigla) as sigla_lista, vl.cant_votos, total.total
+                    trim(l.sigla) as sigla_lista, vl.cant_votos, total.total,
+                    total.votos_blancos, total.votos_nulos, total.votos_recurridos
                 from acta a 
                 inner join mesa m on m.id_mesa = a.de
                 inner join claustro cl on cl.id = m.id_claustro
@@ -667,17 +737,18 @@ class ci_rector extends toba_ci {
                 inner join (
                     select m.id_claustro, s.id_ue,
                             vl.id_lista,  
-                            sum(vl.cant_votos) total
+                            sum(vl.cant_votos) total, sum(total_votos_blancos) votos_blancos,
+                            sum(total_votos_nulos) votos_nulos, sum(total_votos_recurridos) votos_recurridos
                     from acta a 
                     inner join mesa m on m.id_mesa = a.de
                     inner join voto_lista_decano vl on vl.id_acta = a.id_acta
                     inner join sede s on s.id_sede = a.id_sede
-                    where m.fecha = '".$fecha."'
+                    where m.fecha = '$fecha'
                     group by s.id_ue, m.id_claustro, vl.id_lista 
                 ) total on total.id_claustro = cl.id
                         and total.id_lista = l.id_nro_lista
                         and total.id_ue = s.id_ue
-                where l.fecha = '".$fecha."'
+                where l.fecha = '$fecha'
                 order by unidad_electoral, claustro, lista, sede
             ) datos
             inner join (select count(distinct(m.id_mesa))  as m_total, s.id_ue from mesa m
@@ -708,6 +779,8 @@ class ci_rector extends toba_ci {
         $m_enviadas = null;
         $m_confirmadas = null;
         $m_total = null;
+        
+        $bnr = array();
         foreach($datos as $un_registro){
             if($nom_ue != null && $nom_ue != $un_registro['sigla_ue']){
                 $json = array();
@@ -722,15 +795,31 @@ class ci_rector extends toba_ci {
         
                 $fila_total = array();//Ultima fila que contiene los totales de cada columna
                 $fila_total['lista'] = 'TOTAL'; 
+                
+                $b['lista'] = 'Blancos';
+                $n['lista'] = 'Nulos';
+                $r['lista'] = 'Recurridos';
                 foreach($data as $key => $value){
-                    foreach($claustros as $k => $v)
-                        $fila_total[$k] += $value[$k];
+                    foreach($claustros as $k => $v){
+                        $fila_total[$k] += ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
+                    }
                     $fila_total['total'] += $value['total'];
                     
                     $json['data'][] = $value;
                     $json['labels'][] = $value['sigla_lista'];
                     $json['total'][] = $value['total'];
                 }
+                foreach($claustros as $k => $v){
+                        $b[$k] = $bnr['blancos'][$k];
+                        $n[$k] = $bnr['nulos'][$k];
+                        $r[$k] = $bnr['recurridos'][$k];
+                        
+                        $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                }
+                
+                $json['data'][] = $b;
+                $json['data'][] = $n;
+                $json['data'][] = $r;
                 $json['data'][] = $fila_total;
                 $json['columns'] = $columns;
                 $json['fecha'] = date('d/m/Y G:i:s');
@@ -763,6 +852,11 @@ class ci_rector extends toba_ci {
             $m_enviadas = $un_registro['m_enviadas'];
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
+            
+            $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
+            $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
+            $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
+                
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
@@ -778,6 +872,10 @@ class ci_rector extends toba_ci {
 
             $fila_total = array();//Ultima fila que contiene los totales de cada columna
             $fila_total['lista'] = 'TOTAL'; 
+            
+            $b['lista'] = 'Blancos';
+            $n['lista'] = 'Nulos';
+            $r['lista'] = 'Recurridos';
             foreach($data as $key => $value){
                 foreach($claustros as $k => $v)
                     $fila_total[$k] += $value[$k];
@@ -787,6 +885,18 @@ class ci_rector extends toba_ci {
                 $json['labels'][] = $value['sigla_lista'];
                 $json['total'][] = $value['total'];
             }
+            foreach($claustros as $k => $v){
+                $b[$k] = $bnr['blancos'][$k];
+                $n[$k] = $bnr['nulos'][$k];
+                $r[$k] = $bnr['recurridos'][$k];
+
+                $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+            }
+                
+            $json['data'][] = $b;
+            $json['data'][] = $n;
+            $json['data'][] = $r;
+            
             $json['data'][] = $fila_total;
             $json['columns'] = $columns;
             $json['fecha'] = date('d/m/Y G:i:s');
@@ -816,7 +926,8 @@ class ci_rector extends toba_ci {
                 select claustro, id_claustro,
                     trim(lista) as lista, trim(sigla_lista) as sigla_lista, 
                     cargos_csuperior as cant_cargos,
-                    sum(ponderado) ponderado
+                    sum(ponderado) ponderado, sum(votos_blancos) votos_blancos,
+                    sum(votos_nulos) votos_nulos, sum(votos_recurridos) votos_recurridos
                 from(
                     select votos_totales.id_tipo, votos_totales.id_nro_ue, 
                         votos_totales.sigla as sigla_ue, votos_totales.id_claustro, votos_totales.claustro, 
@@ -824,11 +935,14 @@ class ci_rector extends toba_ci {
                         votos_totales.total, empadronados.empadronados, votos_totales.cargos_csuperior,
                         case when empadronados.empadronados <> 0 then 
                                 votos_totales.total/cast(empadronados.empadronados as decimal) 
-                        end ponderado 
+                        end ponderado,
+                        votos_blancos, votos_nulos, votos_recurridos 
                     from (select a.id_tipo, ue.id_nro_ue, ue.sigla, 
                         m.id_claustro as id_claustro, c.descripcion claustro, 
                         l.id_nro_lista, l.nombre lista, c.cargos_csuperior,
-                        l.sigla sigla_lista, sum(cant_votos) total 
+                        l.sigla sigla_lista, sum(cant_votos) total,
+                        sum(total_votos_blancos) votos_blancos, sum(total_votos_nulos) votos_nulos,
+                        sum(total_votos_recurridos) votos_recurridos
                         from acta a 
                         inner join mesa m on m.id_mesa = a.de 
                         inner join sede s on s.id_sede = a.id_sede 
@@ -836,7 +950,7 @@ class ci_rector extends toba_ci {
                         inner join claustro c on c.id = m.id_claustro 
                         inner join voto_lista_csuperior vl on vl.id_acta = a.id_acta 
                         inner join lista_csuperior l on l.id_nro_lista = vl.id_lista 
-                        where m.estado > 1 and m.fecha = '".$fecha."' 
+                        where m.estado > 1 and m.fecha = '$fecha' 
                         group by ue.id_nro_ue, ue.sigla, c.descripcion, l.nombre, l.id_nro_lista, l.sigla, s.id_ue, 
                             m.id_claustro, a.id_tipo, c.cargos_csuperior  
                     order by s.id_ue,m.id_claustro, l.nombre 
@@ -846,7 +960,7 @@ class ci_rector extends toba_ci {
                         inner join acta a on a.id_sede = s.id_sede
                         inner join mesa m on m.id_mesa = a.de 
                         inner join unidad_electoral ue on ue.id_nro_ue = s.id_ue 
-                        where m.fecha = '".$fecha."' 
+                        where m.fecha = '$fecha' 
                         group by id_ue, id_claustro, ue.sigla, id_tipo 
                 ) empadronados on empadronados.id_ue = votos_totales.id_nro_ue 
                             and empadronados.id_claustro = votos_totales.id_claustro
@@ -885,9 +999,18 @@ class ci_rector extends toba_ci {
         $m_enviadas = null;
         $m_confirmadas = null;
         $m_total = null;
+        
+        $blancos = null;
+        $nulos = null;
+        $recurridos = null;
         foreach($datos as $un_registro){
             if($nom_claustro != null && $nom_claustro != $un_registro['claustro']){
                 $json = array();
+                
+                $data[] = array('lista' => 'Blancos', 'ponderado' => $blancos);
+                $data[] = array('lista' => 'Nulos', 'ponderado' => $nulos);
+                $data[] = array('lista' => 'Recurridos', 'ponderado' => $recurridos);
+                
                 $json['columns'] = $columns;
                 $json['data'] = $data;
                 $json['labels'] = $labels;
@@ -928,11 +1051,20 @@ class ci_rector extends toba_ci {
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
             
+            $blancos = $un_registro['votos_blancos'];
+            $nulos = $un_registro['votos_nulos'];
+            $recurridos = $un_registro['votos_recurridos'];
+            
             $data[] = $r;
         }
         
         if(isset($data) && $nom_claustro != null){//Quedo un ultimo claustro sin guardar
             $json = array();
+            
+            $data[] = array('lista' => 'Blancos', 'ponderado' => $blancos);
+            $data[] = array('lista' => 'Nulos', 'ponderado' => $nulos);
+            $data[] = array('lista' => 'Recurridos', 'ponderado' => $recurridos);
+                
             $json['columns'] = $columns;
             $json['data'] = $data;
             $json['labels'] = $labels;
@@ -1017,7 +1149,8 @@ class ci_rector extends toba_ci {
             from (
                 select claustro, t.id_claustro,
                     trim(lista) as lista, trim(sigla_lista) as sigla_lista, 
-                    sum(ponderado) ponderado
+                    sum(ponderado) ponderado, sum(votos_blancos) votos_blancos,
+                    sum(votos_nulos) votos_nulos, sum(votos_recurridos) votos_recurridos
                 from(
                     select votos_totales.id_tipo, votos_totales.id_nro_ue, 
                         votos_totales.sigla as sigla_ue, votos_totales.id_claustro, votos_totales.claustro, 
@@ -1025,10 +1158,12 @@ class ci_rector extends toba_ci {
                         votos_totales.total, validos.validos, 
                         case when validos.validos <> 0 then 
                                 votos_totales.total/cast(validos.validos as decimal) * validos.mult 
-                        end ponderado 
+                        end ponderado,
+                        votos_blancos, votos_nulos, votos_recurridos
                     from (select a.id_tipo, ue.id_nro_ue, ue.sigla, 
                         m.id_claustro as id_claustro, c.descripcion claustro, l.id_nro_lista, l.nombre lista, 
-                        l.sigla sigla_lista, sum(cant_votos) total 
+                        l.sigla sigla_lista, sum(cant_votos) total, sum(total_votos_blancos) votos_blancos,
+                        sum(total_votos_nulos) votos_nulos, sum(total_votos_recurridos) votos_recurridos 
                       from acta a 
                       inner join mesa m on m.id_mesa = a.de 
                       inner join sede s on s.id_sede = a.id_sede 
@@ -1036,7 +1171,7 @@ class ci_rector extends toba_ci {
                       inner join claustro c on c.id = m.id_claustro 
                       inner join voto_lista_rector vl on vl.id_acta = a.id_acta 
                       inner join lista_rector l on l.id_nro_lista = vl.id_lista 
-                        where m.estado > 1 and m.fecha = '".$fecha."' 
+                        where m.estado > 1 and m.fecha = '$fecha' 
                         group by ue.id_nro_ue, ue.sigla, c.descripcion, l.nombre, l.id_nro_lista, l.sigla, s.id_ue, 
                                   m.id_claustro, a.id_tipo 
                         order by s.id_ue,m.id_claustro, l.nombre 
@@ -1052,7 +1187,7 @@ class ci_rector extends toba_ci {
 				inner join voto_lista_rector vl on vl.id_acta = a.id_acta 
 				inner join claustro cl on cl.id = m.id_claustro
 				inner join unidad_electoral ue on ue.id_nro_ue = s.id_ue
-			    where m.estado > 1 and m.fecha = '".$fecha."' 
+			    where m.estado > 1 and m.fecha = '$fecha' 
 			    group by id_ue, id_claustro, cargos_csuperior, ue.nivel, 
                             cargos_cdirectivo, cargos_cdiras  
                 ) validos on validos.id_ue = votos_totales.id_nro_ue 
@@ -1088,10 +1223,19 @@ class ci_rector extends toba_ci {
         $m_confirmadas = null;
         $m_total = null;
         
+        $blancos = null;
+        $nulos = null;
+        $recurridos = null;
+        
         $data = array();
         foreach($datos as $un_registro){
             if($nom_claustro != null && $nom_claustro != $un_registro['claustro']){
                 $json = array();
+                
+                $data[] = array('lista' => 'Blancos', 'ponderado' => $blancos);
+                $data[] = array('lista' => 'Nulos', 'ponderado' => $nulos);
+                $data[] = array('lista' => 'Recurridos', 'ponderado' => $recurridos);
+                
                 $json['columns'] = $columns;
                 $json['data'] = $data;
                 $json['labels'] = $labels;
@@ -1126,11 +1270,20 @@ class ci_rector extends toba_ci {
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
             
+            $blancos = $un_registro['votos_blancos'];
+            $nulos = $un_registro['votos_nulos'];
+            $recurridos = $un_registro['votos_recurridos'];
+            
             $data[] = $r;
         }
         
         if(isset($data) && $nom_claustro != null){//Quedo un ultimo claustro sin guardar
             $json = array();
+            
+            $data[] = array('lista' => 'Blancos', 'ponderado' => $blancos);
+            $data[] = array('lista' => 'Nulos', 'ponderado' => $nulos);
+            $data[] = array('lista' => 'Recurridos', 'ponderado' => $recurridos);
+                
             $json['columns'] = $columns;
             $json['data'] = $data;
             $json['labels'] = $labels;
@@ -1153,11 +1306,11 @@ class ci_rector extends toba_ci {
         $sql = "
             select datos.*, m_enviadas, m_confirmadas, m_total
             from(
-                select ue, id_nro_lista, trim(lista) as lista, 
+                select claustro, id_nro_lista, trim(lista) as lista, 
                     trim(sigla_lista) as sigla_lista, sum(pond) as ponderado,
                     total_votos_blancos, total_votos_nulos, total_votos_recurridos
                 from (
-                    select id_nro_lista, lista as Lista, sigla_lista, vl.ue, 
+                    select id_nro_lista, lista as Lista, sigla_lista, vl.claustro, 
                     sum(cast(votos_lista as real)/votos_validos)*ponderacion pond,
                     sum(total_votos_blancos) total_votos_blancos, 
                     sum(total_votos_nulos) total_votos_nulos, sum(total_votos_recurridos) total_votos_recurridos
@@ -1188,11 +1341,11 @@ class ci_rector extends toba_ci {
                     group by ue,claustro,ponderacion
 
                     )vv on vl.ue=vv.ue and vl.claustro=vv.claustro
-                    group by lista,vl.ue,ponderacion, id_nro_lista, sigla_lista
-                    order by vl.ue, lista
-                )a group by lista, ue, id_nro_lista, sigla_lista, 
+                    group by lista,vl.claustro,ponderacion, id_nro_lista, sigla_lista
+                    order by vl.claustro, lista
+                )a group by lista, claustro, id_nro_lista, sigla_lista, 
                     total_votos_blancos, total_votos_nulos, total_votos_recurridos
-                order by ue, ponderado
+                order by lista, claustro, ponderado
             ) datos, 
             (select count(*) as m_enviadas from mesa m
                            where m.fecha = '$fecha' and m.estado>1) m,
@@ -1204,55 +1357,54 @@ class ci_rector extends toba_ci {
         $datos = toba::db('gu_kena')->consultar($sql);
 
         if(sizeof($datos) > 0){
-            $nom_ue = null;
-            $total = array();
-            $data = array();
-            $r = array();
-            foreach($datos as $un_registro){
-                if($nom_ue == null){
-                    $nom_ue = $un_registro['ue'];                
-                }elseif($nom_ue != $un_registro['ue']){
-                    $r['ue'] = $nom_ue;
-                    $data[] = $r;
-                    
-                    $total['Blancos'] += $r['Blancos'];
-                    $total['Nulos'] += $r['Nulos'];
-                    $total['Recurridos'] += $r['Recurridos'];
-                    
-                    $r = array();
-                    $nom_ue = $un_registro['ue'];
-                }
-                
-                $r[$un_registro['sigla_lista']] = $un_registro['ponderado'];
-                $r['Blancos'] = $un_registro['total_votos_blancos'];
-                $r['Nulos'] = $un_registro['total_votos_nulos'];
-                $r['Recurridos'] = $un_registro['total_votos_recurridos'];
-                
-                $total[$un_registro['sigla_lista']] += $un_registro['ponderado'];
-            }
-            $r['ue'] = $nom_ue;
-            $data[] = $r;
-
-            $total['Blancos'] += $r['Blancos'];
-            $total['Nulos'] += $r['Nulos'];
-            $total['Recurridos'] += $r['Recurridos'];
-            
-            $columns = array();
-            $columns[] = array('field' => 'ue', 'title' => 'Unidad Electoral');
-            foreach($total as $key => $value){
-                 $columns[] = array('field' => $key, 'title' => $key);
-            }
+            $nom_lista = null;
+            $total = array();//Contiene la ultima fila de total por columna
+            $data = array();//Coleccion de filas que forma el cuadro final
+            $r = array();//Recorre y arma una fila del cuadro final
             
             $labels = array();
             $totales = array();
-            foreach($total as $key => $value){
-                $labels[] = $key;
-                $totales[] = $value;
+            
+            //$bnr = array();//Registros de blancos, nulos y recurridos
+            foreach($datos as $un_registro){
+                if($nom_lista == null){
+                    $nom_lista = $un_registro['sigla_lista'];                
+                }elseif($nom_lista != $un_registro['sigla_lista']){
+                    $r['lista'] = $nom_lista;
+                    
+                    $labels[] = $nom_lista;
+                    $totales[] = $r['total'];
+                    
+                    $data[] = $r;
+                    
+                    $r = array();
+                    $nom_lista = $un_registro['sigla_lista'];
+                }
+                
+                $r[$un_registro['claustro']] = $un_registro['ponderado'];
+                //$bnr['Blancos'][$un_registro['claustro']] += $un_registro['total_votos_blancos'];
+                //$bnr['Nulos'][$un_registro['claustro']] += $un_registro['total_votos_nulos'];
+                //$bnr['Recurridos'][$un_registro['claustro']] += $un_registro['total_votos_recurridos'];
+                $r['total'] += $un_registro['ponderado'];
+                
+                $total[$un_registro['claustro']] += $un_registro['ponderado'];
+                
             }
+            //Guardar Ultima lista no guardada
+            $r['lista'] = $nom_lista;
+            $data[] = $r;
 
+            $columns = array();
+            $columns[] = array('field' => 'lista', 'title' => 'Lista');
+            foreach($total as $key => $value){
+                 $columns[] = array('field' => $key, 'title' => $key);
+                 $total['total'] += $value;
+            }
+            $columns[] = array('field' => 'total', 'title' => 'Total');
+            //print_r($bnr);
            //Armado del json
             $json = array();
-            $total['ue'] = 'TOTAL';
+            $total['lista'] = 'TOTAL';
             $data[] = $total;
             $json['data'] = $data;
             $json['columns'] = $columns;
@@ -1271,9 +1423,6 @@ class ci_rector extends toba_ci {
             file_put_contents('resultados_json/'.$nom_archivo . '.json', $string_json);
         }
     }
-    
-    //cargar mesas cargadas y enviadas
-    //corregir jsons 
     
     //-----------------------------------------------------------------------------------
     //---- formulario que muestra datos de mesas enviadas, confirmadas y definitivas -----------------------------------------------------------------
