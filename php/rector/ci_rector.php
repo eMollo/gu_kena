@@ -419,8 +419,8 @@ class ci_rector extends toba_ci {
                         $json['fecha'] = date('d/m/Y G:i:s');
                         $json['titulo'] = 'Votos '.$nom_ue.' '.$categoria.' '.$nom_claustro;
 
-                        $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                        $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                        $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                        $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                         
                         $string_json = json_encode($json);
                         $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_'.strtoupper($nom_claustro[0]).'.json';
@@ -517,8 +517,8 @@ class ci_rector extends toba_ci {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos '.$nom_ue.' '.$categoria.' '.$nom_claustro;
 
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confrimadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_'.strtoupper($nom_claustro[0]).'.json';
@@ -654,8 +654,8 @@ class ci_rector extends toba_ci {
                 else
                     $json['titulo'] = 'Votos '.$nom_ue.' Rector';
                 
-                $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $claustros = array();
@@ -756,8 +756,8 @@ class ci_rector extends toba_ci {
             else
                 $json['titulo'] = 'Votos '.$nom_ue.' Rector';
 
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/R_'.strtoupper($nom_ue).'_T.json';
@@ -855,12 +855,21 @@ class ci_rector extends toba_ci {
                 $r['lista'] = 'Recurridos';
                 foreach($data as $key => $value){
                     foreach($claustros as $k => $v){
+                        $b[$k] = isset($b[$k])?$b[$k]:0;
+                        $n[$k] = isset($n[$k])?$n[$k]:0;
+                        $r[$k] = isset($r[$k])?$r[$k]:0;
+                        
                         if(isset($fila_total[$k]))
-                            $fila_total[$k] += ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
+                            $fila_total[$k] += 
+                                ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
                         else
-                            $fila_total[$k] = ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
+                            $fila_total[$k] = 
+                                ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
                     }
-                    $fila_total['total'] += $value['total'];
+                    if(isset($fila_total['total']))
+                        $fila_total['total'] += $value['total'];
+                    else
+                        $fila_total['total'] = $value['total'];
                     
                     $json['data'][] = $value;
                     $json['labels'][] = $value['sigla_lista'];
@@ -888,8 +897,8 @@ class ci_rector extends toba_ci {
                 else
                     $json['titulo'] = 'Votos '.$nom_ue.' Rector';
                 
-                $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $claustros = array();
@@ -990,8 +999,8 @@ class ci_rector extends toba_ci {
             else
                 $json['titulo'] = 'Votos '.$nom_ue.' Rector';
             
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/D_'.strtoupper($nom_ue).'_T.json';
@@ -1108,8 +1117,8 @@ class ci_rector extends toba_ci {
                 $json['data2'] = $res[1];
                 $json['columns2'] = $res[0];
                 
-                $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $labels = array();
@@ -1163,8 +1172,8 @@ class ci_rector extends toba_ci {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Universidad Consejero Superior '.$nom_claustro;
             
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                 
             $string_json = json_encode($json);
 
@@ -1329,8 +1338,8 @@ class ci_rector extends toba_ci {
                 $json['fecha'] = date('d/m/Y G:i:s');
                 $json['titulo'] = 'Votos Universidad Rector '.$nom_claustro;
                 
-                $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
             
                 $data = array();
                 $labels = array();
@@ -1377,8 +1386,8 @@ class ci_rector extends toba_ci {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Universidad Rector '.$nom_claustro;
             
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
 
@@ -1394,7 +1403,7 @@ class ci_rector extends toba_ci {
             from(
                 select claustro, id_nro_lista, trim(lista) as lista, 
                     trim(sigla_lista) as sigla_lista, sum(pond) as ponderado,
-                    sum(votos) votos,
+                    sum(votos) votos, sum(empadronados) empadronados,
                     total_votos_blancos, total_votos_nulos, total_votos_recurridos
                 from (
                     select id_nro_lista, lista as Lista, sigla_lista, vl.claustro, 
@@ -1406,6 +1415,7 @@ class ci_rector extends toba_ci {
                     select ue.sigla as ue,c.descripcion claustro, l.id_nro_lista, 
                     l.nombre as lista, l.sigla as sigla_lista,
                     sum(cant_votos) as votos_lista, a.total_votos_blancos, 
+                    sum(cant_empadronados) empadronados,
                     a.total_votos_nulos, a.total_votos_recurridos
                     from acta a inner join voto_lista_rector vl on a.id_acta=vl.id_acta and a.id_tipo=4
                             inner join lista_rector l on vl.id_lista=l.id_nro_lista
@@ -1482,12 +1492,12 @@ class ci_rector extends toba_ci {
                 else
                     $bnr['Blancos'][$un_registro['claustro']] = $un_registro['total_votos_blancos'];
                 
-                if($bnr['Nulos'][$un_registro['claustro']])
+                if(isset($bnr['Nulos'][$un_registro['claustro']]))
                     $bnr['Nulos'][$un_registro['claustro']] += $un_registro['total_votos_nulos'];
                 else
                     $bnr['Nulos'][$un_registro['claustro']] = $un_registro['total_votos_nulos'];
                 
-                if($bnr['Recurridos'][$un_registro['claustro']])
+                if(isset($bnr['Recurridos'][$un_registro['claustro']]))
                     $bnr['Recurridos'][$un_registro['claustro']] += $un_registro['total_votos_recurridos'];
                 else
                     $bnr['Recurridos'][$un_registro['claustro']] = $un_registro['total_votos_recurridos'];
@@ -1507,10 +1517,10 @@ class ci_rector extends toba_ci {
                 else
                     $total['ponderado'] = $un_registro['ponderado'];
                 
-                if($tota2[$un_registro['claustro']])
-                    $tota2[$un_registro['claustro']] += $un_registro['votos'];
+                if(isset($total2[$un_registro['claustro']]))
+                    $total2[$un_registro['claustro']] += $un_registro['votos'];
                 else
-                    $tota2[$un_registro['claustro']] = $un_registro['votos'];
+                    $total2[$un_registro['claustro']] = $un_registro['votos'];
             }
             //Guardar Ultima lista no guardada
             $r['sigla_lista'] = $nom_lista;
@@ -1525,7 +1535,10 @@ class ci_rector extends toba_ci {
             $columns2[] = array('field' => 'sigla_lista', 'title' => 'Lista');
             foreach($total2 as $key => $value){
                  $columns2[] = array('field' => $key, 'title' => $key);
-                 $total2['total'] += $value;
+                 if(isset($total2['total']))
+                    $total2['total'] += $value;
+                 else
+                     $total2['total'] = $value;
             }
             $columns[] = array('field' => 'ponderado', 'title' => 'Ponderado');
             $columns2[] = array('field' => 'total', 'title' => 'Total');
@@ -1551,8 +1564,8 @@ class ci_rector extends toba_ci {
             $json['titulo'] = 'Votos Ponderados Universidad Rector';
             $json['titulo2'] = 'Votos Universidad Rector';
 
-            $json['enviadas'] = $datos[0]['m_enviadas']." enviadas de ".$datos[0]['m_total'];
-            $json['confirmadas'] = $datos[0]['m_confirmadas']." confirmadas de ".$datos[0]['m_total'];
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                         
             $string_json = json_encode($json);
 
