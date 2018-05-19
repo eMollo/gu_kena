@@ -29,6 +29,8 @@ $.ajax({
         dataType: 'json',
         cache: false,
         success: function(data) {
+        	$('#alerta').hide();
+        	
         						actualizarTitulo(data);
                                 actualizarTabla(data);
                                 actualizarGrafico(data);
@@ -46,8 +48,10 @@ function borrar(){
     document.getElementById('enviadoConfirmado').innerHTML ="";
     $('#contGrafico').hide();
     $('#contTabla').hide();
+    $('#carteles').hide();
+    $('#alerta').show();
     document.getElementById('hora').innerHTML = "";
-    titulo=data.titulo;
+    //titulo=data.titulo;
 
 }
 function actualizarTabla(data)
@@ -58,8 +62,11 @@ function actualizarTabla(data)
                                     data: data.data,
                                     columns: data.columns
                                 });
+    $('#tabla2').bootstrapTable('destroy');
+    document.getElementById('titulo2').innerHTML="";
     if(data.hasOwnProperty('data2')){
-        document.getElementById('titulo2').innerHTML = 'Dont';
+        
+        document.getElementById('titulo2').innerHTML = data.titulo2;
     $('#tabla2').bootstrapTable({
                                     data: data.data2,
                                     columns: data.columns2
@@ -124,9 +131,10 @@ $(".dropdown-menu").on('click', 'li a', function(){
   $(this).parents('li').addClass("active");
 });
 function actualizarTitulo(data){
+	$('#carteles').show();
 document.getElementById('titulo').innerHTML = data.titulo;
-document.getElementById('enviadoConfirmado').innerHTML =data.enviadas+'</br>'+data.confirmadas;
-document.getElementById('hora').innerHTML = data.fecha;
+document.getElementById('enviadoConfirmado').innerHTML ="Mesas Cargadas: "+data.enviadas+'</br>'+"Mesas Confirmadas: "+data.confirmadas;
+document.getElementById('hora').innerHTML ="Actualizado a: "+data.fecha;
 document.getElementById('tituloTabla').innerHTML=data.titulo;
 titulo=data.titulo;
 }
