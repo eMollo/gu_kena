@@ -174,8 +174,8 @@ class cron {
                         $json['fecha'] = date('d/m/Y G:i:s');
                         $json['titulo'] = 'Votos '.$nom_ue.' '.$categoria.' '.$nom_claustro;
 
-                        $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                        $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                        $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                        $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                         
                         $string_json = json_encode($json);
                         $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_'.strtoupper($nom_claustro[0]).'.json';
@@ -272,8 +272,8 @@ class cron {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos '.$nom_ue.' '.$categoria.' '.$nom_claustro;
 
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confrimadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_'.strtoupper($nom_claustro[0]).'.json';
@@ -409,8 +409,8 @@ class cron {
                 else
                     $json['titulo'] = 'Votos '.$nom_ue.' Rector';
                 
-                $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $claustros = array();
@@ -511,8 +511,8 @@ class cron {
             else
                 $json['titulo'] = 'Votos '.$nom_ue.' Rector';
 
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/R_'.strtoupper($nom_ue).'_T.json';
@@ -652,8 +652,8 @@ class cron {
                 else
                     $json['titulo'] = 'Votos '.$nom_ue.' Rector';
                 
-                $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $claustros = array();
@@ -754,8 +754,8 @@ class cron {
             else
                 $json['titulo'] = 'Votos '.$nom_ue.' Rector';
             
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/D_'.strtoupper($nom_ue).'_T.json';
@@ -872,8 +872,8 @@ class cron {
                 $json['data2'] = $res[1];
                 $json['columns2'] = $res[0];
                 
-                $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $labels = array();
@@ -927,8 +927,8 @@ class cron {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Universidad Consejero Superior '.$nom_claustro;
             
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                 
             $string_json = json_encode($json);
 
@@ -1093,8 +1093,8 @@ class cron {
                 $json['fecha'] = date('d/m/Y G:i:s');
                 $json['titulo'] = 'Votos Universidad Rector '.$nom_claustro;
                 
-                $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-                $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
             
                 $data = array();
                 $labels = array();
@@ -1141,8 +1141,8 @@ class cron {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Universidad Rector '.$nom_claustro;
             
-            $json['enviadas'] = $m_enviadas." enviadas de ".$m_total;
-            $json['confirmadas'] = $m_confirmadas." confirmadas de ".$m_total;
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
 
@@ -1158,7 +1158,7 @@ class cron {
             from(
                 select claustro, id_nro_lista, trim(lista) as lista, 
                     trim(sigla_lista) as sigla_lista, sum(pond) as ponderado,
-                    sum(votos) votos,
+                    sum(votos) votos, sum(empadronados) empadronados,
                     total_votos_blancos, total_votos_nulos, total_votos_recurridos
                 from (
                     select id_nro_lista, lista as Lista, sigla_lista, vl.claustro, 
@@ -1170,6 +1170,7 @@ class cron {
                     select ue.sigla as ue,c.descripcion claustro, l.id_nro_lista, 
                     l.nombre as lista, l.sigla as sigla_lista,
                     sum(cant_votos) as votos_lista, a.total_votos_blancos, 
+                    sum(cant_empadronados) empadronados,
                     a.total_votos_nulos, a.total_votos_recurridos
                     from acta a inner join voto_lista_rector vl on a.id_acta=vl.id_acta and a.id_tipo=4
                             inner join lista_rector l on vl.id_lista=l.id_nro_lista
@@ -1318,8 +1319,8 @@ class cron {
             $json['titulo'] = 'Votos Ponderados Universidad Rector';
             $json['titulo2'] = 'Votos Universidad Rector';
 
-            $json['enviadas'] = $datos[0]['m_enviadas']." enviadas de ".$datos[0]['m_total'];
-            $json['confirmadas'] = $datos[0]['m_confirmadas']." confirmadas de ".$datos[0]['m_total'];
+            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
                         
             $string_json = json_encode($json);
 
