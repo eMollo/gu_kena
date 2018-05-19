@@ -615,9 +615,17 @@ class ci_rector extends toba_ci {
                 $n['lista'] = 'Nulos';
                 $r['lista'] = 'Recurridos';
                 foreach($data as $key => $value){
-                    foreach($claustros as $k => $v)
-                        $fila_total[$k] += $value[$k];
-                    $fila_total['total'] += $value['total'];
+                    foreach($claustros as $k => $v){
+                        if(isset($fila_total[$k])) 
+                            $fila_total[$k] += $value[$k];
+                        else
+                            $fila_total[$k] = $value[$k];
+                    }  
+                    
+                    if(isset($fila_total['total']))
+                        $fila_total['total'] += $value['total'];
+                    else
+                        $fila_total['total'] = $value['total'];
                     
                     $json['data'][] = $value;
                     $json['labels'][] = $value['sigla_lista'];
@@ -628,7 +636,10 @@ class ci_rector extends toba_ci {
                     $n[$k] = $bnr['nulos'][$k];
                     $r[$k] = $bnr['recurridos'][$k];
 
-                    $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                    if(isset($fila_total[$k]))
+                        $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                    else
+                        $fila_total[$k] = ($b[$k]+$n[$k]+$r[$k]);
                 }
                 
                 $json['data'][] = $b;
@@ -685,7 +696,7 @@ class ci_rector extends toba_ci {
             if(isset($bnr['recurridos'][$un_registro['claustro']]))
                 $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
             else
-                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
+                $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
@@ -706,9 +717,17 @@ class ci_rector extends toba_ci {
             $n['lista'] = 'Nulos';
             $r['lista'] = 'Recurridos';
             foreach($data as $key => $value){
-                foreach($claustros as $k => $v)
-                    $fila_total[$k] += $value[$k];
-                $fila_total['total'] += $value['total'];
+                foreach($claustros as $k => $v){
+                    if(isset($fila_total[$k]))
+                        $fila_total[$k] += $value[$k];
+                    else
+                         $fila_total[$k] = $value[$k];
+                }
+                  
+                if(isset($fila_total['total']))
+                    $fila_total['total'] += $value['total'];
+                else
+                    $fila_total['total'] = $value['total'];
 
                 $json['data'][] = $value;
                 $json['labels'][] = $value['sigla_lista'];
@@ -719,7 +738,10 @@ class ci_rector extends toba_ci {
                 $n[$k] = $bnr['nulos'][$k];
                 $r[$k] = $bnr['recurridos'][$k];
 
-                $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                if(isset($fila_total[$k]))
+                    $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                else
+                    $fila_total[$k] = ($b[$k]+$n[$k]+$r[$k]);
             }
 
             $json['data'][] = $b;
@@ -849,7 +871,10 @@ class ci_rector extends toba_ci {
                         $n[$k] = $bnr['nulos'][$k];
                         $r[$k] = $bnr['recurridos'][$k];
                         
-                        $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                        if(isset($fila_total[$k]))
+                            $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                        else
+                            $fila_total[$k] = ($b[$k]+$n[$k]+$r[$k]);
                 }
                 
                 $json['data'][] = $b;
@@ -905,7 +930,7 @@ class ci_rector extends toba_ci {
             if(isset($bnr['recurridos'][$un_registro['claustro']]))
                 $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
             else
-                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];  
+                $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];  
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
@@ -926,9 +951,17 @@ class ci_rector extends toba_ci {
             $n['lista'] = 'Nulos';
             $r['lista'] = 'Recurridos';
             foreach($data as $key => $value){
-                foreach($claustros as $k => $v)
-                    $fila_total[$k] += $value[$k];
-                $fila_total['total'] += $value['total'];
+                foreach($claustros as $k => $v){
+                    if(isset($fila_total[$k]))
+                        $fila_total[$k] += $value[$k];
+                    else
+                        $fila_total[$k] = $value[$k];
+                }
+                    
+                if(isset($fila_total['total']))
+                    $fila_total['total'] += $value['total'];
+                else
+                    $fila_total['total'] = $value['total'];
 
                 $json['data'][] = $value;
                 $json['labels'][] = $value['sigla_lista'];
@@ -939,7 +972,10 @@ class ci_rector extends toba_ci {
                 $n[$k] = $bnr['nulos'][$k];
                 $r[$k] = $bnr['recurridos'][$k];
 
-                $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                if(isset($fila_total[$k]))
+                    $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
+                else
+                     $fila_total[$k] = ($b[$k]+$n[$k]+$r[$k]);
             }
                 
             $json['data'][] = $b;
