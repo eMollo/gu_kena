@@ -1,4 +1,38 @@
 <?php
+include_once './rector.php';
+include_once './rector_claustro.php';
+include_once './rector_ue.php';
+include_once './superior_claustro.php';
+include_once './decano_ue.php';
+include_once './ue_claustro.php';
+include_once './dhont.php';
+
+
+$fecha = '2018-05-22';
+            //Genera un JSON de total rector
+            datos_rector($fecha);
+
+            //Genera 4 JSONS de total rector por claustro
+            datos_rector_claustro($fecha);
+            //Genera 4 JSONS de total consejero superior por claustro
+            datos_sup_claustro($fecha);
+
+            //Genera 18 JSONS de total rector por unidad electoral
+            datos_rector_ue($fecha);
+            //Genera 17 JSONS de total decano por unidad electoral
+            datos_decano_ue($fecha);
+
+            //Genera 17*4 + 1 = 69 JSONS de total rector por claustro y por unidad electoral
+            datos_ue_claustro($fecha, 'voto_lista_rector', 'lista_rector', 'Rector', 'R');
+            //Genera 17*4 = 68 JSONS de total decano por claustro y por unidad electoral
+            datos_ue_claustro($fecha, 'voto_lista_decano', 'lista_decano', 'Decano', 'D');
+            //Genera 17*4 = 68 JSONS de total consejo superior por claustro y por unidad electoral
+            datos_ue_claustro($fecha, 'voto_lista_csuperior', 'lista_csuperior', 'Consejero Superior', 'CS');
+            //Genera 17*4 = 68 JSONS de total consejo directivo por claustro y por unidad electoral
+            datos_ue_claustro($fecha, 'voto_lista_cdirectivo', 'lista_cdirectivo', 'Consejero Directivo', 'CD');
+
+
+/*
 class cron {
     function __construct() {
         $fecha = '2018-05-22';
@@ -916,7 +950,7 @@ class cron {
          * el "número repartidor". El resultado obtenido dará el número de cargos 
          * que se adjudicará a cada una de ellas.
 
-         */
+         
         $escano_max = 0;
         $datos = array();
         if (count($listas) > 0 && count($listas) == count($valores)) {
@@ -1311,4 +1345,4 @@ class cron {
 }
 
 new cron();
-?>
+?>*/
