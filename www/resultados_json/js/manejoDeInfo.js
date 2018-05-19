@@ -4,6 +4,7 @@ var categoria = 'R';
 var grafico = null;
 var tipo = 'pie';
 var titulo;
+
 $(function () {
     json = categoria +"_"+ ua +"_"+ claustro + '.json';
     llamadaAjax();
@@ -24,50 +25,76 @@ function cambioTablaGrafico(opcion, valor){
 }
 function llamadaAjax(){
 $.ajax({
-        url: 'e20180522/'+json,
+        url: carpetajson+'/'+json,
         dataType: 'json',
         cache: false,
         success: function(data) {
+        						actualizarTitulo(data);
                                 actualizarTabla(data);
                                 actualizarGrafico(data);
-                                actualizarTitulo(data);
-                                }}); 
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                    borrar();
+                                    }}); 
+}
+function borrar(){
+    if (grafico != null) {grafico.destroy();};
+    $('#tabla').bootstrapTable('destroy');
+    $('#tabla2').bootstrapTable('destroy');
+    document.getElementById('titulo').innerHTML = "No hay datos para el filtro ingresado";
+    document.getElementById('titulo2').innerHTML = "";
+    document.getElementById('enviadoConfirmado').innerHTML ="";
+    $('#contGrafico').hide();
+    $('#contTabla').hide();
+    document.getElementById('hora').innerHTML = "";
+    titulo=data.titulo;
+
 }
 function actualizarTabla(data)
 {
+	$('#contTabla').show();
     $('#tabla').bootstrapTable('destroy');
     $('#tabla').bootstrapTable({
                                     data: data.data,
                                     columns: data.columns
                                 });
+    if(data.hasOwnProperty('data2')){
+        document.getElementById('titulo2').innerHTML = 'Dont';
+    $('#tabla2').bootstrapTable({
+                                    data: data.data2,
+                                    columns: data.columns2
+                                });
+                            }
 
 }
 function actualizarGrafico(data){
-   var arregloTotal = carga(data);
+  // var arregloTotal = carga(data);
+	$('#contGrafico').show();
    if (grafico != null) {grafico.destroy();};
    grafico = new Chart(document.getElementById("grafico"), {
-    type: tipo,//'pie',horizontalBar
+    type: 'horizontalBar',//'pie','horizontalBar',tipo
     data: {
             labels: data.labels,
              datasets: [{
-                        backgroundColor: arregloTotal[0],
-                        borderColor: arregloTotal[1],
-                        borderWidth: arregloTotal[2],
-                        data: data.total
+                        backgroundColor: "#3498db",// arregloTotal[0],
+                        borderColor: "#1a5276",//arregloTotal[1],
+                        borderWidth: 2,//arregloTotal[2],
+                        data: data.total,
                       }]
            },
     options:{
              legend:{
-                    display: arregloTotal[3],
-                    position: arregloTotal[4],
+                    display: false,//arregloTotal[3],
+                    position: "top",//arregloTotal[4],
                 },
                 title: {
                         display: true,
-                        text: data.titulo,
+                        
                         },
-                
+                        scales:{
+                        	xAxes:[{ticks:{beginAtZero:true}}]
+                        }
             },
-
     });
 }
 function carga(data){
@@ -93,12 +120,14 @@ function arregloDeColore(){
 $(".dropdown-menu").on('click', 'li a', function(){
   var selText = $(this).children("h7").html();
  $(this).parent('li').siblings().removeClass('active');
-  $(this).parents('.btn-group').find('.selection').html(selText);
+  $(this).parents('.nav-item').find('.selection').html(selText);
   $(this).parents('li').addClass("active");
 });
 function actualizarTitulo(data){
 document.getElementById('titulo').innerHTML = data.titulo;
+document.getElementById('enviadoConfirmado').innerHTML =data.enviadas+'</br>'+data.confirmadas;
 document.getElementById('hora').innerHTML = data.fecha;
+document.getElementById('tituloTabla').innerHTML=data.titulo;
 titulo=data.titulo;
 }
 function cambioGrafico(){
@@ -107,13 +136,6 @@ function cambioGrafico(){
     } else{
         tipo = 'horizontalBar';}
 }
-$(window).resize(function(){
-   var aux = $(this);
-   if (aux.width() < 820) {
-    (document.getElementById("primeraImagen")).src="img/icono.ico";
-   }else{(document.getElementById("primeraImagen")).src="img/marca UNCo azul.ico";};
-})
-
 function exportarTabla(){
     $("#tabla").table2excel({
         name:titulo,

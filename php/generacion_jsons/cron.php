@@ -95,7 +95,7 @@ class cron {
                 where m.fecha = '$fecha' and m.estado>1
                 group by s.id_ue, m.id_claustro) m on m.id_ue = t.id_ue
                                         and m2.id_claustro = t.id_claustro
-                ";
+                ";print_r($sql.'///////');
         $datos = toba::db('gu_kena')->consultar($sql);
         
         $nom_ue = null;
@@ -174,8 +174,8 @@ class cron {
                         $json['fecha'] = date('d/m/Y G:i:s');
                         $json['titulo'] = 'Votos '.$nom_ue.' '.$categoria.' '.$nom_claustro;
 
-                        $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-                        $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+                        $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+                        $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
                         
                         $string_json = json_encode($json);
                         $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_'.strtoupper($nom_claustro[0]).'.json';
@@ -223,21 +223,10 @@ class cron {
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
             
-             $nom_mesa = $un_registro['sede'].' mesa '.$un_registro['nro_mesa'];
-            if(isset($bnr['blancos'][$nom_mesa]))
-                $bnr['blancos'][$nom_mesa] += $un_registro['votos_blancos'];
-            else
-                $bnr['blancos'][$nom_mesa] = $un_registro['votos_blancos'];
-            
-            if(isset($bnr['nulos'][$nom_mesa]))
-                $bnr['nulos'][$nom_mesa] += $un_registro['votos_nulos'];
-            else
-                $bnr['nulos'][$nom_mesa] = $un_registro['votos_nulos'];
-            
-            if(isset($bnr['recurridos'][$nom_mesa]))
-                $bnr['recurridos'][$nom_mesa] += $un_registro['votos_recurridos'];
-            else
-                $bnr['recurridos'][$nom_mesa] = $un_registro['votos_recurridos'];
+            $nom_mesa = $un_registro['sede'].' mesa '.$un_registro['nro_mesa'];
+            $bnr['blancos'][$nom_mesa] = $un_registro['votos_blancos'];
+            $bnr['nulos'][$nom_mesa] = $un_registro['votos_nulos'];
+            $bnr['recurridos'][$nom_mesa] = $un_registro['votos_recurridos'];
         }
         
         if(sizeof($data) > 0){//Solo si existen datos finales ent crea el json
@@ -272,8 +261,8 @@ class cron {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos '.$nom_ue.' '.$categoria.' '.$nom_claustro;
 
-            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confrimadas." de ".$m_total.')';
+            $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confrimadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_'.strtoupper($nom_claustro[0]).'.json';
@@ -409,8 +398,8 @@ class cron {
                 else
                     $json['titulo'] = 'Votos '.$nom_ue.' Rector';
                 
-                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+                $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $claustros = array();
@@ -438,20 +427,9 @@ class cron {
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
             
-            if(isset($bnr['blancos'][$un_registro['claustro']]))
-                $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
-            else
-                $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
-
-            if(isset($bnr['nulos'][$un_registro['claustro']]))
-                $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
-            else
-                $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
-
-            if(isset($bnr['recurridos'][$un_registro['claustro']]))
-                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
-            else
-                $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];
+            $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
+            $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
+            $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
@@ -511,8 +489,8 @@ class cron {
             else
                 $json['titulo'] = 'Votos '.$nom_ue.' Rector';
 
-            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+            $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/R_'.strtoupper($nom_ue).'_T.json';
@@ -652,8 +630,8 @@ class cron {
                 else
                     $json['titulo'] = 'Votos '.$nom_ue.' Rector';
                 
-                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+                $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $claustros = array();
@@ -681,20 +659,9 @@ class cron {
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
             
-            if(isset($bnr['blancos'][$un_registro['claustro']]))
-                $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
-            else
-                $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
-
-            if(isset($bnr['nulos'][$un_registro['claustro']]))
-                $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
-            else
-                $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
-
-            if(isset($bnr['recurridos'][$un_registro['claustro']]))
-                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
-            else
-                $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];  
+            $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
+            $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
+            $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];  
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
@@ -754,8 +721,8 @@ class cron {
             else
                 $json['titulo'] = 'Votos '.$nom_ue.' Rector';
             
-            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+            $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
             $nom_archivo = 'e'.str_replace('-','',$fecha).'/D_'.strtoupper($nom_ue).'_T.json';
@@ -872,8 +839,8 @@ class cron {
                 $json['data2'] = $res[1];
                 $json['columns2'] = $res[0];
                 
-                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+                $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
                 
                 $data = array();
                 $labels = array();
@@ -927,8 +894,8 @@ class cron {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Universidad Consejero Superior '.$nom_claustro;
             
-            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+            $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
                 
             $string_json = json_encode($json);
 
@@ -1093,8 +1060,8 @@ class cron {
                 $json['fecha'] = date('d/m/Y G:i:s');
                 $json['titulo'] = 'Votos Universidad Rector '.$nom_claustro;
                 
-                $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-                $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+                $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+                $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
             
                 $data = array();
                 $labels = array();
@@ -1141,8 +1108,8 @@ class cron {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Universidad Rector '.$nom_claustro;
             
-            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+            $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
             
             $string_json = json_encode($json);
 
@@ -1212,7 +1179,8 @@ class cron {
         if(sizeof($datos) > 0){
             $nom_lista = null;
             $total = array();//Contiene la ultima fila de total por columna
-            $total2 = array();//Contiene la ultima fila de total por columna
+            $total2 = array();//Contiene la ultima fila de total votantes por columna
+            $empadronados = array();
             $data = array();//Coleccion de filas que forma el cuadro ponderado final
             $data2 = array();//Coleccion de filas que forma el cuadro votos final
             $r = array();//Recorre y arma una fila del cuadro final
@@ -1220,7 +1188,11 @@ class cron {
             $labels = array();
             $totales = array();
             
-            //$bnr = array();//Registros de blancos, nulos y recurridos
+            $m_enviadas = $datos[0]['m_enviadas'];
+            $m_confirmadas = $datos[0]['m_confirmadas'];
+            $m_total = $datos[0]['m_total'];
+            
+            $bnr = array();//Registros de blancos, nulos y recurridos
             foreach($datos as $un_registro){
                 if($nom_lista == null){
                     $nom_lista = $un_registro['sigla_lista'];                
@@ -1242,20 +1214,9 @@ class cron {
                 //$r['ponderado'] = $un_registro['ponderado'];
                 $r2[$un_registro['claustro']] = $un_registro['votos'];
                 
-                if(isset($bnr['Blancos'][$un_registro['claustro']]))
-                    $bnr['Blancos'][$un_registro['claustro']] += $un_registro['total_votos_blancos'];
-                else
-                    $bnr['Blancos'][$un_registro['claustro']] = $un_registro['total_votos_blancos'];
-                
-                if(isset($bnr['Nulos'][$un_registro['claustro']]))
-                    $bnr['Nulos'][$un_registro['claustro']] += $un_registro['total_votos_nulos'];
-                else
-                    $bnr['Nulos'][$un_registro['claustro']] = $un_registro['total_votos_nulos'];
-                
-                if(isset($bnr['Recurridos'][$un_registro['claustro']]))
-                    $bnr['Recurridos'][$un_registro['claustro']] += $un_registro['total_votos_recurridos'];
-                else
-                    $bnr['Recurridos'][$un_registro['claustro']] = $un_registro['total_votos_recurridos'];
+                $bnr['Blancos'][$un_registro['claustro']] = $un_registro['total_votos_blancos'];
+                $bnr['Nulos'][$un_registro['claustro']] = $un_registro['total_votos_nulos'];
+                $bnr['Recurridos'][$un_registro['claustro']] = $un_registro['total_votos_recurridos'];
                 
                 if(isset($r['ponderado']))
                     $r['ponderado'] += $un_registro['ponderado'];
@@ -1276,6 +1237,11 @@ class cron {
                     $total2[$un_registro['claustro']] += $un_registro['votos'];
                 else
                     $total2[$un_registro['claustro']] = $un_registro['votos'];
+                
+                if(isset($empadronados[$un_registro['claustro']]))
+                    $empadronados[$un_registro['claustro']] += $un_registro['empadronados'];
+                else
+                    $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
             }
             //Guardar Ultima lista no guardada
             $r['sigla_lista'] = $nom_lista;
@@ -1295,18 +1261,26 @@ class cron {
                  else
                      $total2['total'] = $value;
             }
+            foreach($empadronados as $key => $value){
+                 if(isset($empadronados['total']))
+                    $empadronados['total'] += $value;
+                 else
+                     $empadronados['total'] = $value;
+            }
             $columns[] = array('field' => 'ponderado', 'title' => 'Ponderado');
             $columns2[] = array('field' => 'total', 'title' => 'Total');
             //print_r($bnr);
            //Armado del json
             $json = array();
-            $total['lista'] = 'TOTAL';
+            $total['lista'] = 'Total';
             $data[] = $total;
             $json['data'] = $data;
             $json['columns'] = $columns;
             //print_r($total);
-            $total2['sigla_lista'] = 'TOTAL';
+            $total2['sigla_lista'] = 'Votantes';
             $data2[] = $total2;
+            $empadronados['sigla_lista'] = 'Empadronados';
+            $data2[] = $empadronados;
             $json['data2'] = $data2;
             $json['columns2'] = $columns2;
 
@@ -1318,9 +1292,8 @@ class cron {
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Ponderados Universidad Rector';
             $json['titulo2'] = 'Votos Universidad Rector';
-
-            $json['enviadas'] = ($m_enviadas*100/$m_total).'% ('.$m_enviadas." de ".$m_total.')';
-            $json['confirmadas'] = ($m_confirmadas*100/$m_total).'% ('.$m_confirmadas." de ".$m_total.')';
+            $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
+            $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
                         
             $string_json = json_encode($json);
 
