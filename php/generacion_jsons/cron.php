@@ -611,9 +611,11 @@ class cron {
                 foreach($data as $key => $value){
                     foreach($claustros as $k => $v){
                         if(isset($fila_total[$k]))
-                            $fila_total[$k] += ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
+                            $fila_total[$k] += 
+                                ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
                         else
-                            $fila_total[$k] = ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
+                            $fila_total[$k] = 
+                                ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
                     }
                     if(isset($fila_total['total']))
                         $fila_total['total'] += $value['total'];
@@ -1265,7 +1267,7 @@ class cron {
                 else
                     $total['ponderado'] = $un_registro['ponderado'];
                 
-                if($total2[$un_registro['claustro']])
+                if(isset($total2[$un_registro['claustro']]))
                     $total2[$un_registro['claustro']] += $un_registro['votos'];
                 else
                     $total2[$un_registro['claustro']] = $un_registro['votos'];
@@ -1283,7 +1285,10 @@ class cron {
             $columns2[] = array('field' => 'sigla_lista', 'title' => 'Lista');
             foreach($total2 as $key => $value){
                  $columns2[] = array('field' => $key, 'title' => $key);
-                 $total2['total'] += $value;
+                 if(isset($total2['total']))
+                    $total2['total'] += $value;
+                 else
+                     $total2['total'] = $value;
             }
             $columns[] = array('field' => 'ponderado', 'title' => 'Ponderado');
             $columns2[] = array('field' => 'total', 'title' => 'Total');
