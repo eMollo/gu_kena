@@ -624,7 +624,7 @@ class cron {
                     if(isset($fila_total['total']))
                         $fila_total['total'] += $value['total'];
                     else
-                        $fila_total['total'] += $value['total'];
+                        $fila_total['total'] = $value['total'];
                     
                     $json['data'][] = $value;
                     $json['labels'][] = $value['sigla_lista'];
