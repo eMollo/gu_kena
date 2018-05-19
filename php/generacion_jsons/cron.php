@@ -615,7 +615,10 @@ class cron {
                         else
                             $fila_total[$k] = ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
                     }
-                    $fila_total['total'] += $value['total'];
+                    if(isset($fila_total['total']))
+                        $fila_total['total'] += $value['total'];
+                    else
+                        $fila_total['total'] += $value['total'];
                     
                     $json['data'][] = $value;
                     $json['labels'][] = $value['sigla_lista'];
@@ -1237,12 +1240,12 @@ class cron {
                 else
                     $bnr['Blancos'][$un_registro['claustro']] = $un_registro['total_votos_blancos'];
                 
-                if($bnr['Nulos'][$un_registro['claustro']])
+                if(isset($bnr['Nulos'][$un_registro['claustro']]))
                     $bnr['Nulos'][$un_registro['claustro']] += $un_registro['total_votos_nulos'];
                 else
                     $bnr['Nulos'][$un_registro['claustro']] = $un_registro['total_votos_nulos'];
                 
-                if($bnr['Recurridos'][$un_registro['claustro']])
+                if(isset($bnr['Recurridos'][$un_registro['claustro']]))
                     $bnr['Recurridos'][$un_registro['claustro']] += $un_registro['total_votos_recurridos'];
                 else
                     $bnr['Recurridos'][$un_registro['claustro']] = $un_registro['total_votos_recurridos'];
@@ -1262,10 +1265,10 @@ class cron {
                 else
                     $total['ponderado'] = $un_registro['ponderado'];
                 
-                if($tota2[$un_registro['claustro']])
-                    $tota2[$un_registro['claustro']] += $un_registro['votos'];
+                if($total2[$un_registro['claustro']])
+                    $total2[$un_registro['claustro']] += $un_registro['votos'];
                 else
-                    $tota2[$un_registro['claustro']] = $un_registro['votos'];
+                    $total2[$un_registro['claustro']] = $un_registro['votos'];
             }
             //Guardar Ultima lista no guardada
             $r['sigla_lista'] = $nom_lista;
