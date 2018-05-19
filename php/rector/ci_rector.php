@@ -345,8 +345,9 @@ class ci_rector extends toba_ci {
         
         $nom_ue = null;
         $nom_claustro = null;
-        $nom_lista = null;
+        $nro_lista = null;
         $sedes = array();
+        $cant_cargos = null;
         $columns_sedes = array();
         
         $data = array();
@@ -464,9 +465,21 @@ class ci_rector extends toba_ci {
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
             
-            $bnr['blancos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_blancos'];
-            $bnr['nulos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_nulos'];
-            $bnr['recurridos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_recurridos'];
+             $nom_mesa = $un_registro['sede'].' mesa '.$un_registro['nro_mesa'];
+            if(isset($bnr['blancos'][$nom_mesa]))
+                $bnr['blancos'][$nom_mesa] += $un_registro['votos_blancos'];
+            else
+                $bnr['blancos'][$nom_mesa] = $un_registro['votos_blancos'];
+            
+            if(isset($bnr['nulos'][$nom_mesa]))
+                $bnr['nulos'][$nom_mesa] += $un_registro['votos_nulos'];
+            else
+                $bnr['nulos'][$nom_mesa] += $un_registro['votos_nulos'];
+            
+            if(isset($bnr['recurridos'][$nom_mesa]))
+                $bnr['recurridos'][$nom_mesa] += $un_registro['votos_recurridos'];
+            else
+                $bnr['recurridos'][$nom_mesa] = $un_registro['votos_recurridos'];
         }
         
         if(sizeof($data) > 0){//Solo si existen datos finales ent crea el json
@@ -651,9 +664,20 @@ class ci_rector extends toba_ci {
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
             
-            $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
-            $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
-            $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
+            if(isset($bnr['blancos'][$un_registro['claustro']]))
+                $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
+            else
+                $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
+
+            if(isset($bnr['nulos'][$un_registro['claustro']]))
+                $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
+            else
+                $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
+
+            if(isset($bnr['recurridos'][$un_registro['claustro']]))
+                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
+            else
+                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
@@ -853,10 +877,20 @@ class ci_rector extends toba_ci {
             $m_confirmadas = $un_registro['m_confirmadas'];
             $m_total = $un_registro['m_total'];
             
-            $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
-            $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
-            $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
-                
+            if(isset($bnr['blancos'][$un_registro['claustro']]))
+                $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
+            else
+                $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
+
+            if(isset($bnr['nulos'][$un_registro['claustro']]))
+                $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
+            else
+                $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
+
+            if(isset($bnr['recurridos'][$un_registro['claustro']]))
+                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
+            else
+                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];  
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
@@ -1101,6 +1135,7 @@ class ci_rector extends toba_ci {
          * que se adjudicará a cada una de ellas.
 
          */
+        $escano_max = 0;
         $datos = array();
         if (count($listas) > 0 && count($listas) == count($valores)) {
             $cocientes = array();
@@ -1308,10 +1343,12 @@ class ci_rector extends toba_ci {
             from(
                 select claustro, id_nro_lista, trim(lista) as lista, 
                     trim(sigla_lista) as sigla_lista, sum(pond) as ponderado,
+                    sum(votos) votos,
                     total_votos_blancos, total_votos_nulos, total_votos_recurridos
                 from (
                     select id_nro_lista, lista as Lista, sigla_lista, vl.claustro, 
                     sum(cast(votos_lista as real)/votos_validos)*ponderacion pond,
+                    sum(votos_lista) votos,
                     sum(total_votos_blancos) total_votos_blancos, 
                     sum(total_votos_nulos) total_votos_nulos, sum(total_votos_recurridos) total_votos_recurridos
                     from(
@@ -1359,7 +1396,8 @@ class ci_rector extends toba_ci {
         if(sizeof($datos) > 0){
             $nom_lista = null;
             $total = array();//Contiene la ultima fila de total por columna
-            $data = array();//Coleccion de filas que forma el cuadro final
+            $data = array();//Coleccion de filas que forma el cuadro ponderado final
+            $data2 = array();//Coleccion de filas que forma el cuadro votos final
             $r = array();//Recorre y arma una fila del cuadro final
             
             $labels = array();
@@ -1370,37 +1408,50 @@ class ci_rector extends toba_ci {
                 if($nom_lista == null){
                     $nom_lista = $un_registro['sigla_lista'];                
                 }elseif($nom_lista != $un_registro['sigla_lista']){
-                    $r['lista'] = $nom_lista;
+                    $r['sigla_lista'] = $nom_lista;
+                    $r2['sigla_lista'] = $nom_lista;
                     
                     $labels[] = $nom_lista;
-                    $totales[] = $r['total'];
+                    $totales[] = $r['ponderado'];
                     
                     $data[] = $r;
+                    $data2[] = $r2;
                     
                     $r = array();
+                    $r2 = array();
                     $nom_lista = $un_registro['sigla_lista'];
                 }
+                $r['lista'] = utf8_encode($un_registro['lista']);
+                //$r['ponderado'] = $un_registro['ponderado'];
+                $r2[$un_registro['claustro']] = $un_registro['votos'];
                 
-                $r[$un_registro['claustro']] = $un_registro['ponderado'];
-                //$bnr['Blancos'][$un_registro['claustro']] += $un_registro['total_votos_blancos'];
-                //$bnr['Nulos'][$un_registro['claustro']] += $un_registro['total_votos_nulos'];
-                //$bnr['Recurridos'][$un_registro['claustro']] += $un_registro['total_votos_recurridos'];
-                $r['total'] += $un_registro['ponderado'];
+                $bnr['Blancos'][$un_registro['claustro']] += $un_registro['total_votos_blancos'];
+                $bnr['Nulos'][$un_registro['claustro']] += $un_registro['total_votos_nulos'];
+                $bnr['Recurridos'][$un_registro['claustro']] += $un_registro['total_votos_recurridos'];
                 
-                $total[$un_registro['claustro']] += $un_registro['ponderado'];
+                $r['ponderado'] += $un_registro['ponderado'];
+                $r2['total'] += $un_registro['votos'];
                 
+                $total['ponderado'] += $un_registro['ponderado'];
+                $tota2[$un_registro['claustro']] += $un_registro['votos'];
             }
             //Guardar Ultima lista no guardada
-            $r['lista'] = $nom_lista;
+            $r['sigla_lista'] = $nom_lista;
+            $r2['sigla_lista'] = $nom_lista;
             $data[] = $r;
+            $data2[] = $r2;
 
             $columns = array();
             $columns[] = array('field' => 'lista', 'title' => 'Lista');
-            foreach($total as $key => $value){
-                 $columns[] = array('field' => $key, 'title' => $key);
-                 $total['total'] += $value;
+            $columns[] = array('field' => 'sigla_lista', 'title' => 'Sigla');
+            $columns2 = array();
+            $columns2[] = array('field' => 'sigla_lista', 'title' => 'Lista');
+            foreach($total2 as $key => $value){
+                 $columns2[] = array('field' => $key, 'title' => $key);
+                 $total2['total'] += $value;
             }
-            $columns[] = array('field' => 'total', 'title' => 'Total');
+            $columns[] = array('field' => 'ponderado', 'title' => 'Ponderado');
+            $columns2[] = array('field' => 'total', 'title' => 'Total');
             //print_r($bnr);
            //Armado del json
             $json = array();
@@ -1408,11 +1459,20 @@ class ci_rector extends toba_ci {
             $data[] = $total;
             $json['data'] = $data;
             $json['columns'] = $columns;
+            print_r($total);
+            $total2['sigla_lista'] = 'TOTAL';
+            $data2[] = $total2;
+            $json['data2'] = $data2;
+            $json['columns2'] = $columns2;
 
+            $labels[] = $nom_lista;
+            $totales[] = $r['ponderado'];
+            
             $json['labels'] = $labels;
             $json['total'] = $totales;
             $json['fecha'] = date('d/m/Y G:i:s');
-            $json['titulo'] = 'Votos Universidad Rector';
+            $json['titulo'] = 'Votos Ponderados Universidad Rector';
+            $json['titulo2'] = 'Votos Universidad Rector';
 
             $json['enviadas'] = $datos[0]['m_enviadas']." enviadas de ".$datos[0]['m_total'];
             $json['confirmadas'] = $datos[0]['m_confirmadas']." confirmadas de ".$datos[0]['m_total'];

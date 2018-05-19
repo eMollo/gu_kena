@@ -219,9 +219,19 @@ class cron {
                 $m_confirmadas = $un_registro['m_confirmadas'];
                 $m_total = $un_registro['m_total'];
 
-                $bnr['blancos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_blancos'];
-                $bnr['nulos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_nulos'];
-                $bnr['recurridos'][$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] += $un_registro['votos_recurridos'];
+                $nom_mesa = $un_registro['sede'].' mesa '.$un_registro['nro_mesa'];
+                if(isset($bnr['blancos'][$nom_mesa]))
+                    $bnr['blancos'][$nom_mesa] += $un_registro['votos_blancos'];
+                else
+                    $bnr['blancos'][$nom_mesa] = $un_registro['votos_blancos'];
+                if(isset($bnr['nulos'][$nom_mesa]))
+                    $bnr['nulos'][$nom_mesa] += $un_registro['votos_nulos'];
+                else
+                    $bnr['nulos'][$nom_mesa] += $un_registro['votos_nulos'];
+                if(isset($bnr['recurridos'][$nom_mesa]))
+                    $bnr['recurridos'][$nom_mesa] += $un_registro['votos_recurridos'];
+                else
+                    $bnr['recurridos'][$nom_mesa] = $un_registro['votos_recurridos'];
             }
 
             if(sizeof($data) > 0){//Solo si existen datos finales ent crea el json
@@ -608,9 +618,22 @@ class cron {
                 $m_confirmadas = $un_registro['m_confirmadas'];
                 $m_total = $un_registro['m_total'];
 
-                $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
-                $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
-                $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
+                if(isset($bnr['blancos'][$un_registro['claustro']]))
+                    $bnr['blancos'][$un_registro['claustro']] += $un_registro['votos_blancos'];
+                else
+                    $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
+                
+                if(isset($bnr['nulos'][$un_registro['claustro']]))
+                    $bnr['nulos'][$un_registro['claustro']] += $un_registro['votos_nulos'];
+                else
+                    $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
+                
+                if(isset($bnr['recurridos'][$un_registro['claustro']]))
+                    $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
+                else
+                    $bnr['recurridos'][$un_registro['claustro']] += $un_registro['votos_recurridos'];
+                
+                
 
             }
 
