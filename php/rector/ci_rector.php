@@ -458,7 +458,10 @@ class ci_rector extends toba_ci {
             }
             
             $sedes[$un_registro['sede'].' mesa '.$un_registro['nro_mesa']] = $un_registro['cant_votos'];
-            $cant_cargos = $un_registro['cant_cargos'];
+            if(isset($un_registro['cant_cargos']))
+                $cant_cargos = $un_registro['cant_cargos'];
+            else
+                $cant_cargos = null;
             
             //Datos de mesas
             $m_enviadas = $un_registro['m_enviadas'];
@@ -474,7 +477,7 @@ class ci_rector extends toba_ci {
             if(isset($bnr['nulos'][$nom_mesa]))
                 $bnr['nulos'][$nom_mesa] += $un_registro['votos_nulos'];
             else
-                $bnr['nulos'][$nom_mesa] += $un_registro['votos_nulos'];
+                $bnr['nulos'][$nom_mesa] = $un_registro['votos_nulos'];
             
             if(isset($bnr['recurridos'][$nom_mesa]))
                 $bnr['recurridos'][$nom_mesa] += $un_registro['votos_recurridos'];
@@ -655,7 +658,12 @@ class ci_rector extends toba_ci {
             
             $data[$un_registro['sigla_lista']]['lista'] = utf8_encode($un_registro['lista']);
             $data[$un_registro['sigla_lista']]['sigla_lista'] = utf8_encode($un_registro['sigla_lista']);
-            $data[$un_registro['sigla_lista']]['total'] += $un_registro['total'];
+            
+            if(isset($data[$un_registro['sigla_lista']]['total']))
+                $data[$un_registro['sigla_lista']]['total'] += $un_registro['total'];
+            else
+                $data[$un_registro['sigla_lista']]['total'] = $un_registro['total'];
+            
             $data[$un_registro['sigla_lista']][$un_registro['claustro']] = $un_registro['cant_votos'];
             
             $claustros[$un_registro['claustro']] = $un_registro['claustro'];
@@ -825,7 +833,10 @@ class ci_rector extends toba_ci {
                 $r['lista'] = 'Recurridos';
                 foreach($data as $key => $value){
                     foreach($claustros as $k => $v){
-                        $fila_total[$k] += ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
+                        if(isset($fila_total[$k]))
+                            $fila_total[$k] += ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
+                        else
+                            $fila_total[$k] = ($value[$k]+$b[$k]+$n[$k]+$r[$k]);
                     }
                     $fila_total['total'] += $value['total'];
                     
@@ -867,7 +878,11 @@ class ci_rector extends toba_ci {
             
             $data[$un_registro['sigla_lista']]['lista'] = utf8_encode($un_registro['lista']);
             $data[$un_registro['sigla_lista']]['sigla_lista'] = utf8_encode($un_registro['sigla_lista']);
-            $data[$un_registro['sigla_lista']]['total'] += $un_registro['total'];
+            if(isset($data[$un_registro['sigla_lista']]['total']))
+                $data[$un_registro['sigla_lista']]['total'] += $un_registro['total'];
+            else
+                $data[$un_registro['sigla_lista']]['total'] = $un_registro['total'];
+            
             $data[$un_registro['sigla_lista']][$un_registro['claustro']] = $un_registro['cant_votos'];
             
             $claustros[$un_registro['claustro']] = $un_registro['claustro'];
@@ -1396,6 +1411,7 @@ class ci_rector extends toba_ci {
         if(sizeof($datos) > 0){
             $nom_lista = null;
             $total = array();//Contiene la ultima fila de total por columna
+            $total2 = array();//Contiene la ultima fila de total por columna
             $data = array();//Coleccion de filas que forma el cuadro ponderado final
             $data2 = array();//Coleccion de filas que forma el cuadro votos final
             $r = array();//Recorre y arma una fila del cuadro final
@@ -1425,15 +1441,40 @@ class ci_rector extends toba_ci {
                 //$r['ponderado'] = $un_registro['ponderado'];
                 $r2[$un_registro['claustro']] = $un_registro['votos'];
                 
-                $bnr['Blancos'][$un_registro['claustro']] += $un_registro['total_votos_blancos'];
-                $bnr['Nulos'][$un_registro['claustro']] += $un_registro['total_votos_nulos'];
-                $bnr['Recurridos'][$un_registro['claustro']] += $un_registro['total_votos_recurridos'];
+                if(isset($bnr['Blancos'][$un_registro['claustro']]))
+                    $bnr['Blancos'][$un_registro['claustro']] += $un_registro['total_votos_blancos'];
+                else
+                    $bnr['Blancos'][$un_registro['claustro']] = $un_registro['total_votos_blancos'];
                 
-                $r['ponderado'] += $un_registro['ponderado'];
-                $r2['total'] += $un_registro['votos'];
+                if($bnr['Nulos'][$un_registro['claustro']])
+                    $bnr['Nulos'][$un_registro['claustro']] += $un_registro['total_votos_nulos'];
+                else
+                    $bnr['Nulos'][$un_registro['claustro']] = $un_registro['total_votos_nulos'];
                 
-                $total['ponderado'] += $un_registro['ponderado'];
-                $tota2[$un_registro['claustro']] += $un_registro['votos'];
+                if($bnr['Recurridos'][$un_registro['claustro']])
+                    $bnr['Recurridos'][$un_registro['claustro']] += $un_registro['total_votos_recurridos'];
+                else
+                    $bnr['Recurridos'][$un_registro['claustro']] = $un_registro['total_votos_recurridos'];
+                
+                if(isset($r['ponderado']))
+                    $r['ponderado'] += $un_registro['ponderado'];
+                else
+                    $r['ponderado'] = $un_registro['ponderado'];
+                
+                if(isset($r2['total']))
+                    $r2['total'] += $un_registro['votos'];
+                else
+                    $r2['total'] = $un_registro['votos'];
+                
+                if(isset($total['ponderado']))
+                    $total['ponderado'] += $un_registro['ponderado'];
+                else
+                    $total['ponderado'] = $un_registro['ponderado'];
+                
+                if($tota2[$un_registro['claustro']])
+                    $tota2[$un_registro['claustro']] += $un_registro['votos'];
+                else
+                    $tota2[$un_registro['claustro']] = $un_registro['votos'];
             }
             //Guardar Ultima lista no guardada
             $r['sigla_lista'] = $nom_lista;
@@ -1459,7 +1500,7 @@ class ci_rector extends toba_ci {
             $data[] = $total;
             $json['data'] = $data;
             $json['columns'] = $columns;
-            print_r($total);
+            //print_r($total);
             $total2['sigla_lista'] = 'TOTAL';
             $data2[] = $total2;
             $json['data2'] = $data2;
