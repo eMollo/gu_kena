@@ -871,9 +871,9 @@ class ci_rector extends toba_ci {
                 $json['columns'] = $columns;
                 $json['fecha'] = date('d/m/Y G:i:s');
                 if(strtoupper($nom_ue) == 'RECT')
-                    $json['titulo'] = 'Votos Adm. Central Rector';
+                    $json['titulo'] = 'Votos Adm. Central Decano';
                 else
-                    $json['titulo'] = 'Votos '.$nom_ue.' Rector';
+                    $json['titulo'] = 'Votos '.$nom_ue.' Decano';
                 
                 $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
                 $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
@@ -914,7 +914,7 @@ class ci_rector extends toba_ci {
                 
             $columns = array();
             $columns[] = array('field' => 'lista', 'title' => 'Listas');
-            $columns[] = array('field' => 'sigla_lista', 'title' => 'Sigla Listas');
+            $columns[] = array('field' => 'sigla_lista', 'title' => 'Sigla');
             foreach($claustros as $key => $value){
                 $columns[] = array('field' => $key, 'title' => $key);
             }
@@ -962,9 +962,9 @@ class ci_rector extends toba_ci {
             $json['columns'] = $columns;
             $json['fecha'] = date('d/m/Y G:i:s');
             if(strtoupper($nom_ue) == 'RECT')
-                $json['titulo'] = 'Votos Adm. Central Rector';
+                $json['titulo'] = 'Votos Adm. Central Decano';
             else
-                $json['titulo'] = 'Votos '.$nom_ue.' Rector';
+                $json['titulo'] = 'Votos '.$nom_ue.' Decano';
             
             $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
             $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
@@ -1479,14 +1479,17 @@ class ci_rector extends toba_ci {
                     $total['ponderado'] = $un_registro['ponderado'];
                 
                 if(isset($total2[$un_registro['claustro']]))
-                    $total2[$un_registro['claustro']] += $un_registro['votos'];
+                    $total2[$un_registro['claustro']] += $un_registro['votos']+
+                                                        $bnr['Blancos'][$un_registro['claustro']]+
+                                                        $bnr['Nulos'][$un_registro['claustro']]+
+                                                        $bnr['Recurridos'][$un_registro['claustro']];
                 else
-                    $total2[$un_registro['claustro']] = $un_registro['votos'];
+                    $total2[$un_registro['claustro']] = $un_registro['votos']+
+                                                        $bnr['Blancos'][$un_registro['claustro']]+
+                                                        $bnr['Nulos'][$un_registro['claustro']]+
+                                                        $bnr['Recurridos'][$un_registro['claustro']];
                 
-                if(isset($empadronados[$un_registro['claustro']]))
-                    $empadronados[$un_registro['claustro']] += $un_registro['empadronados'];
-                else
-                    $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
+                $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
             }
             //Guardar Ultima lista no guardada
             $r['sigla_lista'] = $nom_lista;
