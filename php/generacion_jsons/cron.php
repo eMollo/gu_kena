@@ -18,9 +18,9 @@ $fecha = '2018-05-22';
             datos_sup_claustro($fecha);
 
             //Genera 18 JSONS de total rector por unidad electoral
-            //datos_rector_ue($fecha);
+            datos_ue($fecha, 'voto_lista_rector', 'lista_rector', 'R');
             //Genera 17 JSONS de total decano por unidad electoral
-            //datos_decano_ue($fecha);
+            datos_ue($fecha, 'voto_lista_decano', 'lista_decano', 'D');
 /*
             //Genera 17*4 + 1 = 69 JSONS de total rector por claustro y por unidad electoral
             datos_ue_claustro($fecha, 'voto_lista_rector', 'lista_rector', 'Rector', 'R');
