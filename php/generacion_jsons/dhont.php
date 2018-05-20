@@ -1,6 +1,6 @@
 <?php
 
-    function dhont($listas, $valores, $escanos) {
+    function dhont($listas, $valores, $escanos,$cat='CS') {
         /*
          * Se multiplicarán por diez (10.000) los votos ponderados obtenidos por cada lista y se los
           dividirá desde uno (1) y hasta el total de cargos a ocupar.
@@ -17,8 +17,10 @@
         $datos = array();
         if (count($listas) > 0 && count($listas) == count($valores)) {
             $cocientes = array();
+            if ($cat=='CS'){
             for ($index1 = 0; $index1 < count($valores); $index1++) {
                 $valores[$index1] = $valores[$index1] * 10000;
+            }
             }
             foreach ($valores as $value) {
                 for ($index = 1; $index <= $escanos; $index++) {
@@ -34,7 +36,7 @@
                 $fila = array('lista' => $lista,
                     'escanos' => floor($valores[$key] / $repartidor));
                 for ($index2 = 1; $index2 <= $escanos; $index2++) {
-                    $fila[$index2] = floor($valores[$key] / $index2);
+                    $fila[$index2] = round($valores[$key] / $index2,2);
                     if ($index2 <= $fila['escanos']) {
                         if ($index2 > $escano_max)
                             $escano_max = $index2;

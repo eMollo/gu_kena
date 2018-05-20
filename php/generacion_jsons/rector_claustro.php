@@ -5,7 +5,10 @@
     //con datos de resultados rector por cada claustro
     function datos_rector_claustro($fecha) {
         $sql = "
-                        select datos.*, m_enviadas, m_confirmadas, m_total, t.empadronados 
+                        select datos.*,
+            case when m_enviadas is null then 0 else m_enviadas end as m_enviadas,
+            case when m_confirmadas is null then 0 else m_confirmadas end as m_confirmadas,                         
+m_total, t.empadronados 
             from (
 								select claustro, t.id_claustro,
 								    trim(lista) as lista, trim(sigla_lista) as sigla_lista, 
@@ -55,7 +58,7 @@
                             			and validos.id_claustro = votos_totales.id_claustro
 									) t
 									group by id_tipo, claustro, lista, sigla_lista, id_claustro
-									order by claustro, lista
+									
 								) datos
            inner join (
                 select count(*)  as m_total ,sum(cant_empadronados) as empadronados, m.id_claustro from mesa m
@@ -69,6 +72,7 @@
                 select count(*) as m_confirmadas, m.id_claustro from mesa m
                 where m.fecha = '2018-05-22' and m.estado>2
                 group by m.id_claustro) m2 on m2.id_claustro = datos.id_claustro
+                order by claustro, lista
             
 
 ";

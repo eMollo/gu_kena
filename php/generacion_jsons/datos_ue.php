@@ -98,7 +98,7 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
 
     foreach($datos as $un_registro){
         if($nom_ue != null && $nom_ue != $un_registro['sigla_ue']){
-            $this->crear_json_rector_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
+            crear_json_rector_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
 
             $b['total'] = 0;
             $n['total'] = 0;
@@ -141,7 +141,7 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
     }
 
     if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
-        $this->crear_json_rector_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
+        crear_json_rector_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
     }
 }
 

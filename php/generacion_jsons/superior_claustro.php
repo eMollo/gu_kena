@@ -56,7 +56,7 @@
                             and empadronados.id_tipo = votos_totales.id_tipo
                 ) t
                 group by id_tipo, claustro, id_claustro, lista, sigla_lista, cargos_csuperior
-                order by claustro, lista
+                
             ) datos
             inner join (
                 select count(*)  as m_total,sum(cant_empadronados) as empadronados, m.id_claustro from mesa m
@@ -70,7 +70,7 @@
                 select count(*) as m_enviadas, m.id_claustro from mesa m
                 where m.fecha = '$fecha' and m.estado>1
                 group by m.id_claustro) m on m.id_claustro = t.id_claustro
-                ";
+                order by claustro, lista";
         //echo $sql; exit;
 
 
@@ -174,6 +174,7 @@
             $res = dhont($labels, $total, $cant_cargos);
             $json['data2'] = $res[1];
             $json['columns2'] = $res[0];
+            $json['titulo2']='Distribución de cargos a ocupar';
             
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Ponderados Universidad Consejero Superior '.$nom_claustro;

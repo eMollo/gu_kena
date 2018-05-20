@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="css/estilo.css">
 <link rel="stylesheet" href="css/bootstrap-table.min.css">
 </head>
-<body>
+<body class="bg-light">
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
 		<img src="img/marca UNCo azul.ico" class="rounded-circle" alt="Logo">
 		<div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
@@ -23,7 +23,6 @@
 			data-target="#collapsibleNavbar">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<div class="overlay"></div>
 		<div class="navbar-collapse collapse" id="collapsibleNavbar">
 			<ul class="nav nav-pills">
 				<li class="nav-item dropdown ml-md-3 "><a
@@ -39,16 +38,10 @@
 							onclick="cambioTablaGrafico('ua','RECT')"><h7> <span>RECT</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','AUZA')"><h7> <span>AUZA</span></h7>
-						</a></li>
-						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','ASMA')"><h7> <span>ASMA</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FACA')"><h7> <span>FACA</span></h7>
-						</a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FAIF')"><h7> <span>FAIF</span></h7>
+							onclick="cambioTablaGrafico('ua','AUZA')"><h7> <span>AUZA</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','CRUB')"><h7> <span>CRUB</span></h7>
@@ -57,37 +50,43 @@
 							onclick="cambioTablaGrafico('ua','CUZA')"><h7> <span>CUZA</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FACE')"><h7> <span>FACE</span></h7>
-						</a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FALE')"><h7> <span>FALE</span></h7>
-						</a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FAIN')"><h7> <span>FAIN</span></h7>
-						</a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FATU')"><h7> <span>FATU</span></h7>
+							onclick="cambioTablaGrafico('ua','ESCM')"><h7> <span>ESCM</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','FAAS')"><h7> <span>FAAS</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FAEA')"><h7> <span>FAEA</span></h7>
+							onclick="cambioTablaGrafico('ua','FACA')"><h7> <span>FACA</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FATA')"><h7> <span>FATA</span></h7>
-						</a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','FAME')"><h7> <span>FAME</span></h7>
-						</a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('ua','ESCM')"><h7> <span>ESCM</span></h7>
+							onclick="cambioTablaGrafico('ua','FACE')"><h7> <span>FACE</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','FADE')"><h7> <span>FADE</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('ua','FAEA')"><h7> <span>FAEA</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','FAHU')"><h7> <span>FAHU</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('ua','FAIF')"><h7> <span>FAIF</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('ua','FAIN')"><h7> <span>FAIN</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('ua','FALE')"><h7> <span>FALE</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('ua','FAME')"><h7> <span>FAME</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('ua','FATA')"><h7> <span>FATA</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('ua','FATU')"><h7> <span>FATU</span></h7>
 						</a></li>
 					</ul></li>
 				<li class="nav-item dropdown ml-md-3"><a
@@ -99,14 +98,15 @@
 						</a></li>
 						<li class="dropdown-divider"></li>
 						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('categoria','CD')"><h7> <span>Consejo
+									Directivo</span></h7> </a></li>
+
+						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('categoria','CS')"><h7> <span>Consejo
 									Superior</span></h7> </a></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('categoria','D')"><h7> <span>Decano</span></h7>
 						</a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('categoria','CD')"><h7> <span>Consejeros
-									Directivos</span></h7> </a></li>
 					</ul></li>
 				<li class="nav-item dropdown ml-md-3"><a
 					class="nav-link active dropdown-toggle" data-toggle="dropdown"
@@ -118,25 +118,31 @@
 						</a></li>
 						<li class="dropdown-divider"></li>
 						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('claustro','D')"><h7> <span>Docentes</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('claustro','E')"><h7> <span>Estudiantes</span></h7>
+						</a></li>
+						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('claustro','G')"><h7> <span>Graduados</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('claustro','N')"><h7> <span>No
 									Docentes</span></h7> </a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('claustro','E')"><h7> <span>Estudiantes</span></h7>
-						</a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('claustro','D')"><h7> <span>Docentes</span></h7>
-						</a></li>
 					</ul></li>
 			</ul>
 		</div>
 	</nav>
+	<div class="container-fluid jumbotron mt-5" id="alerta">
+		<div class="alert alert-warning ">
+			<strong> No se ha encotrado los datos.</strong>
+		</div>
+	</div>
 	<div class="container-fluid" id="carteles">
 		<div class="row justify-content-between border" id="borde">
 			<div>
 				<h2 id="titulo"></h2>
+				<h6 id="enviadoConfirmado" class="m-3"></h6>
 			</div>
 			<div class=" col align-self-center">
 				<small class="float-right">
@@ -154,7 +160,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="container" id="contGrafico">
 		<div class="row d-flex p-4 justify-content-center">
 			<div
 				class="shadow-lg p-4 mb-4 bg-white col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7"
@@ -163,20 +169,36 @@
 			</div>
 		</div>
 	</div>
-	<div class="container ">
+	<div class="container " id="contTabla">
 		<div class="row justify-content-center ">
 			<div class="table-responsive shadow-lg p-4 mb-4 bg-white"
 				id="lugarTabla">
+				<h2 id="tituloTabla"></h2>
 				<table id="tabla" class="table table-striped table-sm "></table>
-				<!-- Boton exportar-->
+				<!-- Boton exportar
 				<button id="exportar" class="btn " onclick="exportarTabla()">Exportar
-				</button>
+				</button>-->
+				<small class="float-left">
+					<h5 id="titulo2"></h5>
+				</small>
+				<table id="tabla2" class="table table-striped table-sm "></table>
 			</div>
 		</div>
 	</div>
-	<div class="p-5" style="background-color: #00658a">
-		<img src="img/ic_gukena.ico" class="rounded-circle" alt="Logo">
+	<!--Fila de logo y nombre gukena-->
+	<div class="row bg-dark d-flex justify-content-left">
+
+		<div>
+			<img class="m-3" src="img/ic_euclides.ico" alt="Logo">
+		</div>
+
+
+		<div>
+			<img class="m-2" src="img/ic_gukena.ico" class="rounded-circle"
+				alt="Logo">
+		</div>
 	</div>
+	<!---->
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/popper.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -185,8 +207,10 @@
 	<script>
 		feather.replace()
 	</script>
+	<script>
+		var carpetajson = 'e20170516';
+	</script>
 	<script src="js/Chart.min.js"></script>
-	<script> var carpetajson = 'e20170516';</script>
 	<script src="js/manejoDeInfo.js"></script>
 	<script src="js/jquery.table2excel.js"></script>
 </body>
