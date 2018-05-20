@@ -108,9 +108,7 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
             $data = array();
             $claustros = array();
             $ponderados = array();
-            $empadronados = array();
-            $empadronados['total'] = 0;
-
+            
             $nom_ue = $un_registro['sigla_ue'];                
         }elseif($nom_ue == null)
             $nom_ue = $un_registro['sigla_ue'];
@@ -208,11 +206,13 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponder
         $json['columns'] = $columns2;
         
         $json['fecha'] = date('d/m/Y G:i:s');
-        if(strtoupper($nom_ue) == 'RECT')
-            $json['titulo'] = 'Votos Adm. Central '.($sigla_cat=='R'?'Rector':'Decano');
-        else
-            $json['titulo'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
-
+        if(strtoupper($nom_ue) == 'RECT'){
+            $json['titulo'] = 'Votos Ponderados Adm. Central '.($sigla_cat=='R'?'Rector':'Decano');
+            $json['titulo2'] = 'Votos Adm. Central '.($sigla_cat=='R'?'Rector':'Decano');
+        }else{
+            $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
+            $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
+        }
         $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
         $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
 
