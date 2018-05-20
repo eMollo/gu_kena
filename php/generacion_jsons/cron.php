@@ -1,11 +1,11 @@
 <?php
-include_once './rector.php';
-include_once './rector_claustro.php';
-include_once './rector_ue.php';
-include_once './superior_claustro.php';
-include_once './decano_ue.php';
-include_once './ue_claustro.php';
-include_once './dhont.php';
+include_once 'rector.php';
+include_once 'rector_claustro.php';
+include_once 'rector_ue.php';
+include_once 'superior_claustro.php';
+include_once 'decano_ue.php';
+include_once 'ue_claustro.php';
+include_once 'dhont.php';
 
 
 $fecha = '2018-05-22';
@@ -18,10 +18,10 @@ $fecha = '2018-05-22';
             datos_sup_claustro($fecha);
 
             //Genera 18 JSONS de total rector por unidad electoral
-            datos_rector_ue($fecha);
+            //datos_rector_ue($fecha);
             //Genera 17 JSONS de total decano por unidad electoral
-            datos_decano_ue($fecha);
-
+            //datos_decano_ue($fecha);
+/*
             //Genera 17*4 + 1 = 69 JSONS de total rector por claustro y por unidad electoral
             datos_ue_claustro($fecha, 'voto_lista_rector', 'lista_rector', 'Rector', 'R');
             //Genera 17*4 = 68 JSONS de total decano por claustro y por unidad electoral
@@ -30,7 +30,7 @@ $fecha = '2018-05-22';
             datos_ue_claustro($fecha, 'voto_lista_csuperior', 'lista_csuperior', 'Consejero Superior', 'CS');
             //Genera 17*4 = 68 JSONS de total consejo directivo por claustro y por unidad electoral
             datos_ue_claustro($fecha, 'voto_lista_cdirectivo', 'lista_cdirectivo', 'Consejero Directivo', 'CD');
-
+*/
 
 /*
 class cron {
