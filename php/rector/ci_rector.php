@@ -663,7 +663,7 @@ class ci_rector extends toba_ci {
         }
     }
     
-    function crear_json_rector_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total){
+    function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total){
         $json = array();
                 
         $columns = array();
