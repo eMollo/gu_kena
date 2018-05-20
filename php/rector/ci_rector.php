@@ -492,77 +492,82 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
     function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
         $sql = "
             select datos.*, 
-            case when m_enviadas is null then 0 else m_enviadas end as m_enviadas, 
-            case when m_confirmadas is null then 0 else m_confirmadas end as m_confirmadas, 
-            m_total, empadronados.empadronados
-            from (
-                select ue.nombre as unidad_electoral, ue.sigla as sigla_ue,
-                    ue.id_nro_ue as id_ue,
-                    trim(cl.descripcion) as claustro, 
-                    l.id_nro_lista, trim(l.nombre) as lista,
-                    s.sigla as sede, m.nro_mesa,
-                    trim(l.sigla) as sigla_lista, vl.cant_votos, total.total,
-                    total.votos_blancos, total.votos_nulos, total.votos_recurridos,
-                    cast(total.total as real)/vv.votos_validos*ponderacion as ponderado
+        case when m_enviadas is null then 0 else m_enviadas end as m_enviadas, 
+        case when m_confirmadas is null then 0 else m_confirmadas end as m_confirmadas, 
+        m_total, empadronados.empadronados
+        from (
+            select ue.nombre as unidad_electoral, ue.sigla as sigla_ue,
+                ue.id_nro_ue as id_ue,
+                trim(cl.descripcion) as claustro, 
+                l.id_nro_lista, trim(l.nombre) as lista,
+                trim(l.sigla) as sigla_lista, sum(vl.cant_votos) cant_votos, total.total,
+                total.votos_blancos, total.votos_nulos, total.votos_recurridos,
+                cast(total.total as real)/vv.votos_validos*ponderacion as ponderado
+            from acta a 
+            inner join mesa m on m.id_mesa = a.de
+            inner join claustro cl on cl.id = m.id_claustro
+            inner join $tabla_voto vl on vl.id_acta = a.id_acta
+            inner join $tabla_lista l on l.id_nro_lista = vl.id_lista
+            inner join sede s on s.id_sede = a.id_sede
+            inner join unidad_electoral ue on ue.id_nro_ue = s.id_ue
+            inner join (
+                select m.id_claustro, s.id_ue,
+                        vl.id_lista,  
+                        sum(vl.cant_votos) total, sum(total_votos_blancos) votos_blancos,
+                        sum(total_votos_nulos) votos_nulos, sum(total_votos_recurridos) votos_recurridos
                 from acta a 
                 inner join mesa m on m.id_mesa = a.de
-                inner join claustro cl on cl.id = m.id_claustro
                 inner join $tabla_voto vl on vl.id_acta = a.id_acta
-                inner join $tabla_lista l on l.id_nro_lista = vl.id_lista
-                inner join sede s on s.id_sede = a.id_sede
-                inner join unidad_electoral ue on ue.id_nro_ue = s.id_ue
-                inner join (
-                    select m.id_claustro, s.id_ue,
-                            vl.id_lista,  
-                            sum(vl.cant_votos) total, sum(total_votos_blancos) votos_blancos,
-                            sum(total_votos_nulos) votos_nulos, sum(total_votos_recurridos) votos_recurridos
-                    from acta a 
-                    inner join mesa m on m.id_mesa = a.de
-                    inner join $tabla_voto vl on vl.id_acta = a.id_acta
-                    inner join sede s on s.id_sede = a.id_sede
-                    where m.fecha = '$fecha'
-                    group by s.id_ue, m.id_claustro, vl.id_lista 
-                ) total on total.id_claustro = cl.id
-                        and total.id_lista = l.id_nro_lista
-                        and total.id_ue = s.id_ue
-                inner join (
-			select ue.sigla as ue,c.descripcion claustro, 
-			cargos_cdirectivo as ponderacion, sum(cant_votos) as votos_validos
-			from acta a inner join $tabla_voto vl on a.id_acta=vl.id_acta
-				inner join $tabla_lista l on vl.id_lista=l.id_nro_lista
-				inner join mesa m on a.de=m.id_mesa
-				inner join claustro c on m.id_claustro=c.id
-				inner join sede s on a.id_sede=s.id_sede
-				right join unidad_electoral ue on s.id_ue=ue.id_nro_ue
-			where m.fecha = '$fecha' and m.estado > 1
-			group by ue,claustro,ponderacion
-			)vv on vv.ue=ue.sigla and vv.claustro=cl.descripcion
-                where l.fecha = '$fecha'
-                order by unidad_electoral, claustro, lista, sede
-            ) datos  
-            inner join (select sum(cant_empadronados) empadronados, cl.descripcion claustro, s.id_ue 
-		from mesa m
-		inner join claustro cl on cl.id = m.id_claustro
-		inner join sede s on s.id_sede = m.id_sede
-		where m.fecha='$fecha'
-		group by cl.descripcion, s.id_ue
-            ) empadronados on empadronados.id_ue = datos.id_ue and empadronados.claustro = datos.claustro      
-            inner join (select count(distinct(m.id_mesa))  as m_total, s.id_ue from mesa m
-                inner join acta a on a.de = m.id_mesa
                 inner join sede s on s.id_sede = a.id_sede
                 where m.fecha = '$fecha'
-                group by s.id_ue) t on t.id_ue = datos.id_ue
-            left join (select count(distinct(m.id_mesa)) as m_confirmadas, s.id_ue from mesa m
-                inner join acta a on a.de = m.id_mesa
-                inner join sede s on s.id_sede = a.id_sede
-                where m.fecha = '$fecha' and m.estado>2
-                group by s.id_ue) m2 on m2.id_ue = t.id_ue
-            left join (select count(distinct(m.id_mesa)) as m_enviadas, s.id_ue from mesa m
-                inner join acta a on a.de = m.id_mesa
-                inner join sede s on s.id_sede = a.id_sede
-                where m.fecha = '$fecha' and m.estado>1
-                group by s.id_ue) m on m.id_ue = t.id_ue
-        order by datos.sigla_ue, datos.claustro, datos.sigla_lista
+                group by s.id_ue, m.id_claustro, vl.id_lista 
+            ) total on total.id_claustro = cl.id
+                    and total.id_lista = l.id_nro_lista
+                    and total.id_ue = s.id_ue
+            inner join (
+                    select ue.sigla as ue,c.descripcion claustro, 
+                    cargos_cdirectivo as ponderacion, sum(cant_votos) as votos_validos
+                    from acta a inner join $tabla_voto vl on a.id_acta=vl.id_acta
+                            inner join $tabla_lista l on vl.id_lista=l.id_nro_lista
+                            inner join mesa m on a.de=m.id_mesa
+                            inner join claustro c on m.id_claustro=c.id
+                            inner join sede s on a.id_sede=s.id_sede
+                            right join unidad_electoral ue on s.id_ue=ue.id_nro_ue
+                    where m.fecha = '$fecha' and m.estado > 1
+                    group by ue,claustro,ponderacion
+                    )vv on vv.ue=ue.sigla and vv.claustro=cl.descripcion
+            where l.fecha = '$fecha'
+            group by ue.nombre, ue.sigla,
+                ue.id_nro_ue, cl.descripcion, 
+                l.id_nro_lista, l.nombre,
+                l.sigla, total.total,
+                total.votos_blancos, total.votos_nulos, total.votos_recurridos,
+                vv.votos_validos, ponderacion
+            order by unidad_electoral, claustro, lista
+        ) datos  
+        inner join (select sum(cant_empadronados) empadronados, cl.descripcion claustro, s.id_ue 
+            from mesa m
+            inner join claustro cl on cl.id = m.id_claustro
+            inner join sede s on s.id_sede = m.id_sede
+            where m.fecha='$fecha'
+            group by cl.descripcion, s.id_ue
+        ) empadronados on empadronados.id_ue = datos.id_ue and empadronados.claustro = datos.claustro      
+        inner join (select count(distinct(m.id_mesa))  as m_total, s.id_ue from mesa m
+            inner join acta a on a.de = m.id_mesa
+            inner join sede s on s.id_sede = a.id_sede
+            where m.fecha = '$fecha'
+            group by s.id_ue) t on t.id_ue = datos.id_ue
+        left join (select count(distinct(m.id_mesa)) as m_confirmadas, s.id_ue from mesa m
+            inner join acta a on a.de = m.id_mesa
+            inner join sede s on s.id_sede = a.id_sede
+            where m.fecha = '$fecha' and m.estado>2
+            group by s.id_ue) m2 on m2.id_ue = t.id_ue
+        left join (select count(distinct(m.id_mesa)) as m_enviadas, s.id_ue from mesa m
+            inner join acta a on a.de = m.id_mesa
+            inner join sede s on s.id_sede = a.id_sede
+            where m.fecha = '$fecha' and m.estado>1
+            group by s.id_ue) m on m.id_ue = t.id_ue
+    order by datos.sigla_ue, datos.claustro, datos.sigla_lista
                 ";
         $datos = toba::db('gu_kena')->consultar($sql);
 
@@ -614,7 +619,10 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
             else
                 $data[$un_registro['sigla_lista']]['total'] = $un_registro['total'];
             
-            $data[$un_registro['sigla_lista']][$un_registro['claustro']] = $un_registro['cant_votos'];
+            if(isset($data[$un_registro['sigla_lista']][$un_registro['claustro']]))
+                $data[$un_registro['sigla_lista']][$un_registro['claustro']] += $un_registro['cant_votos'];
+            else
+                $data[$un_registro['sigla_lista']][$un_registro['claustro']] = $un_registro['cant_votos'];
             
             $claustros[$un_registro['claustro']] = $un_registro['claustro'];
             $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];

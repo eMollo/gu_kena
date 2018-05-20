@@ -12,8 +12,7 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
                 ue.id_nro_ue as id_ue,
                 trim(cl.descripcion) as claustro, 
                 l.id_nro_lista, trim(l.nombre) as lista,
-                s.sigla as sede, m.nro_mesa,
-                trim(l.sigla) as sigla_lista, vl.cant_votos, total.total,
+                trim(l.sigla) as sigla_lista, sum(vl.cant_votos) cant_votos, total.total,
                 total.votos_blancos, total.votos_nulos, total.votos_recurridos,
                 cast(total.total as real)/vv.votos_validos*ponderacion as ponderado
             from acta a 
@@ -50,7 +49,13 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
                     group by ue,claustro,ponderacion
                     )vv on vv.ue=ue.sigla and vv.claustro=cl.descripcion
             where l.fecha = '$fecha'
-            order by unidad_electoral, claustro, lista, sede
+            group by ue.nombre, ue.sigla,
+                ue.id_nro_ue, cl.descripcion, 
+                l.id_nro_lista, l.nombre,
+                l.sigla, total.total,
+                total.votos_blancos, total.votos_nulos, total.votos_recurridos,
+                vv.votos_validos, ponderacion
+            order by unidad_electoral, claustro, lista
         ) datos  
         inner join (select sum(cant_empadronados) empadronados, cl.descripcion claustro, s.id_ue 
             from mesa m
@@ -75,7 +80,7 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
             where m.fecha = '$fecha' and m.estado>1
             group by s.id_ue) m on m.id_ue = t.id_ue
     order by datos.sigla_ue, datos.claustro, datos.sigla_lista
-            ";print_r($sql.'----------------------');
+            ";
     $datos = toba::db('gu_kena')->consultar($sql);
 
     $nom_ue = null;
@@ -127,7 +132,7 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
             $data[$un_registro['sigla_lista']]['total'] = $un_registro['total'];
 
         $data[$un_registro['sigla_lista']][$un_registro['claustro']] = $un_registro['cant_votos'];
-
+            
         $claustros[$un_registro['claustro']] = $un_registro['claustro'];
         $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
         //Datos de mesas
