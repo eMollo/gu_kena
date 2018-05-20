@@ -556,7 +556,7 @@ class ci_rector extends toba_ci {
                 inner join (
 			select ue.sigla as ue,c.descripcion claustro, 
 			cargos_cdirectivo as ponderacion, sum(cant_votos) as votos_validos
-			from acta a inner join voto_lista_rector vl on a.id_acta=vl.id_acta
+			from acta a inner join $tabla_voto vl on a.id_acta=vl.id_acta
 				inner join $tabla_lista l on vl.id_lista=l.id_nro_lista
 				inner join mesa m on a.de=m.id_mesa
 				inner join claustro c on m.id_claustro=c.id
@@ -590,7 +590,8 @@ class ci_rector extends toba_ci {
                 inner join sede s on s.id_sede = a.id_sede
                 where m.fecha = '$fecha' and m.estado>1
                 group by s.id_ue) m on m.id_ue = t.id_ue
-                ";print_r($sql.'----------------------');
+        order by datos.sigla_ue, datos.claustro, datos.sigla_lista
+                ";
         $datos = toba::db('gu_kena')->consultar($sql);
 
         $nom_ue = null;
@@ -604,6 +605,7 @@ class ci_rector extends toba_ci {
         
         $claustros = array();
         $empadronados = array();
+        $empadronados['lista'] = 'Empadronados';
         
         //Datos de mesas
         $m_enviadas = null;
@@ -611,19 +613,19 @@ class ci_rector extends toba_ci {
         $m_total = null;
         
         $bnr = array();
+        $bnr['blancos']['lista'] = 'Blancos';
+        $bnr['nulos']['lista'] = 'Nulos';
+        $bnr['recurridos']['lista'] = 'Recurridos';
         
         foreach($datos as $un_registro){
             if($nom_ue != null && $nom_ue != $un_registro['sigla_ue']){
-                $this->crear_json_rector_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
-                
-                $b['total'] = 0;
-                $n['total'] = 0;
-                $r['total'] = 0;
+                $this->crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
                 
                 $data = array();
                 $claustros = array();
                 $ponderados = array();
                 $empadronados = array();
+                $empadronados['total'] = 0;
                 
                 $nom_ue = $un_registro['sigla_ue'];                
             }elseif($nom_ue == null)
@@ -657,7 +659,7 @@ class ci_rector extends toba_ci {
         }
         
         if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
-            $this->crear_json_rector_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
+            $this->crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
         }
     }
     
@@ -680,24 +682,25 @@ class ci_rector extends toba_ci {
         $fila_total2['ponderado'] = 'Ponderado'; 
         $data2 = array();//cuadro de ponderados
         
-        $b['lista'] = 'Blancos';
-        $n['lista'] = 'Nulos';
-        $r['lista'] = 'Recurridos';
-        $b['total'] = 0;
-        $n['total'] = 0;
-        $r['total'] = 0;
-        foreach($data as $key => $value){
-            foreach($claustros as $k => $v){
-                if(isset($fila_total[$k])) 
-                    $fila_total[$k] += $value[$k];
-                else
-                    $fila_total[$k] = $value[$k];
-            }  
+        //Carga valores de blancos, nulos y recurridos
+        foreach($claustros as $k => $v){
+            $bnr['blancos']['total'] += $bnr['blancos'][$k];
+            $bnr['nulos']['total'] += $bnr['nulos'][$k];
+            $bnr['recurridos']['total'] += $bnr['recurridos'][$k];
 
-            if(isset($fila_total['total']))
-                $fila_total['total'] += $value['total'];
-            else
-                $fila_total['total'] = $value['total'];
+            $empadronados['total'] += $empadronados[$k];
+            
+            $fila_total[$k] = $bnr['blancos'][$k]+$bnr['nulos'][$k]+$bnr['recurridos'][$k];
+        }
+        $fila_total['total'] = $bnr['blancos']['total']+$bnr['nulos']['total']+$bnr['recurridos']['total'];
+        
+        //calcula valores totales
+        foreach($data as $key => $value){
+            //calcula valores totales de cada fila
+            foreach($claustros as $k => $v)
+                $fila_total[$k] += $value[$k];
+            
+            $fila_total['total'] += $value['total'];
 
             $r_data['lista'] = $value['lista'];
             $r_data['sigla_lista'] = $value['sigla_lista'];
@@ -710,35 +713,16 @@ class ci_rector extends toba_ci {
             $json['labels'][] = $value['sigla_lista'];
             $json['total'][] = $ponderados[$value['sigla_lista']];
         }
-        $json['data'][] = $fila_total2;
-        $json['columns'] = $columns2;
-        $empadronados['lista'] = 'Empadronados';
-        $empadronados['total'] = 0;
-        foreach($claustros as $k => $v){
-            $b[$k] = $bnr['blancos'][$k];
-            $n[$k] = $bnr['nulos'][$k];
-            $r[$k] = $bnr['recurridos'][$k];
-
-            //columna final con valores totales de cada fila
-            $b['total'] += $bnr['blancos'][$k];
-            $n['total'] += $bnr['nulos'][$k];
-            $r['total'] += $bnr['recurridos'][$k];
-
-            if(isset($fila_total[$k]))
-                $fila_total[$k] += ($b[$k]+$n[$k]+$r[$k]);
-            else
-                $fila_total[$k] = ($b[$k]+$n[$k]+$r[$k]);
-
-            $empadronados['total'] += $empadronados[$k];
-        }
-
-        $json['data2'][] = $b;
-        $json['data2'][] = $n;
-        $json['data2'][] = $r;
-
+        $json['data2'][] = $bnr['blancos'];
+        $json['data2'][] = $bnr['nulos'];
+        $json['data2'][] = $bnr['recurridos'];
         $json['data2'][] = $fila_total;
         $json['data2'][] = $empadronados;
         $json['columns2'] = $columns;
+        
+        $json['data'][] = $fila_total2;
+        $json['columns'] = $columns2;
+        
         $json['fecha'] = date('d/m/Y G:i:s');
         if(strtoupper($nom_ue) == 'RECT')
             $json['titulo'] = 'Votos Adm. Central '.($sigla_cat=='R'?'Rector':'Decano');
@@ -751,6 +735,18 @@ class ci_rector extends toba_ci {
         $string_json = json_encode($json);
         $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_T.json';
         file_put_contents('resultados_json/'. $nom_archivo , $string_json);
+        
+        $bnr = array();
+        $bnr['blancos']['lista'] = 'Blancos';
+        $bnr['nulos']['lista'] = 'Nulos';
+        $bnr['recurridos']['lista'] = 'Recurridos';
+        $bnr['blancos']['total'] = 0;
+        $bnr['nulos']['total'] = 0;
+        $bnr['recurridos']['total'] = 0;
+        
+        $empadronados = array();
+        $empadronados['lista'] = 'Empadronados';
+        $empadronados['total'] = 0;
     }
     
     //Metodo que calcula y genera archivos JSONS ubicados en /resultados_json/$fecha
