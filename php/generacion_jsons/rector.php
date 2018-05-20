@@ -1,13 +1,9 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ // Resultado general de rector con lista | ponderado
     function datos_rector($fecha) {
         $sql = "
-            select datos.*, m_enviadas, m_confirmadas, m_total
+            select datos.*, m_enviadas, m_confirmadas, m_total, empadronados.empadronados
             from(
                 select claustro, id_nro_lista, trim(lista) as lista, 
                     trim(sigla_lista) as sigla_lista, sum(pond) as ponderado,
@@ -58,7 +54,15 @@
             (select count(*) as m_confirmadas from mesa m
                         where m.fecha = '$fecha' and m.estado>2) m2,
             (select count(*) as m_total from mesa m
-                        where m.fecha = '$fecha') t
+                        where m.fecha = '$fecha') t,
+            (select sum(cant_empadronados) empadronados, cl.descripcion claustro 
+		from mesa m
+		inner join claustro cl on cl.id = m.id_claustro
+		where m.fecha='2018-05-22'
+		group by cl.descripcion
+            ) empadronados
+      where empadronados.claustro = datos.claustro
+      order by id_nro_lista, claustro
                     ";
         $datos = toba::db('gu_kena')->consultar($sql);
 
@@ -79,6 +83,9 @@
             $m_total = $datos[0]['m_total'];
             
             $bnr = array();//Registros de blancos, nulos y recurridos
+            $bnr['Blancos']['total'] = 0;
+            $bnr['Nulos']['total'] = 0;
+            $bnr['Recurridos']['total'] = 0;
             foreach($datos as $un_registro){
                 if($nom_lista == null){
                     $nom_lista = $un_registro['sigla_lista'];                
@@ -103,7 +110,7 @@
                 $bnr['Blancos'][$un_registro['claustro']] = $un_registro['total_votos_blancos'];
                 $bnr['Nulos'][$un_registro['claustro']] = $un_registro['total_votos_nulos'];
                 $bnr['Recurridos'][$un_registro['claustro']] = $un_registro['total_votos_recurridos'];
-                
+                 
                 if(isset($r['ponderado']))
                     $r['ponderado'] += $un_registro['ponderado'];
                 else
@@ -124,11 +131,9 @@
                 else
                     $total2[$un_registro['claustro']] = $un_registro['votos'];
                 
-                if(isset($empadronados[$un_registro['claustro']]))
-                    $empadronados[$un_registro['claustro']] += $un_registro['empadronados'];
-                else
-                    $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
+                $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
             }
+            
             //Guardar Ultima lista no guardada
             $r['sigla_lista'] = $nom_lista;
             $r2['sigla_lista'] = $nom_lista;
@@ -142,6 +147,15 @@
             $columns2[] = array('field' => 'sigla_lista', 'title' => 'Lista');
             foreach($total2 as $key => $value){
                  $columns2[] = array('field' => $key, 'title' => $key);
+                 
+                 $total2[$key] = $value+$bnr['Blancos'][$key]+
+                                    $bnr['Nulos'][$key]+
+                                    $bnr['Recurridos'][$key];
+                 
+                 $bnr['Blancos']['total'] += $bnr['Blancos'][$key];
+                 $bnr['Nulos']['total'] += $bnr['Nulos'][$key];
+                 $bnr['Recurridos']['total'] += $bnr['Recurridos'][$key];
+                  
                  if(isset($total2['total']))
                     $total2['total'] += $value;
                  else
