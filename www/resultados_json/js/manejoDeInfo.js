@@ -1,6 +1,6 @@
-var ua = 'TODO';
+/*var ua = 'TODO';
 var claustro = 'T';
-var categoria = 'R';
+var categoria = 'R';*/
 var grafico = null;
 var tipo = 'pie';
 var titulo;
