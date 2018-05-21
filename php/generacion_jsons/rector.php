@@ -64,7 +64,7 @@
             (select sum(cant_empadronados) empadronados, cl.descripcion claustro 
 		from mesa m
 		inner join claustro cl on cl.id = m.id_claustro
-		where m.fecha='2018-05-22'
+		where m.fecha='$fecha'
 		group by cl.descripcion
             ) empadronados
       where empadronados.claustro = datos.claustro

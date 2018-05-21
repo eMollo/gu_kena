@@ -248,32 +248,32 @@ class ci_rector extends toba_ci {
 
     function generar_json($fecha) {
         //Genera un JSON de total rector
-        $this->datos_rector($fecha);
+        //$this->datos_rector($fecha);
         
         //Genera 4 JSONS de total rector por claustro
-        $this->datos_rector_claustro($fecha);
+        //$this->datos_rector_claustro($fecha);
         //Genera 4 JSONS de total consejero superior por claustro
-        $this->datos_sup_claustro($fecha);
+        //$this->datos_sup_claustro($fecha);
         
         //Genera 18 JSONS de total rector por unidad electoral
-        $this->datos_ue($fecha, 'voto_lista_rector', 'lista_rector', 'R');
+        //$this->datos_ue($fecha, 'voto_lista_rector', 'lista_rector', 'R');
         //Genera 17 JSONS de total decano por unidad electoral
-        $this->datos_ue($fecha, 'voto_lista_decano', 'lista_decano', 'D');
+        //$this->datos_ue($fecha, 'voto_lista_decano', 'lista_decano', 'D');
         
         //Genera 17*4 + 1 = 69 JSONS de total rector por claustro y por unidad electoral
-        $this->datos_ue_claustro($fecha, 'voto_lista_rector', 'lista_rector', 'Rector', 'R');
+        //$this->datos_ue_claustro($fecha, 'voto_lista_rector', 'lista_rector', 'Rector', 'R');
         //Genera 17*4 = 68 JSONS de total decano por claustro y por unidad electoral
-        $this->datos_ue_claustro($fecha, 'voto_lista_decano', 'lista_decano', 'Decano', 'D');
+        //$this->datos_ue_claustro($fecha, 'voto_lista_decano', 'lista_decano', 'Decano', 'D');
         //Genera 17*4 = 68 JSONS de total consejo superior por claustro y por unidad electoral
-        $this->datos_ue_claustro($fecha, 'voto_lista_csuperior', 'lista_csuperior', 'Consejero Superior', 'CS');
+        //$this->datos_ue_claustro($fecha, 'voto_lista_csuperior', 'lista_csuperior', 'Consejero Superior', 'CS');
         //Genera 17*4 = 68 JSONS de total consejo directivo por claustro y por unidad electoral
-        $this->datos_ue_claustro($fecha, 'voto_lista_cdirectivo', 'lista_cdirectivo', 'Consejero Directivo', 'CD');
+        //$this->datos_ue_claustro($fecha, 'voto_lista_cdirectivo', 'lista_cdirectivo', 'Consejero Directivo', 'CD');
     }
     
     //Metodo que calcula y genera JSONS de la categoria $categoria para cada unidad
 //electoral y cada claustro
 function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla_cat) {
-    $cargos = '';
+   $cargos = '';
     if ($sigla_cat == 'CS') {
         $cargos = ", cl.cargos_csuperior as cant_cargos";
     } elseif ($sigla_cat == 'CD') {
@@ -491,7 +491,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
     //con datos de resultados rector por cada unidad electoral
     function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
         $sql = "
-            select datos.*, 
+        select datos.*, 
         case when m_enviadas is null then 0 else m_enviadas end as m_enviadas, 
         case when m_confirmadas is null then 0 else m_confirmadas end as m_confirmadas, 
         m_total, empadronados.empadronados
@@ -568,81 +568,78 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
             where m.fecha = '$fecha' and m.estado>1
             group by s.id_ue) m on m.id_ue = t.id_ue
     order by datos.sigla_ue, datos.claustro, datos.sigla_lista
-                ";
-        $datos = toba::db('gu_kena')->consultar($sql);
+            ";
+    $datos = toba::db('gu_kena')->consultar($sql);
 
-        $nom_ue = null;
-        $data = array();//Datos de cuadro de votos finales por claustro
-        $data2 = array();//Datos de cuadro de ponderados 
-        
-        $columns2 = array();
-        $columns2[] = array('field' => 'lista', 'title' => 'Listas');
-        $columns2[] = array('field' => 'sigla_lista', 'title' => 'Sigla Listas');
-        $columns2[] = array('field' => 'ponderado', 'title' => 'Ponderado');
-        
-        $claustros = array();
-        $empadronados = array();
-        $empadronados['lista'] = 'Empadronados';
-        
-        //Datos de mesas
-        $m_enviadas = null;
-        $m_confirmadas = null;
-        $m_total = null;
-        
-        $bnr = array();
-        $bnr['blancos']['lista'] = 'Blancos';
-        $bnr['nulos']['lista'] = 'Nulos';
-        $bnr['recurridos']['lista'] = 'Recurridos';
-        
-        foreach($datos as $un_registro){
-            if($nom_ue != null && $nom_ue != $un_registro['sigla_ue']){
-                $this->crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
-                
-                $data = array();
-                $claustros = array();
-                $ponderados = array();
-                
-                $nom_ue = $un_registro['sigla_ue'];                
-            }elseif($nom_ue == null)
-                $nom_ue = $un_registro['sigla_ue'];
-            
-            $data[$un_registro['sigla_lista']]['lista'] = utf8_encode($un_registro['lista']);
-            $data[$un_registro['sigla_lista']]['sigla_lista'] = utf8_encode($un_registro['sigla_lista']);
-            
-            if(isset($ponderados[$un_registro['sigla_lista']]))
-                $ponderados[$un_registro['sigla_lista']] += $un_registro['ponderado'];
-            else
-                $ponderados[$un_registro['sigla_lista']] = $un_registro['ponderado'];
-            
-            if(isset($data[$un_registro['sigla_lista']]['total']))
-                $data[$un_registro['sigla_lista']]['total'] += $un_registro['total'];
-            else
-                $data[$un_registro['sigla_lista']]['total'] = $un_registro['total'];
-            
-            if(isset($data[$un_registro['sigla_lista']][$un_registro['claustro']]))
-                $data[$un_registro['sigla_lista']][$un_registro['claustro']] += $un_registro['cant_votos'];
-            else
-                $data[$un_registro['sigla_lista']][$un_registro['claustro']] = $un_registro['cant_votos'];
-            
-            $claustros[$un_registro['claustro']] = $un_registro['claustro'];
-            $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
-            //Datos de mesas
-            $m_enviadas = $un_registro['m_enviadas'];
-            $m_confirmadas = $un_registro['m_confirmadas'];
-            $m_total = $un_registro['m_total'];
-            
-            $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
-            $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
-            $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];
-        }
-        
-        if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
+    $nom_ue = null;
+    $data = array();//Datos de cuadro de votos finales por claustro
+    $data2 = array();//Datos de cuadro de ponderados 
+
+    $columns2 = array();
+    $columns2[] = array('field' => 'lista', 'title' => 'Listas');
+    $columns2[] = array('field' => 'sigla_lista', 'title' => 'Sigla Listas');
+    $columns2[] = array('field' => 'ponderado', 'title' => 'Ponderado');
+
+    $claustros = array();
+    $empadronados = array();
+    $empadronados['lista'] = 'Empadronados';
+
+    //Datos de mesas
+    $m_enviadas = null;
+    $m_confirmadas = null;
+    $m_total = null;
+
+    $bnr = array();
+    $bnr['blancos']['lista'] = 'Blancos';
+    $bnr['nulos']['lista'] = 'Nulos';
+    $bnr['recurridos']['lista'] = 'Recurridos';
+
+    foreach($datos as $un_registro){
+        if($nom_ue != null && $nom_ue != $un_registro['sigla_ue']){
             $this->crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
-        }
+
+            $data = array();
+            $claustros = array();
+            $ponderados = array();
+            
+            $nom_ue = $un_registro['sigla_ue'];                
+        }elseif($nom_ue == null)
+            $nom_ue = $un_registro['sigla_ue'];
+
+        $data[$un_registro['sigla_lista']]['lista'] = utf8_encode($un_registro['lista']);
+        $data[$un_registro['sigla_lista']]['sigla_lista'] = utf8_encode($un_registro['sigla_lista']);
+
+        if(isset($ponderados[$un_registro['sigla_lista']]))
+            $ponderados[$un_registro['sigla_lista']] += $un_registro['ponderado'];
+        else
+            $ponderados[$un_registro['sigla_lista']] = $un_registro['ponderado'];
+
+        if(isset($data[$un_registro['sigla_lista']]['total']))
+            $data[$un_registro['sigla_lista']]['total'] += $un_registro['total'];
+        else
+            $data[$un_registro['sigla_lista']]['total'] = $un_registro['total'];
+
+        $data[$un_registro['sigla_lista']][$un_registro['claustro']] = $un_registro['cant_votos'];
+            
+        $claustros[$un_registro['claustro']] = $un_registro['claustro'];
+        $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
+        //Datos de mesas
+        $m_enviadas = $un_registro['m_enviadas'];
+        $m_confirmadas = $un_registro['m_confirmadas'];
+        $m_total = $un_registro['m_total'];
+
+        $bnr['blancos'][$un_registro['claustro']] = $un_registro['votos_blancos'];
+        $bnr['nulos'][$un_registro['claustro']] = $un_registro['votos_nulos'];
+        $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];
     }
-    
-    function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total){
-        $json = array();
+
+    if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
+        $this->crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
+    }
+}
+
+function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total){
+    $json = array();
                 
         $columns = array();
         $columns[] = array('field' => 'lista', 'title' => 'Listas');
@@ -727,7 +724,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
         $empadronados = array();
         $empadronados['lista'] = 'Empadronados';
         $empadronados['total'] = 0;
-    }
+}
     
     //Metodo que calcula y genera archivos JSONS ubicados en /resultados_json/$fecha
     //con datos de resultados consejero superior por cada claustro
@@ -928,14 +925,16 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
           A continuación se dividirá la cantidad de votos lograda por cada Lista por 
          * el "número repartidor". El resultado obtenido dará el número de cargos 
          * que se adjudicará a cada una de ellas.
-
-         */
+*/
+         
         $escano_max = 0;
         $datos = array();
         if (count($listas) > 0 && count($listas) == count($valores)) {
             $cocientes = array();
+            if ($cat=='CS'){
             for ($index1 = 0; $index1 < count($valores); $index1++) {
                 $valores[$index1] = $valores[$index1] * 10000;
+            }
             }
             foreach ($valores as $value) {
                 for ($index = 1; $index <= $escanos; $index++) {
@@ -951,7 +950,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
                 $fila = array('lista' => $lista,
                     'escanos' => floor($valores[$key] / $repartidor));
                 for ($index2 = 1; $index2 <= $escanos; $index2++) {
-                    $fila[$index2] = floor($valores[$key] / $index2);
+                    $fila[$index2] = round($valores[$key] / $index2,2);
                     if ($index2 <= $fila['escanos']) {
                         if ($index2 > $escano_max)
                             $escano_max = $index2;
@@ -964,7 +963,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
         }
         $columns = array();
         $columns[] = array('field' => 'lista', 'title' => 'Listas');
-        $columns[] = array('field' => 'escanos', 'title' => 'Escaños');
+        $columns[] = array('field' => 'escanos', 'title' =>'Cargos');
         for ($index3 = 1; $index3 <= $escano_max; $index3++) {
             $columns[] = array('field' => $index3, 'title' => $index3);
         }
