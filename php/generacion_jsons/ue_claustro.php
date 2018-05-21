@@ -77,7 +77,8 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
     foreach ($datos as $un_registro) {
 
         $sigla_sede = $un_registro['sede'] . ' M' . $un_registro['nro_mesa'];
-        if($un_registro['estado']>2) $sigla_sede.='*';
+        if ($un_registro['estado'] > 2)
+            $sigla_sede.='*';
         if (($nro_lista != $un_registro['id_nro_lista']) || ($nom_ue != $un_registro['sigla_ue']) || ( $nom_claustro != $un_registro['claustro'])) { //nueva fila
             if (!is_null($nro_lista)) {
                 $data[] = $lista;
@@ -108,8 +109,16 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
                         $json['columns2'] = $res[0];
                         $json['titulo2'] = 'Distribución de cargos a ocupar';
                     }
+                    $categoria2 = $categoria;
+                    if (strtoupper($nom_ue) == 'AUZA' || strtoupper($nom_ue) == 'ASMA') {
+                        if ($sigla_cat == 'D') {
+                            $categoria2 = 'Director de Asentamiento';
+                        } elseif ($sigla_cat == 'CD') {
+                            $categoria2 = 'Consejero Directivo Asentamiento';
+                        }
+                    }
                     $json['fecha'] = date('d/m/Y G:i:s');
-                    $json['titulo'] = 'Votos ' . $nom_ue . ' ' . $categoria . ' ' . $nom_claustro;
+                    $json['titulo'] = 'Votos ' . $nom_ue . ' ' . $categoria2 . ' ' . $nom_claustro;
                     $json['enviadas'] = round($m_enviadas * 100 / $m_total, 2) . '% (' . $m_enviadas . " de " . $m_total . ')';
                     $json['confirmadas'] = round($m_confirmadas * 100 / $m_total, 2) . '% (' . $m_confirmadas . " de " . $m_total . ')';
                     //print_r($json);exit;
@@ -173,7 +182,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
         $votantes['total']+=$un_registro['cant_votos'];
     }
 
-    if (sizeof($data) > 0) {//Solo si existen datos finales ent crea el json
+    if (sizeof($lista) > 0) {//Solo si existen datos finales ent crea el json
         $data[] = $lista;
         $total[] = $lista['total'];
         //print_r($data);exit;
@@ -206,7 +215,16 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
         }
 
         $json['fecha'] = date('d/m/Y G:i:s');
-        $json['titulo'] = 'Votos ' . $nom_ue . ' ' . $categoria . ' ' . $nom_claustro;
+        $categoria2 = $categoria;
+        if (strtoupper($nom_ue) == 'AUZA' || strtoupper($nom_ue) == 'ASMA') {
+            if ($sigla_cat == 'D') {
+                $categoria2 = 'Director de Asentamiento';
+            } elseif ($sigla_cat == 'CD') {
+                $categoria2 = 'Consejero Directivo Asentamiento';
+            }
+        }
+
+        $json['titulo'] = 'Votos ' . $nom_ue . ' ' . $categoria2 . ' ' . $nom_claustro;
 
         $json['enviadas'] = round($m_enviadas * 100 / $m_total, 2) . '% (' . $m_enviadas . " de " . $m_total . ')';
         $json['confirmadas'] = round($m_confirmadas * 100 / $m_total, 2) . '% (' . $m_confirmadas . " de " . $m_total . ')';

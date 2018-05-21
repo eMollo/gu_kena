@@ -11,7 +11,13 @@
                     total_votos_blancos, total_votos_nulos, total_votos_recurridos
                 from (
                     select id_nro_lista, lista as Lista, sigla_lista, vl.claustro, 
-                    sum(cast(votos_lista as real)/votos_validos)*ponderacion pond,
+                    
+
+                 
+
+
+                    sum(case when votos_validos=0 then 0
+                else cast(votos_lista as real)/votos_validos end)*ponderacion pond,
                     sum(votos_lista) votos, sum(empadronados) empadronados,
                     sum(total_votos_blancos) total_votos_blancos, 
                     sum(total_votos_nulos) total_votos_nulos, sum(total_votos_recurridos) total_votos_recurridos
@@ -182,6 +188,7 @@
             $bnr['Blancos']['sigla_lista'] = 'Blancos';
             $bnr['Nulos']['sigla_lista'] = 'Nulos';
             $bnr['Recurridos']['sigla_lista'] = 'Recurridos';
+            $total2['total']+= $bnr['Blancos']['total']+$bnr['Nulos']['total']+$bnr['Recurridos']['total'];
             $data2[] = $bnr['Blancos'];
             $data2[] = $bnr['Nulos'];
             $data2[] = $bnr['Recurridos'];

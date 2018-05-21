@@ -14,7 +14,8 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
                 l.id_nro_lista, trim(l.nombre) as lista,
                 trim(l.sigla) as sigla_lista, sum(vl.cant_votos) cant_votos, total.total,
                 total.votos_blancos, total.votos_nulos, total.votos_recurridos,
-                cast(total.total as real)/vv.votos_validos*ponderacion as ponderado
+                case when vv.votos_validos=0 then 0
+                else cast(total.total as real)/vv.votos_validos*ponderacion end as ponderado
             from acta a 
             inner join mesa m on m.id_mesa = a.de
             inner join claustro cl on cl.id = m.id_claustro
@@ -94,7 +95,7 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
 
     $claustros = array();
     $empadronados = array();
-    $empadronados['lista'] = 'Empadronados';
+    $empadronados['sigla_lista'] = 'Empadronados';
 
     //Datos de mesas
     $m_enviadas = null;
@@ -102,9 +103,9 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
     $m_total = null;
 
     $bnr = array();
-    $bnr['blancos']['lista'] = 'Blancos';
-    $bnr['nulos']['lista'] = 'Nulos';
-    $bnr['recurridos']['lista'] = 'Recurridos';
+    $bnr['blancos']['sigla_lista'] = 'Blancos';
+    $bnr['nulos']['sigla_lista'] = 'Nulos';
+    $bnr['recurridos']['sigla_lista'] = 'Recurridos';
 
     foreach($datos as $un_registro){
         if($nom_ue != null && $nom_ue != $un_registro['sigla_ue']){
@@ -154,7 +155,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponder
     $json = array();
                 
         $columns = array();
-        $columns[] = array('field' => 'lista', 'title' => 'Listas');
+        //$columns[] = array('field' => 'lista', 'title' => 'Listas');
         $columns[] = array('field' => 'sigla_lista', 'title' => 'Sigla Listas');
         foreach($claustros as $key => $value){
             $columns[] = array('field' => $key, 'title' => $key);
@@ -163,14 +164,30 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponder
 
         $fila_total = array();//Ultima fila que contiene los totales de cada columna
         $fila_total2 = array(); //Ultima fila que contiene los totales de ponderados
-        $fila_total['lista'] = 'Votantes'; 
+        $fila_total['sigla_lista'] = 'Votantes';
         
-        $fila_total2['lista'] = 'Total'; 
+        
+        $fila_total2['lista'] = 'Total';
+        
+        
         $fila_total2['ponderado'] = 'Ponderado'; 
         $data2 = array();//cuadro de ponderados
         
+        if(!isset($bnr['blancos']['total'])){
+            $bnr['blancos']['total']=0;
+        }
+        if(!isset($bnr['nulos']['total'])){
+            $bnr['nulos']['total']=0;
+        }
+        if(!isset($bnr['recurridos']['total'])){
+            $bnr['recurridos']['total']=0;
+        }
+        if(!isset($empadronados['total'])){
+            $empadronados['total']=0;
+        }        
         //Carga valores de blancos, nulos y recurridos
         foreach($claustros as $k => $v){
+
             $bnr['blancos']['total'] += $bnr['blancos'][$k];
             $bnr['nulos']['total'] += $bnr['nulos'][$k];
             $bnr['recurridos']['total'] += $bnr['recurridos'][$k];
@@ -214,7 +231,11 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponder
         if(strtoupper($nom_ue) == 'RECT'){
             $json['titulo'] = 'Votos Ponderados Adm. Central '.($sigla_cat=='R'?'Rector':'Decano');
             $json['titulo2'] = 'Votos Adm. Central '.($sigla_cat=='R'?'Rector':'Decano');
-        }else{
+        }elseif(strtoupper($nom_ue)=='AUZA'||strtoupper($nom_ue)=='ASMA'){
+            $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Asentamiento');
+            $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Asentamiento');
+        }
+        else{
             $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
             $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
         }
@@ -226,9 +247,9 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponder
         file_put_contents('resultados_json/'. $nom_archivo , $string_json);
         
         $bnr = array();
-        $bnr['blancos']['lista'] = 'Blancos';
-        $bnr['nulos']['lista'] = 'Nulos';
-        $bnr['recurridos']['lista'] = 'Recurridos';
+        $bnr['blancos']['sigla_lista'] = 'Blancos';
+        $bnr['nulos']['sigla_lista'] = 'Nulos';
+        $bnr['recurridos']['sigla_lista'] = 'Recurridos';
         $bnr['blancos']['total'] = 0;
         $bnr['nulos']['total'] = 0;
         $bnr['recurridos']['total'] = 0;
