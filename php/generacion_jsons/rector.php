@@ -24,9 +24,12 @@
                     from(
                     select ue.sigla as ue,c.descripcion claustro, l.id_nro_lista, 
                     l.nombre as lista, l.sigla as sigla_lista,
-                    sum(cant_votos) as votos_lista, a.total_votos_blancos, 
+                    sum(cant_votos) as votos_lista, 
                     sum(cant_empadronados) empadronados,
-                    a.total_votos_nulos, a.total_votos_recurridos
+        sum(a.total_votos_blancos) as total_votos_blancos,
+        sum(a.total_votos_nulos) as total_votos_nulos,
+        sum(a.total_votos_recurridos) as total_votos_recurridos
+
                     from acta a inner join voto_lista_rector vl on a.id_acta=vl.id_acta and a.id_tipo=4
                             inner join lista_rector l on vl.id_lista=l.id_nro_lista
                             inner join mesa m on a.de=m.id_mesa
@@ -34,8 +37,8 @@
                             inner join sede s on a.id_sede=s.id_sede
                             inner join unidad_electoral ue on s.id_ue=ue.id_nro_ue
                     where m.fecha = '$fecha' and m.estado > 1
-                    group by ue,claustro, lista, l.id_nro_lista, a.total_votos_blancos, 
-                    a.total_votos_nulos, a.total_votos_recurridos
+                    group by ue,claustro, lista, l.id_nro_lista 
+                    --a.total_votos_blancos, a.total_votos_nulos, a.total_votos_recurridos
                     )vl inner join 
                     (
                     select ue.sigla as ue,c.descripcion claustro, cargos_cdirectivo as ponderacion, sum(cant_votos) as votos_validos
@@ -70,6 +73,7 @@
       where empadronados.claustro = datos.claustro
       order by id_nro_lista, claustro
                     ";
+        //echo $sql; exit;
         $datos = toba::db('gu_kena')->consultar($sql);
 
         if(sizeof($datos) > 0){
