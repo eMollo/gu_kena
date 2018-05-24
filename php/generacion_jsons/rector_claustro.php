@@ -40,10 +40,13 @@ m_total, t.empadronados
 													  m.id_claustro, a.id_tipo 
 											order by s.id_ue,m.id_claustro, l.nombre 
                 						) votos_totales
-											inner join (select id_ue, id_claustro, 
-										case ue.nivel when 2 then cargos_cdirectivo
-											when 3 then cargos_cdiras
-										end as mult, 
+											inner join (select id_ue, id_claustro,
+                                                                                        
+                                                                                --siempre debería ser por cdirectivo sin importar el nivel
+										--case ue.nivel when 2 then cargos_cdirectivo
+										--	when 3 then cargos_cdiras
+										--end
+                                                                                cargos_cdirectivo as mult, 
 										sum(cant_votos) validos 
 											from sede s 
 											inner join acta a on a.id_sede = s.id_sede 
