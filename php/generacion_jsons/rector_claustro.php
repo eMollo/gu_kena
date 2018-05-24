@@ -35,7 +35,7 @@ m_total, t.empadronados
 										  inner join claustro c on c.id = m.id_claustro 
 										  inner join voto_lista_rector vl on vl.id_acta = a.id_acta 
 										  inner join lista_rector l on l.id_nro_lista = vl.id_lista 
-											where m.estado > 1 and m.fecha = '2018-05-22' 
+											where m.estado > 1 and m.fecha = '$fecha' 
 											group by ue.id_nro_ue, ue.sigla, c.descripcion, l.nombre, l.id_nro_lista, l.sigla, s.id_ue, 
 													  m.id_claustro, a.id_tipo 
 											order by s.id_ue,m.id_claustro, l.nombre 
@@ -51,7 +51,7 @@ m_total, t.empadronados
 											inner join voto_lista_rector vl on vl.id_acta = a.id_acta 
 											inner join claustro cl on cl.id = m.id_claustro
 											inner join unidad_electoral ue on ue.id_nro_ue = s.id_ue
-											where m.estado > 1 and m.fecha = '2018-05-22' 
+											where m.estado > 1 and m.fecha = '$fecha' 
 											group by id_ue, id_claustro, cargos_csuperior, ue.nivel, 
 														cargos_cdirectivo, cargos_cdiras  
                 						) validos on validos.id_ue = votos_totales.id_nro_ue 
@@ -62,15 +62,15 @@ m_total, t.empadronados
 								) datos
            inner join (
                 select count(*)  as m_total ,sum(cant_empadronados) as empadronados, m.id_claustro from mesa m
-                where m.fecha = '2018-05-22'
+                where m.fecha = '$fecha'
                 group by m.id_claustro) t on t.id_claustro = datos.id_claustro
 			left outer join (
                 select count(*) as m_enviadas, m.id_claustro from mesa m
-                where m.fecha = '2018-05-22' and m.estado>1
+                where m.fecha = '$fecha' and m.estado>1
                 group by m.id_claustro) m on m.id_claustro = datos.id_claustro
             left outer join (
                 select count(*) as m_confirmadas, m.id_claustro from mesa m
-                where m.fecha = '2018-05-22' and m.estado>2
+                where m.fecha = '$fecha' and m.estado>2
                 group by m.id_claustro) m2 on m2.id_claustro = datos.id_claustro
                 order by claustro, lista
             
