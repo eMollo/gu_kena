@@ -241,8 +241,10 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $columns2, $data, $ponder
         }elseif(strtoupper($nom_ue)=='AUZA'||strtoupper($nom_ue)=='ASMA'){
             $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Asentamiento');
             $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Asentamiento');
-        }
-        else{
+        }elseif(strtoupper($nom_ue)=='ESCM'){
+            $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Escuela');
+            $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Escuela');
+        }else{
             $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
             $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
         }
