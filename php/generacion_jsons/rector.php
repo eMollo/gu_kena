@@ -95,7 +95,7 @@
                     $r['sigla_lista'] = $nom_lista;
                     $r2['sigla_lista'] = $nom_lista;
                     
-                    $labels[] = $nom_lista;
+                    $labels[] = $nom_lista.' (%)';
                     //$totales[] = $r['ponderado'];
                     
                     $data[] = $r;
@@ -127,7 +127,7 @@
                 $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
             }
             //Guardar Ultima lista no guardada de ponderado
-            $labels[] = $nom_lista;
+            $labels[] = $nom_lista.' (%)';
             //$totales[] = $r['ponderado'];
             
             $r['sigla_lista'] = $nom_lista;
@@ -199,7 +199,7 @@
             $json['data2'] = $data2;
             $json['columns2'] = $columns2;
 
-            $json['titulo_grafico'] = 'Porcentajes resultantes';
+            $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
             $json['labels'] = $labels;
             $json['total'] = $porcentajes;
             $json['fecha'] = date('d/m/Y G:i:s');

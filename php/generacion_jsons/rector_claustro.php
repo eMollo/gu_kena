@@ -126,7 +126,7 @@ m_total, t.empadronados
             $json['total'] = $porcentajes;
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Ponderados Universidad Rector ' . $nom_claustro;
-
+            $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
             $data2 = votos_por_ue($fecha, 'voto_lista_rector', 'lista_rector', 4, $nom_claustro);
             $json['titulo2'] = 'Votos Universidad Rector ' . $nom_claustro . ' por Unidad Electoral';
             $json['columns2'] = $data2[1];
@@ -156,7 +156,7 @@ m_total, t.empadronados
         $total_votos+=$r['votos'];
         $r['ponderado'] = $un_registro['ponderado'];
 
-        $labels[] = $un_registro['sigla_lista'];
+        $labels[] = $un_registro['sigla_lista'].' (%)';
         $total[] = $un_registro['ponderado'];
         $total['total'] += $un_registro['ponderado'];
 
@@ -194,7 +194,7 @@ m_total, t.empadronados
         $json['total'] = $porcentajes;
         $json['fecha'] = date('d/m/Y G:i:s');
         $json['titulo'] = 'Votos Ponderados Universidad Rector ' . $nom_claustro;
-
+        $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
         $data2 = votos_por_ue($fecha, 'voto_lista_rector', 'lista_rector', 4, $nom_claustro);
         $json['titulo2'] = 'Votos Universidad Rector ' . $nom_claustro . ' por Unidad Electoral';
         $json['columns2'] = $data2[1];

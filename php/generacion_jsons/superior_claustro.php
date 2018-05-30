@@ -1,6 +1,4 @@
 <?php
-
-
     //Metodo que calcula y genera archivos JSONS ubicados en /resultados_json/$fecha
     //con datos de resultados consejero superior por cada claustro
     function datos_sup_claustro($fecha){
@@ -81,12 +79,14 @@
         $columns[] = array('field' => 'sigla_lista', 'title' => 'Sigla Listas');
         $columns[] = array('field' => 'votos', 'title' => 'Votos');
         $columns[] = array('field' => 'ponderado', 'title' => 'Ponderado');
+        $columns[] = array('field' => 'porcentaje', 'title' => 'Porcentaje');
         
         $nom_claustro = null;
         $cant_cargos =null;
         $data = array();
         $data2 = array();
         $columns2 = array();
+        $total_ponderado = 0; // Almacena el total de ponderados para calcular los porcentajes
         $total_votos=0;
         $empadronados=null;
         //Datos de mesas
@@ -101,6 +101,14 @@
             if($nom_claustro != null && $nom_claustro != $un_registro['claustro']){
                 $json = array();
                 
+                $porcentajes = array();
+                for($pos = 0; $pos <sizeof($data); $pos++){
+                    $porcentaje = round($data[$pos]['ponderado']*100/$total_ponderado, 2);
+
+                    $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                    $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
+                }
+                
                 $data[] = array('lista' => 'Blancos', 'votos' => $blancos);
                 $data[] = array('lista' => 'Nulos', 'votos' => $nulos);
                 $data[] = array('lista' => 'Recurridos', 'votos' => $recurridos);
@@ -109,10 +117,10 @@
                 $json['columns'] = $columns;
                 $json['data'] = $data;
                 $json['labels'] = $labels;
-                $json['total'] = $total;
+                $json['total'] = $porcentajes;
                 $json['fecha'] = date('d/m/Y G:i:s');
                 $json['titulo'] = 'Votos Ponderados Universidad Consejero Superior '.$nom_claustro;
-                
+                $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
                 //Formula dhont
                 $res = dhont($labels, $total, $cant_cargos);
                 $json['titulo2']='Distribución de cargos a ocupar';
@@ -125,6 +133,7 @@
                 $data = array();
                 $labels = array();
                 $total = array();
+                $total_ponderado = 0;
                 $total_votos=0;
                 
                 $string_json = json_encode($json);
@@ -140,8 +149,9 @@
             $r['ponderado'] = $un_registro['ponderado'];
             $r['votos'] = $un_registro['votos_lista'];
             $total_votos+=$r['votos'];
-            $labels[] = $un_registro['sigla_lista'];
+            $labels[] = $un_registro['sigla_lista'].' (%)';
             $total[] = $un_registro['ponderado'];
+            $total_ponderado += $un_registro['ponderado'];
             $cant_cargos = $un_registro['cant_cargos'];
             
             //Datos de mesas
@@ -160,6 +170,14 @@
         if(isset($data) && $nom_claustro != null){//Quedo un ultimo claustro sin guardar
             $json = array();
             
+            $porcentajes = array();
+            for($pos = 0; $pos <sizeof($data); $pos++){
+                $porcentaje = round($data[$pos]['ponderado']*100/$total_ponderado, 2);
+
+                $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
+            }
+            
             $data[] = array('lista' => 'Blancos', 'votos' => $blancos);
             $data[] = array('lista' => 'Nulos', 'votos' => $nulos);
             $data[] = array('lista' => 'Recurridos', 'votos' => $recurridos);
@@ -168,14 +186,14 @@
             $json['columns'] = $columns;
             $json['data'] = $data;
             $json['labels'] = $labels;
-            $json['total'] = $total;
+            $json['total'] = $porcentajes;
             
             //Formula dhont
             $res = dhont($labels, $total, $cant_cargos);
             $json['data2'] = $res[1];
             $json['columns2'] = $res[0];
             $json['titulo2']='Distribución de cargos a ocupar';
-            
+            $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Ponderados Universidad Consejero Superior '.$nom_claustro;
             
