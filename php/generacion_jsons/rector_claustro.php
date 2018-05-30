@@ -86,6 +86,7 @@ m_total, t.empadronados
     $columns[] = array('field' => 'sigla_lista', 'title' => 'Sigla Listas');
     $columns[] = array('field' => 'votos', 'title' => 'Votos');
     $columns[] = array('field' => 'ponderado', 'title' => 'Ponderado');
+    $columns[] = array('field' => 'porcentaje', 'title' => 'Porcentaje');
 
     $nom_claustro = null;
 
@@ -93,6 +94,7 @@ m_total, t.empadronados
     $m_enviadas = null;
     $m_confirmadas = null;
     $m_total = null;
+    $total['total'] = 0;
     $total_votos = 0;
     $empadronados = null;
     $blancos = null;
@@ -103,6 +105,15 @@ m_total, t.empadronados
     foreach ($datos as $un_registro) {
         if ($nom_claustro != null && $nom_claustro != $un_registro['claustro']) {
             $json = array();
+            
+            $porcentajes = array();
+            for($pos = 0; $pos <sizeof($data); $pos++){
+                $porcentaje = round($data[$pos]['ponderado']*100/$total['total'], 2);
+
+                $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
+            }
+        
             $data[] = array('lista' => 'Blancos', 'votos' => $blancos);
             $data[] = array('lista' => 'Nulos', 'votos' => $nulos);
             $data[] = array('lista' => 'Recurridos', 'votos' => $recurridos);
@@ -112,7 +123,7 @@ m_total, t.empadronados
             $json['columns'] = $columns;
             $json['data'] = $data;
             $json['labels'] = $labels;
-            $json['total'] = $total;
+            $json['total'] = $porcentajes;
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Ponderados Universidad Rector ' . $nom_claustro;
 
@@ -128,6 +139,7 @@ m_total, t.empadronados
             $data = array();
             $labels = array();
             $total = array();
+            $total['total'] = 0;
             $total_votos = 0;
 
             $string_json = json_encode($json);
@@ -146,6 +158,7 @@ m_total, t.empadronados
 
         $labels[] = $un_registro['sigla_lista'];
         $total[] = $un_registro['ponderado'];
+        $total['total'] += $un_registro['ponderado'];
 
         //Datos de mesas
         $m_enviadas = $un_registro['m_enviadas'];
@@ -161,17 +174,24 @@ m_total, t.empadronados
     if (isset($data) && $nom_claustro != null) {//Quedo un ultimo claustro sin guardar
         $json = array();
 
+        $porcentajes = array();
+        for($pos = 0; $pos <sizeof($data); $pos++){
+            $porcentaje = round($data[$pos]['ponderado']*100/$total['total'], 2);
+
+            $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+            $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
+        }
+        
         $data[] = array('lista' => 'Blancos', 'votos' => $blancos);
         $data[] = array('lista' => 'Nulos', 'votos' => $nulos);
         $data[] = array('lista' => 'Recurridos', 'votos' => $recurridos);
         $data[] = array('lista' => 'Votantes', 'votos' => $total_votos + $blancos + $nulos + $recurridos);
         $data[] = array('lista' => 'Empadronados', 'votos' => $empadronados);
 
-
         $json['columns'] = $columns;
         $json['data'] = $data;
         $json['labels'] = $labels;
-        $json['total'] = $total;
+        $json['total'] = $porcentajes;
         $json['fecha'] = date('d/m/Y G:i:s');
         $json['titulo'] = 'Votos Ponderados Universidad Rector ' . $nom_claustro;
 
