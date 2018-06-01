@@ -723,7 +723,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
         $fila_total2['porcentaje'] += $porcentaje;
 
         $json['data2'][] = $value;
-        $json['labels'][] = $value['sigla_lista'].' (%)';
+        $json['labels'][] = $value['sigla_lista'].' ('.$porcentaje.'%)';
         $json['total'][] = $porcentaje;
     }
     $json['data2'][] = $bnr['blancos'];
@@ -752,7 +752,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
     }
     $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
     $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
-    $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+    $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
 
     $string_json = json_encode($json);
     $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_T.json';
@@ -876,7 +876,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
                 $porcentajes = array();
                 for($pos = 0; $pos <sizeof($data); $pos++){
                     $porcentaje = round($data[$pos]['ponderado']*100/$total_ponderado, 2);
-
+                    $labels[$pos] .= ' ('.$porcentaje.'%)';
                     $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
                     $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
                 }
@@ -892,7 +892,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
                 $json['total'] = $porcentajes;
                 $json['fecha'] = date('d/m/Y G:i:s');
                 $json['titulo'] = 'Votos Ponderados Universidad Consejero Superior '.$nom_claustro;
-                $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+                $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
                 //Formula dhont
                 $res = $this->dhont($labels, $total, $cant_cargos);
                 $json['titulo2']='Distribución de cargos a ocupar';
@@ -921,7 +921,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
             $r['ponderado'] = $un_registro['ponderado'];
             $r['votos'] = $un_registro['votos_lista'];
             $total_votos+=$r['votos'];
-            $labels[] = $un_registro['sigla_lista'].' (%)';
+            $labels[] = $un_registro['sigla_lista'];
             $total[] = $un_registro['ponderado'];
             $total_ponderado += $un_registro['ponderado'];
             $cant_cargos = $un_registro['cant_cargos'];
@@ -945,7 +945,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
             $porcentajes = array();
             for($pos = 0; $pos <sizeof($data); $pos++){
                 $porcentaje = round($data[$pos]['ponderado']*100/$total_ponderado, 2);
-
+                $labels[$pos] .= ' ('.$porcentaje.'%)';
                 $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
                 $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
             }
@@ -965,7 +965,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
             $json['data2'] = $res[1];
             $json['columns2'] = $res[0];
             $json['titulo2']='Distribución de cargos a ocupar';
-            $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+            $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Ponderados Universidad Consejero Superior '.$nom_claustro;
             
@@ -1144,7 +1144,7 @@ m_total, t.empadronados
             $porcentajes = array();
             for($pos = 0; $pos <sizeof($data); $pos++){
                 $porcentaje = round($data[$pos]['ponderado']*100/$total['total'], 2);
-
+                $labels[$pos] .= ' ('.$porcentaje.'%)';
                 $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
                 $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
             }
@@ -1161,7 +1161,7 @@ m_total, t.empadronados
             $json['total'] = $porcentajes;
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Ponderados Universidad Rector ' . $nom_claustro;
-            $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+            $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
             $data2 = $this->votos_por_ue($fecha, 'voto_lista_rector', 'lista_rector', 4, $nom_claustro);
             $json['titulo2'] = 'Votos Universidad Rector ' . $nom_claustro . ' por Unidad Electoral';
             $json['columns2'] = $data2[1];
@@ -1191,7 +1191,7 @@ m_total, t.empadronados
         $total_votos+=$r['votos'];
         $r['ponderado'] = $un_registro['ponderado'];
 
-        $labels[] = $un_registro['sigla_lista'].' (%)';
+        $labels[] = $un_registro['sigla_lista'];
         $total[] = $un_registro['ponderado'];
         $total['total'] += $un_registro['ponderado'];
 
@@ -1212,7 +1212,7 @@ m_total, t.empadronados
         $porcentajes = array();
         for($pos = 0; $pos <sizeof($data); $pos++){
             $porcentaje = round($data[$pos]['ponderado']*100/$total['total'], 2);
-
+            $labels[$pos] .= ' ('.$porcentaje.'%)';
             $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
             $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
         }
@@ -1229,7 +1229,7 @@ m_total, t.empadronados
         $json['total'] = $porcentajes;
         $json['fecha'] = date('d/m/Y G:i:s');
         $json['titulo'] = 'Votos Ponderados Universidad Rector ' . $nom_claustro;
-        $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+        $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
         $data2 = $this->votos_por_ue($fecha, 'voto_lista_rector', 'lista_rector', 4, $nom_claustro);
         $json['titulo2'] = 'Votos Universidad Rector ' . $nom_claustro . ' por Unidad Electoral';
         $json['columns2'] = $data2[1];
@@ -1445,7 +1445,7 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
                     $r['sigla_lista'] = $nom_lista;
                     $r2['sigla_lista'] = $nom_lista;
                     
-                    $labels[] = $nom_lista.' (%)';
+                    $labels[] = $nom_lista;
                     //$totales[] = $r['ponderado'];
                     
                     $data[] = $r;
@@ -1477,7 +1477,7 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
                 $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
             }
             //Guardar Ultima lista no guardada de ponderado
-            $labels[] = $nom_lista.' (%)';
+            $labels[] = $nom_lista;
             //$totales[] = $r['ponderado'];
             
             $r['sigla_lista'] = $nom_lista;
@@ -1490,8 +1490,10 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
             $porcentajes = array();
             for($pos = 0; $pos <sizeof($data); $pos++){
                 $porcentaje = round($data[$pos]['ponderado']*100/$total['ponderado'], 2);
-                
-                $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                if($data[$pos]['lista'] != 'Total'){
+                    $labels[$pos] .= ' ('.$porcentaje.'%)';
+                    $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                }
                 $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
             }
             
@@ -1549,7 +1551,7 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
             $json['data2'] = $data2;
             $json['columns2'] = $columns2;
 
-            $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+            $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
             $json['labels'] = $labels;
             $json['total'] = $porcentajes;
             $json['fecha'] = date('d/m/Y G:i:s');

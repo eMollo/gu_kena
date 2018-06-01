@@ -95,7 +95,7 @@
                     $r['sigla_lista'] = $nom_lista;
                     $r2['sigla_lista'] = $nom_lista;
                     
-                    $labels[] = $nom_lista.' (%)';
+                    $labels[] = $nom_lista;
                     //$totales[] = $r['ponderado'];
                     
                     $data[] = $r;
@@ -127,7 +127,7 @@
                 $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
             }
             //Guardar Ultima lista no guardada de ponderado
-            $labels[] = $nom_lista.' (%)';
+            $labels[] = $nom_lista;
             //$totales[] = $r['ponderado'];
             
             $r['sigla_lista'] = $nom_lista;
@@ -140,8 +140,10 @@
             $porcentajes = array();
             for($pos = 0; $pos <sizeof($data); $pos++){
                 $porcentaje = round($data[$pos]['ponderado']*100/$total['ponderado'], 2);
-                
-                $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                if($data[$pos]['lista'] != 'Total'){
+                    $labels[$pos] .= ' ('.$porcentaje.'%)';
+                    $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                }
                 $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
             }
             
@@ -199,7 +201,7 @@
             $json['data2'] = $data2;
             $json['columns2'] = $columns2;
 
-            $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+            $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
             $json['labels'] = $labels;
             $json['total'] = $porcentajes;
             $json['fecha'] = date('d/m/Y G:i:s');

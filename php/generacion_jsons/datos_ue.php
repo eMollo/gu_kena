@@ -217,7 +217,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
         $fila_total2['porcentaje'] += $porcentaje;
 
         $json['data2'][] = $value;
-        $json['labels'][] = $value['sigla_lista'].' (%)';
+        $json['labels'][] = $value['sigla_lista'].' ('.$porcentaje.'%)';
         $json['total'][] = $porcentaje;
     }
     $json['data2'][] = $bnr['blancos'];
@@ -246,7 +246,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
     }
     $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
     $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
-    $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+    $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
 
     $string_json = json_encode($json);
     $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_T.json';

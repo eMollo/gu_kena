@@ -104,7 +104,7 @@
                 $porcentajes = array();
                 for($pos = 0; $pos <sizeof($data); $pos++){
                     $porcentaje = round($data[$pos]['ponderado']*100/$total_ponderado, 2);
-
+                    $labels[$pos] .= ' ('.$porcentaje.'%)';
                     $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
                     $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
                 }
@@ -120,7 +120,7 @@
                 $json['total'] = $porcentajes;
                 $json['fecha'] = date('d/m/Y G:i:s');
                 $json['titulo'] = 'Votos Ponderados Universidad Consejero Superior '.$nom_claustro;
-                $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+                $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
                 //Formula dhont
                 $res = dhont($labels, $total, $cant_cargos);
                 $json['titulo2']='Distribución de cargos a ocupar';
@@ -149,7 +149,7 @@
             $r['ponderado'] = $un_registro['ponderado'];
             $r['votos'] = $un_registro['votos_lista'];
             $total_votos+=$r['votos'];
-            $labels[] = $un_registro['sigla_lista'].' (%)';
+            $labels[] = $un_registro['sigla_lista'];
             $total[] = $un_registro['ponderado'];
             $total_ponderado += $un_registro['ponderado'];
             $cant_cargos = $un_registro['cant_cargos'];
@@ -173,7 +173,7 @@
             $porcentajes = array();
             for($pos = 0; $pos <sizeof($data); $pos++){
                 $porcentaje = round($data[$pos]['ponderado']*100/$total_ponderado, 2);
-
+                $labels[$pos] .= ' ('.$porcentaje.'%)';
                 $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
                 $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
             }
@@ -193,7 +193,7 @@
             $json['data2'] = $res[1];
             $json['columns2'] = $res[0];
             $json['titulo2']='Distribución de cargos a ocupar';
-            $json['titulo_grafico'] = 'Porcentaje de ponderado sobre mesas cargadas';
+            $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
             $json['fecha'] = date('d/m/Y G:i:s');
             $json['titulo'] = 'Votos Ponderados Universidad Consejero Superior '.$nom_claustro;
             
