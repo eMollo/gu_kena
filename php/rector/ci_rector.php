@@ -241,13 +241,14 @@ class ci_rector extends toba_ci {
                     break;
             }
         }
-        if(!$this->max_fecha_modificacion('2018-05-22'))
-            $this->generar_json('2018-05-22');
+        $res = $this->max_fecha_modificacion('2017-05-16');
+        if($res['existe_mod'])
+            $this->generar_json('2018-05-22', $res['fechamax']);
         else
             print_r("No existen modificaciones");
     }
 
-    function generar_json($fecha) {
+    function generar_json($fecha, $fechamax) {
         //Genera un JSON de total rector
         $this->datos_rector($fecha);
         
@@ -270,7 +271,13 @@ class ci_rector extends toba_ci {
         //Genera 17*4 = 68 JSONS de total consejo directivo por claustro y por unidad electoral
         $this->datos_ue_claustro($fecha, 'voto_lista_cdirectivo', 'lista_cdirectivo', 'Consejero Directivo', 'CD');
     
-        
+        if(!is_null($fechamax)){
+            $sql_update = "update acto_electoral 
+                                set generacion_json_fecha = $fechamax 
+                                where id_fecha = $fecha";
+            print_r($sql_update);
+            //toba::db('gu_kena')->consultar($sql_update);
+        }
     }
     
     //Metodo que calcula y genera JSONS de la categoria $categoria para cada unidad
@@ -715,7 +722,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
         $fila_total[$k] = $bnr['blancos'][$k]+$bnr['nulos'][$k]+$bnr['recurridos'][$k];
     }
     $fila_total['total'] = $bnr['blancos']['total']+$bnr['nulos']['total']+$bnr['recurridos']['total'];
-    $fila_total2['porcentaje'] = 0;
+    
     //calcula valores totales
     foreach($data as $key => $value){
         //calcula valores totales de cada fila
@@ -730,8 +737,6 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
         $r_data['ponderado'] = $ponderados[$value['sigla_lista']];
         $r_data['porcentaje'] = $porcentaje.' %';
         $json['data'][] = $r_data;
-
-        $fila_total2['porcentaje'] += $porcentaje;
 
         $json['data2'][] = $value;
         $json['labels'][] = $value['sigla_lista'].' ('.$porcentaje.'%)';
@@ -1504,8 +1509,9 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
                 if($data[$pos]['lista'] != 'Total'){
                     $labels[$pos] .= ' ('.$porcentaje.'%)';
                     $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                
+                    $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
                 }
-                $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
             }
             
             //Datos de columnas de primer cuadro (ponderado)
@@ -1591,7 +1597,7 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
                                       else 1
                                  end
                             else 0
-                   end existe_mod
+                   end existe_mod, fechamax_modificacion fechamax
             from (
                     select max(fechamax) fechamax_modificacion
                     from (
@@ -1635,8 +1641,8 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
             where id_fecha = '$fecha') x
             ";
     $max = toba::db('gu_kena')->consultar($sql);
-    if(sizeof($max)>0 && !is_null($max[0]['existe_mod']))
-        return $max[0]['existe_mod'];
+    if(sizeof($max)>0 && isset($max[0]))
+        return $max[0];
     else
         return null;
 }

@@ -11,7 +11,7 @@ function max_fecha_modificacion($fecha) {
                                       else 1
                                  end
                             else 0
-                   end existe_mod
+                   end existe_mod, fechamax_modificacion fechamax
             from (
                     select max(fechamax) fechamax_modificacion
                     from (
@@ -55,8 +55,8 @@ function max_fecha_modificacion($fecha) {
             where id_fecha = '$fecha') x
             ";
     $max = toba::db('gu_kena')->consultar($sql);
-    if(sizeof($max)>0 && !is_null($max[0]['existe_mod']))
-        return $max[0]['existe_mod'];
+    if(sizeof($max)>0 && isset($max[0]))
+        return $max[0];
     else
         return null;
 }

@@ -198,7 +198,7 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
         $fila_total[$k] = $bnr['blancos'][$k]+$bnr['nulos'][$k]+$bnr['recurridos'][$k];
     }
     $fila_total['total'] = $bnr['blancos']['total']+$bnr['nulos']['total']+$bnr['recurridos']['total'];
-    $fila_total2['porcentaje'] = 0;
+    
     //calcula valores totales
     foreach($data as $key => $value){
         //calcula valores totales de cada fila
@@ -213,8 +213,6 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
         $r_data['ponderado'] = $ponderados[$value['sigla_lista']];
         $r_data['porcentaje'] = $porcentaje.' %';
         $json['data'][] = $r_data;
-
-        $fila_total2['porcentaje'] += $porcentaje;
 
         $json['data2'][] = $value;
         $json['labels'][] = $value['sigla_lista'].' ('.$porcentaje.'%)';

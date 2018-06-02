@@ -25,7 +25,7 @@ class tp_gu_kena extends toba_tp_basico
 		
 //        echo "<div>".utf8_decode("versión")." ".toba::proyecto()->get_version()."</div>";
 				echo "<div><a style='color:blue;font-size:15px;' href='ord_1386_2013_46.pdf'>Ver ".utf8_decode('Ordenanza N°1386')."</a></div>";
-				echo "<div><a style='color:blue;font-size:15px;' href='instructivo_autoridades_mesa_2018.pdf'>Ver Instructivo</a></div>";
+				echo "<div><a style='color:blue;font-size:15px;' href='instructivo_autoridades_mesa_2018_segunda.pdf'>Ver Instructivo</a></div>";
 		echo "</div>";                
 		echo "<div align='center' class='cuerpo'>\n";        
 	}

@@ -143,8 +143,9 @@
                 if($data[$pos]['lista'] != 'Total'){
                     $labels[$pos] .= ' ('.$porcentaje.'%)';
                     $porcentajes[] = $porcentaje;//utf8_encode($porcentaje.'%');
+                
+                    $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
                 }
-                $data[$pos]['porcentaje'] = utf8_encode($porcentaje.'%');
             }
             
             //Datos de columnas de primer cuadro (ponderado)
