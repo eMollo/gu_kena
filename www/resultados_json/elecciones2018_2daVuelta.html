@@ -14,10 +14,10 @@
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
 		<img src="img/marca UNCo azul.ico" class="rounded-circle" alt="Logo">
 		<div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
-			<h3 class="text-white ">Elecciones 2018 1ra Vuelta</h3>
+			<h3 class="text-white ">Elecciones 2018 2da Vuelta</h3>
 		</div>
 		<div class="d-md-none d-block d-sm-block d-lg-none d-xl-none">
-			<h5 class="text-white ">Elecciones 2018 1ra Vuelta</h5>
+			<h5 class="text-white ">Elecciones 2018 2da Vuelta</h5>
 		</div>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#collapsibleNavbar">
@@ -37,12 +37,12 @@
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','RECT')"><h7> <span>RECT</span></h7>
 						</a></li>
-						<li><a class="dropdown-item"
+<!--					<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','ASMA')"><h7> <span>ASMA</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','AUZA')"><h7> <span>AUZA</span></h7>
-						</a></li>
+						</a></li>-->
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','CRUB')"><h7> <span>CRUB</span></h7>
 						</a></li>
@@ -97,13 +97,13 @@
 							onclick="cambioTablaGrafico('categoria','R')"><h7> <span>Rector</span></h7>
 						</a></li>
 						<li class="dropdown-divider"></li>
-						<li><a class="dropdown-item"
+<!--					<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('categoria','CD')"><h7> <span>Consejo
 									Directivo</span></h7> </a></li>
 
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('categoria','CS')"><h7> <span>Consejo
-									Superior</span></h7> </a></li>
+									Superior</span></h7> </a></li>-->
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('categoria','D')"><h7> <span>Decano</span></h7>
 						</a></li>
@@ -168,8 +168,8 @@
 				class="shadow-lg p-4 mb-4 bg-white col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7"
 				id="lugarGrafico">
 				<canvas id="grafico"></canvas>
-<!--				<button type="button" class="btn btn-outline-primary float-right"id="mostrarCartel">
-  Mostrar Detalles</button>-->
+<!-- 				<button type="button" class="btn btn-outline-primary float-right"id="mostrarCartel">
+  Mostrar Detalles</button> -->
 			</div>
 		</div>
 	</div>
@@ -189,6 +189,76 @@
 			</div>
 		</div>
 	</div>
+                <div class="alert">
+                <h5> Sistema de votación en la Universidad del Comahue</h5>
+                <p>
+En las elecciones de la Universidad Nacional del Comahue, se utiliza voto directo con sistema de ponderación para atender y federalizar la representación de los claustros y de las unidades académicas.
+El Reglamento General de Elecciones <a href="https://despacho.uncoma.edu.ar/archivos/ord_1386_2013_46.pdf">Ordenanza 1386/13</a> es la norma que regula el Proceso Electoral.<br/>
+Para las categorías de Rector, Decano y Director de Asentamiento o Escuelas Superiores, resultará ganadora la lista que obtenga la mayoría absoluta de los <strong>Votos Ponderados</strong>.
+En caso contrario se realiza una nueva Elección (Segunda Vuelta) con las listas que obtuvieron el primer y segundo lugar en la primera Elección (Primera Vuelta) (Art 82-83-84).
+<br/>
+A los fines de realizar los cómputos de los votos para las categorías de Rector y Consejeros Superiores se considerará Unidad Electoral a las 12 Facultades,
+los 2 Centros Regionales, la Escuela Superior en Ciencias Marinas y la Administración Central (Art 78).<br/>
+
+RECT - Administración Central<br/>
+CRUB - Centro Regional Universitario Bariloche <br/>            
+CUZA - Centro Regional Zona Atlántica<br/>                 
+ESCM - Escuela Superior de Ciencias Marinas <br/>               
+FAAS - Facultad de Ciencias del Ambiente y la Salud<br/>
+FACA - Facultad de Ciencias Agrarias (incluye a ASMA - Asentamiento Universitario San Martín de los Andes como sede)<br/>
+FACE - Facultad de Ciencias de la Educación<br/>
+FADE - Facultad de Derecho y Ciencias Sociales<br/>
+FAEA - Facultad de Economía y Administración<br/>
+FAHU - Facultad de Humanidades<br/>
+FAIF - Facultad de Informática<br/>
+FAIN - Facultad de Ingeniería (incluye a AUZA - Asentamiento Universitario Zapala como sede)<br/>
+FALE - Facultad de Lenguas<br/>
+FAME - Facultad de Ciencias Médicas<br/>
+FATA - Facultad de Ciencias y Tecnologías de los Alimentos<br/>			
+FATU - Facultad de Turismo<br/>
+<br/>
+
+
+Para el cálculo de votos ponderados obtenidos por cada lista de la categoría <strong>Rector</strong>,
+se realiza la suma de los cocientes de
+los votos obtenidos por la lista en cada Unidad Electoral y Claustro, sobre
+los votos válidos emitidos en la respectiva Unidad Electoral y Claustro, multiplicados por: 8 para Docentes, 4 para Estudiantes, 3 para No Docentes y 1 para Graduados (Art. 79).
+Serán considerados votos válidos los que se hayan emitido con exclusión de los votos en blanco, nulos y recurridos (Art 63, Acta Junta Electoral).
+
+Utilizando la siguiente fómula:<br/>
+VP=(VD1/DE1+VD2/DE2+...)*8+(VE1/EE1+VE2/EE2+... )*4+(VND1/NDE1 +VND2/NDE2+...)*3+(VG1/GE1 +VG2/GE2... )*1<br/>
+Siendo,<br/>
+VP= Sumatoria de los votos ponderados obtenidos por cada lista de la categoría Rector.<br/>
+VDn= Cantidad de votos del claustro docente obtenidos por la lista en la Unidad Electoral "n".<br/>
+VDEn= Cantidad de votos válidos emitidos en el claustro docente en la Unidad Electoral "n".<br/>
+VEn= Cantidad de votos del claustro de estudiantes obtenidos por la lista en la Unidad Electoral "n".<br/>
+VEEn= Cantidad de votos válidos emitidos en el claustro de estudiantes en la Unidad Electoral "n".<br/>
+VNDn= Cantidad de votos del claustro no docente obtenidos por la lista en la Unidad Electoral "n".<br/>
+VNDEn= Cantidad de votos válidos emitidos en el claustro no docente en la Unidad Electoral "n".<br/>
+VGn= Cantidad de votos del claustro graduados obtenidos por la lista en la Unidad Electoral "n".<br/>
+VGEn= Cantidad de votos válidos emitidos en el claustro graduados en la Unidad Electoral "n".<br/>
+<br/>
+Para el cálculo de los votos ponderados por cada lista de la categoría de <strong>Decano y Director de Asentamiento o Escuela</strong>, se utiliza la misma fórmula de Rector,
+pero con los datos de una sola Unidad Electoral (Art 81).<br>
+<br/>
+A los efectos de ponderar los votos obtenidos para listas de la categoría de <strong>Consejeros Superiores</strong> de cada Claustro, se realiza la suma de los cocientes de
+los votos obtenidos por la lista en cada Unidad Electoral sobre
+los empadronados de la respectiva Unidad Electoral (Art. 80), utilizando la siguiente fórmula:<br/>
+VP=VUE1/EUE1+VUE2/EUE2+VUE3/EUE3+ ...<br/>
+Siendo,<br/>
+VP= Sumatoria de los votos ponderados obtenidos por cada lista.<br/>
+VUEn= Cantidad de votos obtenidos por la lista en la Unidad Electoral "n".<br/>
+EUEn= Cantidad de empadronados en ese claustro en la Unidad Electoral "n".<br/>
+<br>
+Para la Distribución de Cargos a ocupar de <strong>Consejeros Superiores y Consejeros Directivos se utiliza el sistema D'Hondt</strong> (Art 85, 86).
+
+
+</p>
+
+
+            </div>
+        </div>
+
 	<div id="pie"
 		class="row bg-dark d-flex justify-content-left d-print-none">
 		<!--<footer class="d-flex justify-content-between bg-dark mb-3">-->
@@ -215,7 +285,7 @@
 		feather.replace()
 	</script>
 	<script>
-		var carpetajson = 'e20180522';
+		var carpetajson = 'e20180605';
 		var ua = 'TODO';
 		var claustro = 'T';
 		var categoria = 'R';
