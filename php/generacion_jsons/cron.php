@@ -13,8 +13,8 @@ $fecha = '2018-06-05';
 //$fecha = '2016-05-17';
 //$fecha = '2015-06-16';
 //
-//$res = max_fecha_modificacion('2017-05-16');
-//if($res['existe_mod']){//Existen modificaciones ent generar jsons
+$res = max_fecha_modificacion($fecha);
+if($res['existe_mod']){//Existen modificaciones ent generar jsons
     //Genera un JSON de total rector
     datos_rector($fecha);
 
@@ -37,11 +37,11 @@ $fecha = '2018-06-05';
     //Genera 17*4 = 68 JSONS de total consejo directivo por claustro y por unidad electoral
     datos_ue_claustro($fecha, 'voto_lista_cdirectivo', 'lista_cdirectivo', 'Consejero Directivo', 'CD');
 
-//    if(!is_null($res['fechamax'])){
-//        $sql_update = "update acto_electoral 
-//                            set generacion_json_fecha = ".$res['fechamax']." 
-//                            where id_fecha = $fecha";
-//        //print_r($sql_update);
-//        //toba::db('gu_kena')->consultar($sql_update);
-//    }
-//}
+    if(!is_null($res['fechamax'])){
+        $sql_update = "update acto_electoral 
+                            set generacion_json_fecha = ".$res['fechamax']." 
+                            where id_fecha = $fecha";
+        print_r($sql_update);
+        toba::db('gu_kena')->consultar($sql_update);
+    }
+}

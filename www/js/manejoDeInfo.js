@@ -23,6 +23,7 @@ function cambioTablaGrafico(opcion, valor){
     llamadaAjax();
 }
 function llamadaAjax(){
+    borrar();
 $.ajax({
         //url: 'e20160517/'+json,
         url: 'e20180522/'+json,
@@ -57,9 +58,11 @@ function actualizarTabla(data)
                                     columns: data.columns
                                 });
     $('#tabla2').bootstrapTable('destroy');
+    $('#tabla2').hide();
     document.getElementById('titulo2').innerHTML = '';
     //if(isset )
     if(data.hasOwnProperty('data2')){
+        $('#tabla2').show();
         document.getElementById('titulo2').innerHTML = 'Dont';
     $('#tabla2').bootstrapTable({
                                     data: data.data2,

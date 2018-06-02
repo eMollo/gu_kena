@@ -16,7 +16,7 @@
   border-left:0 !important;
   border-color: #343a40 !important;
 }
-#refresh{
+#contRefresh{
   position: fixed;
       bottom: 22px;
     right: 0;
@@ -30,7 +30,15 @@
 #pie {
 	bottom: 0;
 	aling-self:flex-end;
-	
 	position: fixed;
-	
+}
+.btn-outline-primary:hover 
+{
+  color: #007bff;
+  background-color: transparent;
+  background-image: none;
+  border-color: #007bff;
+}
+#alerta{
+	display:none;
 }
