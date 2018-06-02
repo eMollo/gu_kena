@@ -241,7 +241,7 @@ class ci_rector extends toba_ci {
                     break;
             }
         }
-        if($this->max_fecha_modificacion('2018-05-22'))
+        if(!$this->max_fecha_modificacion('2018-05-22'))
             $this->generar_json('2018-05-22');
         else
             print_r("No existen modificaciones");
@@ -269,12 +269,14 @@ class ci_rector extends toba_ci {
         $this->datos_ue_claustro($fecha, 'voto_lista_csuperior', 'lista_csuperior', 'Consejero Superior', 'CS');
         //Genera 17*4 = 68 JSONS de total consejo directivo por claustro y por unidad electoral
         $this->datos_ue_claustro($fecha, 'voto_lista_cdirectivo', 'lista_cdirectivo', 'Consejero Directivo', 'CD');
+    
+        
     }
     
     //Metodo que calcula y genera JSONS de la categoria $categoria para cada unidad
 //electoral y cada claustro
 function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla_cat) {
-   $cargos = '';
+    $cargos = '';
     if ($sigla_cat == 'CS') {
         $cargos = ", cl.cargos_csuperior as cant_cargos";
     } elseif ($sigla_cat == 'CD') {
@@ -293,7 +295,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
                     cl.descripcion as claustro, cl.id id_claustro,
                     l.id_nro_lista, l.nombre as lista,
                     s.sigla as sede, m.nro_mesa,m.estado,
-                    l.sigla as sigla_lista, vl.cant_votos,
+                    trim(l.sigla) as sigla_lista, vl.cant_votos,
                     a.total_votos_blancos as votos_blancos, a.total_votos_nulos as votos_nulos,
                     a.total_votos_recurridos as votos_recurridos, m.cant_empadronados
 
@@ -364,8 +366,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
                     $data[] = $votantes;
                     $data[] = $empadronados;
                     $json['data'] = $data;
-                    $json['labels'] = $labels;
-                    $json['total'] = $total;
+                    
                     $columns = array();
                     $columns[] = array('field' => 'lista', 'title' => 'Listas');
                     $columns[] = array('field' => 'sigla_lista', 'title' => 'Sigla');
@@ -388,11 +389,17 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
                             $categoria2 = 'Consejero Directivo Asentamiento';
                         }
                     }
+                    foreach($total as $pos => $votos){
+                        $labels[$pos] .= ' ('.$votos.' votos)'; 
+                    }
+                    $json['labels'] = $labels;
+                    $json['total'] = $total;
+                    
                     $json['fecha'] = date('d/m/Y G:i:s');
                     $json['titulo'] = 'Votos ' . $nom_ue . ' ' . $categoria2 . ' ' . $nom_claustro;
                     $json['enviadas'] = round($m_enviadas * 100 / $m_total, 2) . '% (' . $m_enviadas . " de " . $m_total . ')';
                     $json['confirmadas'] = round($m_confirmadas * 100 / $m_total, 2) . '% (' . $m_confirmadas . " de " . $m_total . ')';
-                    //print_r($json);exit;
+                    $json['titulo_grafico'] = 'VOTOS SOBRE MESAS CARGADAS';
                     $string_json = json_encode($json);
                     $nom_archivo = 'e' . str_replace('-', '', $fecha) . '/' . $sigla_cat . '_' . strtoupper($nom_ue) . '_' . strtoupper($nom_claustro[0]) . '.json';
                     file_put_contents('resultados_json/' . $nom_archivo, $string_json);
@@ -474,8 +481,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
         $data[] = $votantes;
         $data[] = $empadronados;
         $json['data'] = $data;
-        $json['labels'] = $labels;
-        $json['total'] = $total;
+        
         //Calculo dhont solo para cons.  directivo, los 
         // unicos que tendran este campo cargado
         if ($sigla_cat == 'CD') {
@@ -484,7 +490,11 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
             $json['columns2'] = $res[0];
             $json['titulo2'] = 'Distribución de cargos a ocupar';
         }
-
+        foreach($total as $pos => $votos){
+            $labels[$pos] .= ' ('.$votos.' votos)'; 
+        }
+        $json['labels'] = $labels;
+        $json['total'] = $total;
         $json['fecha'] = date('d/m/Y G:i:s');
         $categoria2 = $categoria;
         if (strtoupper($nom_ue) == 'AUZA' || strtoupper($nom_ue) == 'ASMA') {
@@ -496,7 +506,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
         }
 
         $json['titulo'] = 'Votos ' . $nom_ue . ' ' . $categoria2 . ' ' . $nom_claustro;
-
+        $json['titulo_grafico'] = 'VOTOS SOBRE MESAS CARGADAS';
         $json['enviadas'] = round($m_enviadas * 100 / $m_total, 2) . '% (' . $m_enviadas . " de " . $m_total . ')';
         $json['confirmadas'] = round($m_confirmadas * 100 / $m_total, 2) . '% (' . $m_confirmadas . " de " . $m_total . ')';
 
