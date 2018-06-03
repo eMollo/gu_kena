@@ -249,7 +249,7 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
     $r_recurridos = array('sigla_lista' => 'Recurridos', 'total' => 0);
     $r_votantes = array('sigla_lista' => 'Votantes', 'total' => 0);
     $r_empadronados = array('sigla_lista' => 'Empadronados', 'total' => 0);
-    $r_mesas = array('sigla_lista' => 'Mesas Total', 'total' => 0);
+    $r_mesas_confirmadas = array('sigla_lista' => 'Mesas Confirmadas', 'total' => 0);
     $r_mesas_cargadas = array('sigla_lista' => 'Mesas Cargadas', 'total' => 0);
 
     $columns = array();
@@ -293,8 +293,8 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
             $r_votantes['total']+=$r_votantes[$un_registro['sigla_ue']];
             $r_empadronados[$un_registro['sigla_ue']] = $un_registro['cant_empadronados'];
             $r_empadronados['total']+=$un_registro['cant_empadronados'];
-            $r_mesas[$un_registro['sigla_ue']] = $un_registro['mesas'];
-            $r_mesas['total']+=$un_registro['mesas'];
+            $r_mesas_confirmadas[$un_registro['sigla_ue']] = $un_registro['mesas_confirmadas'];
+            $r_mesas_confirmadas['total']+=$un_registro['mesas_confirmadas'];
             $r_mesas_cargadas[$un_registro['sigla_ue']] = $un_registro['mesas_cargadas'];
             $r_mesas_cargadas['total']+=$un_registro['mesas_cargadas'];
         }
@@ -309,8 +309,9 @@ function votos_por_ue($fecha, $tabla_voto, $tabla_lista, $id_tipo, $nom_claustro
         $data[] = $r_votantes;
         $data[] = $r_empadronados;
         
-        $data[] = $r_mesas;
+        
         $data[] = $r_mesas_cargadas;
+        $data[] = $r_mesas_confirmadas;
         $columns[] = array('field' => 'total', 'title' => 'Total');
     }
     return array($data, $columns);
