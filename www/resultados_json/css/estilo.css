@@ -42,3 +42,6 @@
 #alerta{
 	display:none;
 }
+.container {
+    max-width: 1240px;
+}
