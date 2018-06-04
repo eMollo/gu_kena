@@ -46,7 +46,7 @@ function max_fecha_modificacion($fecha) {
                                             select max(auditoria_fecha) fmod
                                             from public_auditoria.logs_voto_lista_csuperior
                                     ) pv on pv.fmod > pm.auditoria_fecha or pv.fmod > pa.fmod
-                            where m.estado < 4
+                            --where m.estado < 4
                             and m.fecha = '$fecha'
                     ) t
             ) t,
