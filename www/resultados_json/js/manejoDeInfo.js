@@ -46,8 +46,7 @@ function llamadaAjax() {
         },
         success: function (data) {
             $('#alerta').hide();
-            $('#pie').removeClass('fixed-bottom');
-            $('#pie').addClass('position-relative');
+            
             actualizarTitulo(data);
             actualizarTabla(data);
             actualizarGrafico(data);
