@@ -187,7 +187,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
         $votantes['total']+=$un_registro['cant_votos'];
     }
 
-    if (sizeof($lista) > 0) {//Solo si existen datos finales ent crea el json
+    if (isset($lista)&&sizeof($lista) > 0) {//Solo si existen datos finales ent crea el json
         $data[] = $lista;
         $total[] = $lista['total'];
         //print_r($data);exit;
