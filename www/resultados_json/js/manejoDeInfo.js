@@ -6,7 +6,7 @@ var mostrar = false;// carteles fijos
 $(function () {
     json = categoria + "_" + ua + "_" + claustro + '.json';
     llamadaAjax();
-    //setInterval(llamadaAjax, 60000);
+    //setInterval(llamadaAjax, 6000);
 
 });
 

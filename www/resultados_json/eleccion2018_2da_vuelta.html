@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="icon" href="http://pedco.uncoma.edu.ar/theme/image.php/academi/theme/1527951601/favicon">
 <title>Elecciones UNCOMA</title>
-<link rel="icon" href="icono.ico">
-<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="css/estilo.css">
 <link rel="stylesheet" href="css/bootstrap-table.min.css">
 </head>
@@ -163,7 +163,7 @@
 		</div>
 	</div>
 	<div class="d-print-none container " id="contGrafico">
-		<div class="row justify-content-center">
+		<div class="row justify-content-center p-4">
 			<div
 				class="shadow-lg p-4 mb-4 bg-white col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7 "
 				id="lugarGrafico">
@@ -230,7 +230,7 @@ los votos válidos emitidos en la respectiva Unidad Electoral y Claustro, multip
 Serán considerados votos válidos los que se hayan emitido con exclusión de los votos en blanco, nulos y recurridos (Art 63, Acta Junta Electoral).
 
 Utilizando la siguiente fórmula:<br/>
-VP=(VD1/DE1+VD2/DE2+...)*8+(VE1/EE1+VE2/EE2+... )*4+(VND1/NDE1 +VND2/NDE2+...)*3+(VG1/GE1 +VG2/GE2... )*1<br/>
+VP=(VD1/VDE1+VD2/VDE2+...)*8+(VE1/VEE1+VE2/VEE2+... )*4+(VND1/VNDE1 +VND2/VNDE2+...)*3+(VG1/VGE1 +VG2/VGE2... )*1<br/>
 Siendo,<br/>
 VP= Sumatoria de los votos ponderados obtenidos por cada lista de la categoría Rector.<br/>
 VDn= Cantidad de votos del claustro docente obtenidos por la lista en la Unidad Electoral "n".<br/>
@@ -261,28 +261,31 @@ Para la Distribución de Cargos a ocupar de <strong>Consejeros Superiores y Cons
 
 
             </div>
-        </div>
+
 
 	<div id="pie"
 		class="row bg-dark d-flex justify-content-left d-print-none">
 		<!--<footer class="d-flex justify-content-between bg-dark mb-3">-->
-		<div>
-			<a href="http://euclides.uncoma.edu.ar/?q=node/12"><img
-				class="m-3" src="img/ic_euclides.ico" alt="Logo"></a>
-		</div>
+                    <div>
+                        <a href="http://euclides.uncoma.edu.ar/?q=node/12"><img
+                                class="m-3" src="img/ic_euclides.ico" alt="Logo"></a>
 
-		<div>
-			<img class="m-2" src="img/ic_gukena.ico" class="rounded-circle"
-				alt="Logo">
+                    </div>
+                    <div>
+                        <img class="m-2" src="img/ic_gukena.ico" alt="Logo" class="rounded-circle">
+                    </div>
+
+<!--		<div>
+			
 			<p class="text-white d-inline-block">Desarrollado por Grupo
 				Euclides 2018</p>
-<!--			<a href="ordenanza/ord_1386_2013_46.pdf">Ordenanza Electoral</a>-->
-		</div>
+			<a href="ordenanza/ord_1386_2013_46.pdf">Ordenanza Electoral</a>
+		</div>-->
 	</div>
 
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 	<script src="js/bootstrap-table.min.js"></script>
 	<script src="js/feather.min.js"></script>
 	<script>
@@ -299,6 +302,6 @@ Para la Distribución de Cargos a ocupar de <strong>Consejeros Superiores y Cons
         <script src="js/manejoDeInfo.js">
 
         </script>
-	<script src="js/jquery.table2excel.js"></script>
+<!--	<script src="js/jquery.table2excel.js"></script>-->
 </body>
 </html>
