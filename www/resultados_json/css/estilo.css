@@ -27,11 +27,7 @@
     max-height: 200px;
     overflow-x: hidden;
 }
-#pie {
-	bottom: 0;
-	aling-self:flex-end;
-	position: fixed;
-}
+
 .btn-outline-primary:hover 
 {
   color: #007bff;
