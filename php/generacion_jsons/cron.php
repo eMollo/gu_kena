@@ -41,8 +41,8 @@ if($res['existe_mod']){//Existen modificaciones ent generar jsons
 /*
     if(!is_null($res['fechamax'])){
         $sql_update = "update acto_electoral 
-                            set generacion_json_fecha = ".$res['fechamax']." 
-                            where id_fecha = $fecha";
+                            set generacion_json_fecha = '".$res['fechamax']."' 
+                            where id_fecha = '$fecha'";
         print_r($sql_update);
         toba::db('gu_kena')->consultar($sql_update);
     }

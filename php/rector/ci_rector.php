@@ -241,9 +241,9 @@ class ci_rector extends toba_ci {
                     break;
             }
         }
-        $res = $this->max_fecha_modificacion('2017-05-16');
+        $res = $this->max_fecha_modificacion('2018-06-05');print_r($res);
         if($res['existe_mod'])
-            $this->generar_json('2018-05-22', $res['fechamax']);
+            $this->generar_json('2018-06-05', $res['fechamax']);
         else
             print_r("No existen modificaciones");
     }
@@ -273,10 +273,10 @@ class ci_rector extends toba_ci {
     
         if(!is_null($fechamax)){
             $sql_update = "update acto_electoral 
-                                set generacion_json_fecha = $fechamax 
-                                where id_fecha = $fecha";
-            print_r($sql_update);
-            //toba::db('gu_kena')->consultar($sql_update);
+                                set generacion_json_fecha = '$fechamax' 
+                                where id_fecha = '$fecha'";
+            //print_r($sql_update);
+            toba::db('gu_kena')->consultar($sql_update);
         }
     }
     
