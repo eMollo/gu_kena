@@ -56,7 +56,6 @@ function llamadaAjax() {
             borrar();
         }
     });
-    setInterval("llamadaAjax()", 600000);
 }
 function borrar() {
     $('#contGrafico').hide();
