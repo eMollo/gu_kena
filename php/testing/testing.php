@@ -131,4 +131,4 @@ where m.fecha='$fecha' and a.id_tipo=$id_tipo";
 
 }
 
-new Testing('2018-05-22');
+new Testing('2018-08-22');

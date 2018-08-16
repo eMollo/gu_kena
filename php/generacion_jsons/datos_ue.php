@@ -3,9 +3,9 @@
 //con datos de resultados rector por cada unidad electoral
 function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
     if ($sigla_cat=='R'){
-        $id_tipo=4;
+        $id_tipo='(4)';
     }elseif($sigla_cat=='D'){
-        $id_tipo=5;
+        $id_tipo='(5,6)';
     }else{
         exit('error sigla');
     }
@@ -69,7 +69,7 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
             from acta a inner join mesa m on a.de=m.id_mesa
             inner join claustro cl on cl.id = m.id_claustro
             inner join sede s on a.id_sede = s.id_sede
-            where m.fecha='$fecha' and a.id_tipo=$id_tipo
+            where m.fecha='$fecha' and a.id_tipo in $id_tipo
             group by cl.descripcion, s.id_ue
         ) empadronados on empadronados.id_ue = datos.id_ue and empadronados.claustro = datos.claustro      
         inner join (select count(distinct(m.id_mesa))  as m_total, s.id_ue from mesa m

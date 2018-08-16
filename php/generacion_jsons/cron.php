@@ -7,7 +7,10 @@ include_once 'ue_claustro.php';
 include_once 'dhont.php';
 include_once 'max_fecha_modificacion.php';
 
-$fecha = '2018-06-05';
+// para ejecutar toba item ejecutar -p gu_kena -t 10000050
+
+$fecha = '2018-08-22';
+//$fecha = '2018-06-05';
 //$fecha = '2018-05-22';
 //$fecha = '2017-05-16';
 //$fecha = '2016-05-17';
