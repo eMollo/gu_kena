@@ -7,7 +7,6 @@
 <title>Elecciones UNCOMA</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="css/bootstrap.min.css">
-
 <link rel="stylesheet" href="css/estilo.css?1">
 <link rel="stylesheet" href="css/bootstrap-table.min.css">
 </head>
@@ -15,10 +14,10 @@
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
 		<img src="img/marca UNCo azul.ico" class="rounded-circle" alt="Logo">
 		<div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
-			<h3 class="text-white ">1ra Vuelta 2018</h3>
+			<h3 class="text-white ">Feria 2018</h3>
 		</div>
 		<div class="d-md-none d-block d-sm-block d-lg-none d-xl-none">
-			<h5 class="text-white ">1ra Vuelta 2018</h5>
+			<h5 class="text-white ">Feria 2018</h5>
 		</div>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#collapsibleNavbar">
@@ -28,7 +27,7 @@
 			<ul class="nav nav-pills">
 				<li class="nav-item dropdown ml-md-3 "><a
 					class="nav-link active dropdown-toggle" data-toggle="dropdown"
-					href="#">Unidad Electoral: <span class="selection pull-left">Universidad</span></a>
+					href="#">Unidad Electoral: <span class="selection pull-left">RECT</span></a>
 
 					<ul class=" dropdown-menu scrollable-menu">
 						<li><a class="dropdown-item"
@@ -38,7 +37,7 @@
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','RECT')"><h7> <span>RECT</span></h7>
 						</a></li>
-					<li><a class="dropdown-item"
+<!--					<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','ASMA')"><h7> <span>ASMA</span></h7>
 						</a></li>
 						<li><a class="dropdown-item"
@@ -88,27 +87,26 @@
 						</a></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('ua','FATU')"><h7> <span>FATU</span></h7>
-						</a></li>
+						</a></li>-->
 					</ul></li>
 				<li class="nav-item dropdown ml-md-3"><a
 					class="nav-link active dropdown-toggle" data-toggle="dropdown"
 					href="#">Categoria: <span class="selection pull-left">Rector</span></a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item"
+<!--						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('categoria','R')"><h7> <span>Rector</span></h7>
 						</a></li>
 						<li class="dropdown-divider"></li>
-
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('categoria','CS')"><h7> <span>Consejo
-									Superior</span></h7> </a></li>
-						<li><a class="dropdown-item"
-							onclick="cambioTablaGrafico('categoria','D')"><h7> <span>Decano</span></h7>
-						</a></li>
-                                                					<li><a class="dropdown-item"
+					<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('categoria','CD')"><h7> <span>Consejo
 									Directivo</span></h7> </a></li>
 
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('categoria','CS')"><h7> <span>Consejo
+									Superior</span></h7> </a></li>-->
+						<li><a class="dropdown-item"
+							onclick="cambioTablaGrafico('categoria','R')"><h7> <span>Rector</span></h7>
+						</a></li>
 					</ul></li>
 				<li class="nav-item dropdown ml-md-3"><a
 					class="nav-link active dropdown-toggle" data-toggle="dropdown"
@@ -118,7 +116,7 @@
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('claustro','T')"><h7> <span>Total</span></h7>
 						</a></li>
-						<li class="dropdown-divider"></li>
+<!--						<li class="dropdown-divider"></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('claustro','D')"><h7> <span>Docentes</span></h7>
 						</a></li>
@@ -127,7 +125,7 @@
 						</a></li>
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('claustro','G')"><h7> <span>Graduados</span></h7>
-						</a></li>
+						</a></li>-->
 						<li><a class="dropdown-item"
 							onclick="cambioTablaGrafico('claustro','N')"><h7> <span>No
 									Docentes</span></h7> </a></li>
@@ -191,17 +189,17 @@
 			</div>
 		</div>
 	</div>
-                <div class="alert d-print-none" >
-                <h5 id='#ayuda' > Sistema de votación en la Universidad del Comahue</h5>
+                <div class="alert">
+                <h5 id='#ayuda' class="d-print-none"> Sistema de votación en la Universidad del Comahue</h5>
 
-                <p>
+                <p class="d-print-none">
 En las elecciones de la Universidad Nacional del Comahue, se utiliza voto directo con sistema de ponderación para atender y federalizar la representación de los claustros y de las unidades académicas.
 El Reglamento General de Elecciones <a href="https://despacho.uncoma.edu.ar/archivos/ord_1386_2013_46.pdf">Ordenanza 1386/13</a> es la norma que regula el Proceso Electoral.<br/>
 Para las categorías de Rector, Decano y Director de Asentamiento o Escuelas Superiores, resultará ganadora la lista que obtenga la mayoría absoluta de los <strong>Votos Ponderados</strong>.
 En caso contrario se realiza una nueva Elección (Segunda Vuelta) con las listas que obtuvieron el primer y segundo lugar en la primera Elección (Primera Vuelta) (Art 82-83-84).
-                <a href="#ayuda" onclick="$( '#ayuda' ).toggle();">Ver mas...</a>
+<a href="#ayuda" onclick="$( '#ayuda' ).toggle();" >Ver mas...</a>
                 </p>
-                <p id="ayuda" style="display: none">
+                <p id="ayuda" style="display: none" class="d-print-none">
 
 A los fines de realizar los cómputos de los votos para las categorías de Rector y Consejeros Superiores se considerará Unidad Electoral a las 12 Facultades,
 los 2 Centros Regionales, la Escuela Superior en Ciencias Marinas y la Administración Central (Art 78).<br/>
@@ -294,8 +292,8 @@ Para la Distribución de Cargos a ocupar de <strong>Consejeros Superiores y Cons
 		feather.replace()
 	</script>
 	<script>
-		var carpetajson = 'e20180522';
-		var ua = 'TODO';
+		var carpetajson = 'e20181005';
+		var ua = 'RECT';
 		var claustro = 'T';
 		var categoria = 'R';
 
