@@ -9,7 +9,8 @@ include_once 'max_fecha_modificacion.php';
 
 // para ejecutar toba item ejecutar -p gu_kena -t 10000050
 
-$fecha = '2018-08-22';
+$fecha = '2018-10-05';
+//$fecha = '2018-08-22';
 //$fecha = '2018-06-05';
 //$fecha = '2018-05-22';
 //$fecha = '2017-05-16';
