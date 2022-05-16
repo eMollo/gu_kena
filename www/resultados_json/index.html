@@ -7,38 +7,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="favicon.ico">
+    <!--enlazo bootstrap-->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/estilo.css">
-    <!--enlazo bootstrap-->
-
-
-
 </head>
 
-<body class="bg-light d-flex">
-    <div class=" container-fluid">
-        <div class="row bg-dark d-flex justify-content-left ">
-            <div class="d-flex justify-content-between  m-2">
-                <div>
-                    <img id="primeraImagen" src="img/marca UNCo azul.ico" class="rounded-circle   " alt="Logo">
-                    <img width="50px" height="50px" src="img/ic_gukena.ico" alt="Logo">
+<body class="bg-light d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="row bg-dark d-flex justify-content-left ">
+                <div class="d-flex justify-content-between  m-2">
+                    <div>
+                        <img id="primeraImagen" src="img/marca UNCo azul.ico" class="rounded-circle" alt="Logo" width="50px" height="50px">
+                        <img src="img/ic_gukena.ico" alt="Logo" width="50px" height="50px">
+                    </div>
+                    <div>
+                        <h1 class="text-white ml-2">Resultados Elecciones</h1>
+                    </div>
 
                 </div>
-                <div>
-                    <h1 class="text-white ml-2">Resultados Elecciones</h1>
-                </div>
-
             </div>
         </div>
+    </nav>
 
-
-        <!--fila de los botones que direccionan a las elecciones de cada año-->
-        <div class="row bg-light justify-content-center">
-
-            <div class="container-fluid">
-                <div class=" container p-5 ">
+    <main>
+        <div class="container">
+            <!--fila de los botones que direccionan a las elecciones de cada año-->
+            <div class="row bg-light">
+                <div class="container">
                     <h5 class="text-center">Gukena: Sistema para recuento de votos Elecciones Uncoma</h5>
                 </div>
+
                 <a href="eleccion2022.html" class="btn btn-block bg-primary btn-lg text-center text-white">Primera vuelta 2022</a>
                 <p>Elección Primera vuelta de Rector, Consejo Superior, Decano, Consejo Directivo de todos los claustros.</p>
 
@@ -63,34 +62,24 @@
                 <a href="eleccion2015.html" class="btn btn-block bg-primary btn-lg text-center text-white">Elecciones 2015</a>
                 <p>Elección de Consejo Superior y Consejo Directivo del claustro de Estudiantes.</p>
             </div>
+    </main>
+
+    <footer id="pie" class="row bg-dark d-flex justify-content-left mt-auto">
+        <!--<footer class="d-flex justify-content-between bg-dark mb-3">-->
+
+        <div>
+            <a href="http://euclides.uncoma.edu.ar/?q=node/12"><img class="m-3" src="img/ic_euclides.ico" alt="Logo"></a>
         </div>
-
-        <div id="pie" class="row bg-dark d-flex justify-content-left position-relative ">
-            <!--<footer class="d-flex justify-content-between bg-dark mb-3">-->
-
-            <div>
-                <a href="http://euclides.uncoma.edu.ar/?q=node/12"><img class="m-3" src="img/ic_euclides.ico" alt="Logo"></a>
-
-            </div>
-            <div>
-                <img class="m-2" src="img/ic_gukena.ico" alt="Logo" class="rounded-circle">
-            </div>
-            <!--
-                    <div>
-
-                        <p class="text-white  justify-content-left">Desarrollado por Grupo
-                            Euclides 2018</p>
-                    </div>-->
-
+        <div>
+            <img class="m-2" src="img/ic_gukena.ico" alt="Logo" class="rounded-circle">
         </div>
+        <!-- 
+        <div>
+            <p class="text-white  justify-content-left">Desarrollado por Grupo Euclides 2018</p>
+        </div> 
+        -->
 
-
-
-    </div>
-
-
-
-
+    </footer>
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
