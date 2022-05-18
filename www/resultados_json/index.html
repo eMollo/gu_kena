@@ -6,7 +6,8 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="favicon.ico">
+    <!-- <link rel="icon" href="favicon.ico"> -->
+    <link rel="icon" href="img/ic_gukena.ico">
     <!--enlazo bootstrap-->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/estilo.css">
@@ -19,7 +20,7 @@
                 <div class="d-flex justify-content-between  m-2">
                     <div>
                         <img id="primeraImagen" src="img/marca UNCo azul.ico" class="rounded-circle" alt="Logo" width="50px" height="50px">
-                        <img src="img/ic_gukena.ico" alt="Logo" width="50px" height="50px">
+                        <!-- <img src="img/ic_gukena.ico" alt="Logo" width="50px" height="50px"> -->
                     </div>
                     <div>
                         <h1 class="text-white ml-2">Resultados Elecciones</h1>
@@ -34,15 +35,15 @@
         <div class="container">
             <!--fila de los botones que direccionan a las elecciones de cada año-->
             <div class="row bg-light">
-                <div class="container">
+                <div class="container m-4">
                     <h5 class="text-center">Gukena: Sistema para recuento de votos Elecciones Uncoma</h5>
                 </div>
 
-                <a href="eleccion2022.html" class="btn btn-block bg-primary btn-lg text-center text-white">Primera vuelta 2022</a>
-                <p>Elección Primera vuelta de Rector, Consejo Superior, Decano, Consejo Directivo de todos los claustros.</p>
+                <a href="eleccion2022.html" class="btn btn-block bg-primary btn-lg text-center text-white">Elecciones 2022</a>
+                <p>Elección Primera vuelta de Rector, Consejo Superior, Decano, Consejo Directivo de todos los claustros. Resultados Provisorios a partir de las 20:30 del 24/05/2022. Escrutinio Provisorio</p>
 
                 <a href="eleccion2019.html" class="btn btn-block bg-primary btn-lg text-center text-white">Elecciones 2019</a>
-                <p>Elección de Consejo Superior y Consejo Directivo del claustro de Estudiantes.Resultados Provisorios a partir de las 20:30 del 14/05/2019. Escrutinio Provisorio</p>
+                <p>Elección de Consejo Superior y Consejo Directivo del claustro de Estudiantes.</p>
 
                 <a href="eleccion2018_3ra_ASMA.html" class="btn btn-block bg-primary btn-lg text-center text-white">Director ASMA 2018</a>
                 <p>Director de Asentamiento San Martin de los Andes.</p>
@@ -64,27 +65,38 @@
             </div>
     </main>
 
-    <footer id="pie" class="row bg-dark d-flex justify-content-left mt-auto">
+    <footer id="pie" class="bg-dark mt-auto">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-2 col-md-2 text-center">
+                    <a href="http://euclides.uncoma.edu.ar/?q=node/12"><img class="m-3" src="img/ic_euclides.ico" alt="Logo"></a>
+                </div>
+
+                <div class="col-lg-2 col-md-2 text-center">
+                    <img class="m-2" src="img/ic_gukena.ico" alt="Logo" class="rounded-circle">
+                </div>
+
+                <div class="col-lg-2 col-md-2 text-center">
+                    <a href="../API_json.pdf" target="_blank"><img class="m-2" src="img/API.png" alt="Logo" class="rounded-circle" height="82px" width="82px"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <p class="text-white  justify-content-left">Desarrollado por Grupo Euclides 2022</p>
+        </div>
         <!--<footer class="d-flex justify-content-between bg-dark mb-3">-->
 
-        <div>
-            <a href="http://euclides.uncoma.edu.ar/?q=node/12"><img class="m-3" src="img/ic_euclides.ico" alt="Logo"></a>
-        </div>
-        <div>
-            <img class="m-2" src="img/ic_gukena.ico" alt="Logo" class="rounded-circle">
-        </div>
         <!-- 
         <div>
             <p class="text-white  justify-content-left">Desarrollado por Grupo Euclides 2018</p>
         </div> 
         -->
-
     </footer>
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
     <script src="js/feather.min.js"></script>
     <script>
         feather.replace()
