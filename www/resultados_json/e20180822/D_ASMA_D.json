@@ -1,0 +1,72 @@
+{
+    "data": [
+      {
+        "lista": "CHAUCHARD LUIS MARIO                                                                      ",
+        "sigla_lista": "CHAUCHARD",
+        "total": 19,
+        "SMA M1*": 19
+      },
+      {
+        "lista": "ORLOV DIANA LUISA                                                                         ",
+        "sigla_lista": "ORLOV",
+        "total": 17,
+        "SMA M1*": 17
+      },
+      {
+        "lista": "Blancos",
+        "total": 1,
+        "SMA M1*": 1
+      },
+      {
+        "lista": "Nulos",
+        "total": 0,
+        "SMA M1*": 0
+      },
+      {
+        "lista": "Recurridos",
+        "total": 0,
+        "SMA M1*": 0
+      },
+      {
+        "lista": "Votantes",
+        "total": 37,
+        "SMA M1*": 37
+      },
+      {
+        "lista": "Empadronados",
+        "total": 38,
+        "SMA M1*": 38
+      }
+    ],
+    "columns": [
+      {
+        "field": "lista",
+        "title": "Listas"
+      },
+      {
+        "field": "sigla_lista",
+        "title": "Sigla"
+      },
+      {
+        "field": "SMA M1*",
+        "title": "SMA M1*"
+      },
+      {
+        "field": "total",
+        "title": "Total"
+      }
+    ],
+    "labels": [
+      "CHAUCHARD (19 votos)",
+      "ORLOV (17 votos)"
+    ],
+    "total": [
+      19,
+      17
+    ],
+    "fecha": "22/08/2018 20:57:02",
+    "titulo": "Votos ASMA Director de Asentamiento Docente     ",
+    "enviadas": "100% (1 de 1)",
+    "confirmadas": "100% (1 de 1)",
+    "titulo_grafico": "VOTOS SOBRE MESAS CARGADAS"
+  }
