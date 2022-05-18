@@ -114,7 +114,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
                         if ($sigla_cat == 'D') {
                             $categoria2 = 'Director/a de Asentamiento';
                         } elseif ($sigla_cat == 'CD') {
-                            $categoria2 = 'Consejero/a Directivo Asentamiento';
+                            $categoria2 = 'Consejero/a Directivo/a Asentamiento';
                         }
                     }
                     foreach ($total as $pos => $votos) {
@@ -229,7 +229,7 @@ function datos_ue_claustro($fecha, $tabla_voto, $tabla_lista, $categoria, $sigla
             if ($sigla_cat == 'D') {
                 $categoria2 = 'Director/a de Asentamiento';
             } elseif ($sigla_cat == 'CD') {
-                $categoria2 = 'Consejero/a Directivo Asentamiento';
+                $categoria2 = 'Consejero/a Directivo/a Asentamiento';
             }
         }
 
