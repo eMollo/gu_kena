@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="css/bootstrap-table.min.css">
 </head>
 
-<body class="bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
 		<img src="img/marca UNCo azul.ico" class="rounded-circle" alt="Logo">
 		<div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
@@ -258,23 +258,34 @@
 	</div>
 
 
-	<div id="pie" class="row bg-dark d-flex justify-content-left d-print-none">
+	<footer id="pie" class="bg-dark mt-auto">
+		<div class="container-fluid">
+			<div class="row justify-content-center">
+				<div class="col-lg-2 col-md-2 text-center">
+					<a href="http://euclides.uncoma.edu.ar/?q=node/12"><img class="m-3" src="img/ic_euclides.ico" alt="Logo"></a>
+				</div>
+
+				<div class="col-lg-2 col-md-2 text-center">
+					<img class="m-2" src="img/ic_gukena.ico" alt="Logo" class="rounded-circle">
+				</div>
+
+				<div class="col-lg-2 col-md-2 text-center">
+					<a href="../API_json.pdf" target="_blank"><img class="m-2" src="img/API.png" alt="Logo" class="rounded-circle" height="82px" width="82px"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="text-center">
+			<p class="text-white  justify-content-left">Desarrollado por Grupo Euclides 2022</p>
+		</div>
 		<!--<footer class="d-flex justify-content-between bg-dark mb-3">-->
-		<div>
-			<a href="http://euclides.uncoma.edu.ar/?q=node/12"><img class="m-3" src="img/ic_euclides.ico" alt="Logo"></a>
 
-		</div>
-		<div>
-			<img class="m-2" src="img/ic_gukena.ico" alt="Logo" class="rounded-circle">
-		</div>
-
-		<!--		<div>
-			
-			<p class="text-white d-inline-block">Desarrollado por Grupo
-				Euclides 2018</p>
-			<a href="ordenanza/ord_1386_2013_46.pdf">Ordenanza Electoral</a>
-		</div>-->
-	</div>
+		<!-- 
+        <div>
+            <p class="text-white  justify-content-left">Desarrollado por Grupo Euclides 2018</p>
+        </div> 
+        -->
+	</footer>
 
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/popper.min.js"></script>
