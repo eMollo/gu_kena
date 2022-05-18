@@ -1,0 +1,138 @@
+{
+    "data": [
+      {
+        "lista": "CHAUCHARD LUIS MARIO",
+        "sigla_lista": "CHAUCHARD",
+        "ponderado": 9.4114114114114,
+        "porcentaje": "58,82 %"
+      },
+      {
+        "lista": "ORLOV DIANA LUISA",
+        "sigla_lista": "ORLOV",
+        "ponderado": 6.5885885885886,
+        "porcentaje": "41,18 %"
+      },
+      {
+        "ponderado": 16,
+        "lista": "Total"
+      }
+    ],
+    "data2": [
+      {
+        "lista": "CHAUCHARD LUIS MARIO",
+        "sigla_lista": "CHAUCHARD",
+        "total": 60,
+        "Docente": 19,
+        "Estudiantes": 15,
+        "Graduados": 21,
+        "No docente": 5
+      },
+      {
+        "lista": "ORLOV DIANA LUISA",
+        "sigla_lista": "ORLOV",
+        "total": 55,
+        "Docente": 17,
+        "Estudiantes": 22,
+        "Graduados": 16,
+        "No docente": 0
+      },
+      {
+        "sigla_lista": "Blancos",
+        "total": 1,
+        "Docente": 1,
+        "Estudiantes": 0,
+        "Graduados": 0,
+        "No docente": 0
+      },
+      {
+        "sigla_lista": "Nulos",
+        "total": 3,
+        "Docente": 0,
+        "Estudiantes": 1,
+        "Graduados": 2,
+        "No docente": 0
+      },
+      {
+        "sigla_lista": "Recurridos",
+        "total": 0,
+        "Docente": 0,
+        "Estudiantes": 0,
+        "Graduados": 0,
+        "No docente": 0
+      },
+      {
+        "sigla_lista": "Votantes",
+        "Docente": 37,
+        "Estudiantes": 38,
+        "Graduados": 39,
+        "No docente": 5,
+        "total": 119
+      },
+      {
+        "sigla_lista": "Empadronados",
+        "total": 269,
+        "Docente": 38,
+        "Estudiantes": 49,
+        "Graduados": 176,
+        "No docente": 6
+      }
+    ],
+    "labels": [
+      "CHAUCHARD (58,82%)",
+      "ORLOV (41,18%)"
+    ],
+    "total": [
+      58.82,
+      41.18
+    ],
+    "columns2": [
+      {
+        "field": "sigla_lista",
+        "title": "Sigla Listas"
+      },
+      {
+        "field": "Docente",
+        "title": "Docente"
+      },
+      {
+        "field": "Estudiantes",
+        "title": "Estudiantes"
+      },
+      {
+        "field": "Graduados",
+        "title": "Graduados"
+      },
+      {
+        "field": "No docente",
+        "title": "No docente"
+      },
+      {
+        "field": "total",
+        "title": "Total"
+      }
+    ],
+    "columns": [
+      {
+        "field": "lista",
+        "title": "Listas"
+      },
+      {
+        "field": "sigla_lista",
+        "title": "Sigla Listas"
+      },
+      {
+        "field": "ponderado",
+        "title": "Ponderado"
+      },
+      {
+        "field": "porcentaje",
+        "title": "Porcentaje"
+      }
+    ],
+    "fecha": "22/08/2018 20:57:02",
+    "titulo": "Votos Ponderados ASMA Director de Asentamiento",
+    "titulo2": "Votos ASMA Director de Asentamiento",
+    "enviadas": "100% (4 de 4)",
+    "confirmadas": "100% (4 de 4)",
+    "titulo_grafico": "PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS"
+  }
