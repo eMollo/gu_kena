@@ -1,12 +1,13 @@
 <?php
 //Metodo que calcula y genera archivos JSONS ubicados en /resultados_json/$fecha
 //con datos de resultados rector por cada unidad electoral
-function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
-    if ($sigla_cat=='R'){
-        $id_tipo='(4)';
-    }elseif($sigla_cat=='D'){
-        $id_tipo='(5,6)';
-    }else{
+function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat)
+{
+    if ($sigla_cat == 'R') {
+        $id_tipo = '(4)';
+    } elseif ($sigla_cat == 'D') {
+        $id_tipo = '(5,6)';
+    } else {
         exit('error sigla');
     }
     $sql = "
@@ -92,12 +93,12 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
     $datos = toba::db('gu_kena')->consultar($sql);
 
     $nom_ue = null;
-    $data = array();//Datos de cuadro de votos finales por claustro
-    
+    $data = array(); //Datos de cuadro de votos finales por claustro
+
     $claustros = array();
     $empadronados = array();
     $empadronados['sigla_lista'] = 'Empadronados';
-    $empadronados['total']=0;
+    $empadronados['total'] = 0;
 
     //Datos de mesas
     $m_enviadas = null;
@@ -106,49 +107,49 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
 
     $bnr = array();
     $bnr['blancos']['sigla_lista'] = 'Blancos';
-    $bnr['blancos']['total']=0;
+    $bnr['blancos']['total'] = 0;
     $bnr['nulos']['sigla_lista'] = 'Nulos';
-    $bnr['nulos']['total']=0;
+    $bnr['nulos']['total'] = 0;
     $bnr['recurridos']['sigla_lista'] = 'Recurridos';
-    $bnr['recurridos']['total']=0;
-    
+    $bnr['recurridos']['total'] = 0;
+
     $fila_total2 = array(); //Ultima fila que contiene los totales de ponderados
     $fila_total2['ponderado'] = 0;
     $fila_total2['lista'] = 'Total';
-        
-    foreach($datos as $un_registro){
-        if($nom_ue != null && $nom_ue != $un_registro['sigla_ue']){
+
+    foreach ($datos as $un_registro) {
+        if ($nom_ue != null && $nom_ue != $un_registro['sigla_ue']) {
             crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
 
             $data = array();
             $claustros = array();
             $ponderados = array();
-            
+
             $fila_total2 = array(); //Ultima fila que contiene los totales de ponderados
             $fila_total2['ponderado'] = 0;
             $fila_total2['lista'] = 'Total';
-        
-            $nom_ue = $un_registro['sigla_ue'];                
-        }elseif($nom_ue == null)
+
+            $nom_ue = $un_registro['sigla_ue'];
+        } elseif ($nom_ue == null)
             $nom_ue = $un_registro['sigla_ue'];
 
         $data[$un_registro['sigla_lista']]['lista'] = utf8_encode($un_registro['lista']);
         $data[$un_registro['sigla_lista']]['sigla_lista'] = utf8_encode($un_registro['sigla_lista']);
 
-        if(isset($ponderados[$un_registro['sigla_lista']]))
+        if (isset($ponderados[$un_registro['sigla_lista']]))
             $ponderados[$un_registro['sigla_lista']] += $un_registro['ponderado'];
         else
             $ponderados[$un_registro['sigla_lista']] = $un_registro['ponderado'];
 
-        $fila_total2['ponderado'] += $un_registro['ponderado'];    
-        
-        if(isset($data[$un_registro['sigla_lista']]['total']))
+        $fila_total2['ponderado'] += $un_registro['ponderado'];
+
+        if (isset($data[$un_registro['sigla_lista']]['total']))
             $data[$un_registro['sigla_lista']]['total'] += $un_registro['total'];
         else
             $data[$un_registro['sigla_lista']]['total'] = $un_registro['total'];
 
         $data[$un_registro['sigla_lista']][$un_registro['claustro']] = $un_registro['cant_votos'];
-            
+
         $claustros[$un_registro['claustro']] = $un_registro['claustro'];
         $empadronados[$un_registro['claustro']] = $un_registro['empadronados'];
         //Datos de mesas
@@ -161,23 +162,24 @@ function datos_ue($fecha, $tabla_voto, $tabla_lista, $sigla_cat){
         $bnr['recurridos'][$un_registro['claustro']] = $un_registro['votos_recurridos'];
     }
 
-    if(isset($data) && $nom_ue != null){//Quedo un ultimo claustro sin guardar
+    if (isset($data) && $nom_ue != null) { //Quedo un ultimo claustro sin guardar
         crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total);
     }
 }
 
-function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total){
+function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $ponderados, $empadronados, $bnr, $nom_ue, $m_enviadas, $m_confirmadas, $m_total)
+{
     $json = array();
-                
+
     $columns = array();
     //$columns[] = array('field' => 'lista', 'title' => 'Listas');
     $columns[] = array('field' => 'sigla_lista', 'title' => 'Sigla Listas');
-    foreach($claustros as $key => $value){
+    foreach ($claustros as $key => $value) {
         $columns[] = array('field' => $key, 'title' => $key);
     }
     $columns[] = array('field' => 'total', 'title' => 'Total');
 
-    $fila_total = array();//Ultima fila que contiene los totales de cada columna
+    $fila_total = array(); //Ultima fila que contiene los totales de cada columna
     $fila_total['sigla_lista'] = 'Votantes';
 
     $columns2 = array();
@@ -185,9 +187,9 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
     $columns2[] = array('field' => 'sigla_lista', 'title' => 'Sigla Listas');
     $columns2[] = array('field' => 'ponderado', 'title' => 'Ponderado');
     $columns2[] = array('field' => 'porcentaje', 'title' => 'Porcentaje');
-            
+
     //Carga valores de blancos, nulos y recurridos
-    foreach($claustros as $k => $v){
+    foreach ($claustros as $k => $v) {
 
         $bnr['blancos']['total'] += $bnr['blancos'][$k];
         $bnr['nulos']['total'] += $bnr['nulos'][$k];
@@ -195,27 +197,27 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
 
         $empadronados['total'] += $empadronados[$k];
 
-        $fila_total[$k] = $bnr['blancos'][$k]+$bnr['nulos'][$k]+$bnr['recurridos'][$k];
+        $fila_total[$k] = $bnr['blancos'][$k] + $bnr['nulos'][$k] + $bnr['recurridos'][$k];
     }
-    $fila_total['total'] = $bnr['blancos']['total']+$bnr['nulos']['total']+$bnr['recurridos']['total'];
-    
+    $fila_total['total'] = $bnr['blancos']['total'] + $bnr['nulos']['total'] + $bnr['recurridos']['total'];
+
     //calcula valores totales
-    foreach($data as $key => $value){
+    foreach ($data as $key => $value) {
         //calcula valores totales de cada fila
-        foreach($claustros as $k => $v)
+        foreach ($claustros as $k => $v)
             $fila_total[$k] += $value[$k];
 
         $fila_total['total'] += $value['total'];
-        
-        $porcentaje = round($ponderados[$value['sigla_lista']]*100/$fila_total2['ponderado'], 2);
+
+        $porcentaje = round($ponderados[$value['sigla_lista']] * 100 / $fila_total2['ponderado'], 2);
         $r_data['lista'] = $value['lista'];
         $r_data['sigla_lista'] = $value['sigla_lista'];
         $r_data['ponderado'] = $ponderados[$value['sigla_lista']];
-        $r_data['porcentaje'] = $porcentaje.' %';
+        $r_data['porcentaje'] = $porcentaje . ' %';
         $json['data'][] = $r_data;
 
         $json['data2'][] = $value;
-        $json['labels'][] = $value['sigla_lista'].' ('.$porcentaje.'%)';
+        $json['labels'][] = $value['sigla_lista'] . ' (' . $porcentaje . '%)';
         $json['total'][] = $porcentaje;
     }
     $json['data2'][] = $bnr['blancos'];
@@ -229,34 +231,34 @@ function crear_json_ue($fecha, $sigla_cat, $claustros, $fila_total2, $data, $pon
     $json['columns'] = $columns2;
 
     $json['fecha'] = date('d/m/Y G:i:s');
-    if(strtoupper($nom_ue) == 'RECT'){
-        $json['titulo'] = 'Votos Ponderados Adm. Central '.($sigla_cat=='R'?'Rector':'Decano');
-        $json['titulo2'] = 'Votos Adm. Central '.($sigla_cat=='R'?'Rector':'Decano');
-    }elseif(strtoupper($nom_ue)=='AUZA'||strtoupper($nom_ue)=='ASMA'){
-        $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Asentamiento');
-        $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Asentamiento');
-    }elseif(strtoupper($nom_ue)=='ESCM'){
-        $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Escuela');
-        $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Director de Escuela');
-    }else{
-        $json['titulo'] = 'Votos Ponderados '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
-        $json['titulo2'] = 'Votos '.$nom_ue.' '.($sigla_cat=='R'?'Rector':'Decano');
+    if (strtoupper($nom_ue) == 'RECT') {
+        $json['titulo'] = 'Votos Ponderados Adm. Central ' . ($sigla_cat == 'R' ? 'Rector/a' : 'Decano/a');
+        $json['titulo2'] = 'Votos Adm. Central ' . ($sigla_cat == 'R' ? 'Rector/a' : 'Decano/a');
+    } elseif (strtoupper($nom_ue) == 'AUZA' || strtoupper($nom_ue) == 'ASMA') {
+        $json['titulo'] = 'Votos Ponderados ' . $nom_ue . ' ' . ($sigla_cat == 'R' ? 'Rector/a' : 'Director/a de Asentamiento');
+        $json['titulo2'] = 'Votos ' . $nom_ue . ' ' . ($sigla_cat == 'R' ? 'Rector/a' : 'Director/a de Asentamiento');
+    } elseif (strtoupper($nom_ue) == 'ESCM') {
+        $json['titulo'] = 'Votos Ponderados ' . $nom_ue . ' ' . ($sigla_cat == 'R' ? 'Rector/a' : 'Director/a de Escuela');
+        $json['titulo2'] = 'Votos ' . $nom_ue . ' ' . ($sigla_cat == 'R' ? 'Rector/a' : 'Director/a de Escuela');
+    } else {
+        $json['titulo'] = 'Votos Ponderados ' . $nom_ue . ' ' . ($sigla_cat == 'R' ? 'Rector/a' : 'Decano/a');
+        $json['titulo2'] = 'Votos ' . $nom_ue . ' ' . ($sigla_cat == 'R' ? 'Rector/a' : 'Decano/a');
     }
-    $json['enviadas'] = round($m_enviadas*100/$m_total, 2).'% ('.$m_enviadas." de ".$m_total.')';
-    $json['confirmadas'] = round($m_confirmadas*100/$m_total, 2).'% ('.$m_confirmadas." de ".$m_total.')';
+    $json['enviadas'] = round($m_enviadas * 100 / $m_total, 2) . '% (' . $m_enviadas . " de " . $m_total . ')';
+    $json['confirmadas'] = round($m_confirmadas * 100 / $m_total, 2) . '% (' . $m_confirmadas . " de " . $m_total . ')';
     $json['titulo_grafico'] = 'PORCENTAJE DE VOTOS PONDERADOS SOBRE MESAS CARGADAS';
 
     $string_json = json_encode($json);
-    $nom_archivo = 'e'.str_replace('-','',$fecha).'/'.$sigla_cat.'_'.strtoupper($nom_ue).'_T.json';
-    file_put_contents('resultados_json/'. $nom_archivo , $string_json);
+    $nom_archivo = 'e' . str_replace('-', '', $fecha) . '/' . $sigla_cat . '_' . strtoupper($nom_ue) . '_T.json';
+    file_put_contents('resultados_json/' . $nom_archivo, $string_json);
 
     $bnr = array();
     $bnr['blancos']['sigla_lista'] = 'Blancos';
-    $bnr['blancos']['total']=0;
+    $bnr['blancos']['total'] = 0;
     $bnr['nulos']['sigla_lista'] = 'Nulos';
-    $bnr['nulos']['total']=0;
+    $bnr['nulos']['total'] = 0;
     $bnr['recurridos']['sigla_lista'] = 'Recurridos';
-    $bnr['recurridos']['total']=0;
+    $bnr['recurridos']['total'] = 0;
 
     $empadronados = array();
     $empadronados['lista'] = 'Empadronados';
