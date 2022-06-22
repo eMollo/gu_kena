@@ -6,11 +6,12 @@ include_once 'datos_ue.php';
 include_once 'ue_claustro.php';
 include_once 'dhont.php';
 include_once 'max_fecha_modificacion.php';
+include_once 'estado_mesas.php';
 
 // ubicarse www
 // para ejecutar toba item ejecutar -p gu_kena -t 10000050
 
-$fecha = '2022-05-24';
+$fecha = '2022-06-14';
 // $fecha = '2019-05-14';
 //$fecha = '2018-10-05';
 //$fecha = '2018-08-22';
@@ -23,7 +24,9 @@ $fecha = '2022-05-24';
 $res = max_fecha_modificacion($fecha);
 if ($res['existe_mod']) { //Existen modificaciones ent generar jsons
 
-
+    //Genera un JSON del estado de las mesas
+    estado_mesas($fecha);
+    
     //Genera un JSON de total rector
     datos_rector($fecha);
 
