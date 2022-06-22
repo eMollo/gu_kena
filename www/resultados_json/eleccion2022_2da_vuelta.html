@@ -68,7 +68,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" onclick="cambioTablaGrafico('ua','FAAS')">
+                            <a id='FAAS' class="dropdown-item" onclick="cambioTablaGrafico('ua','FAAS')">
                                 <h7><span>FAAS</span></h7>
                             </a>
                         </li>
@@ -113,7 +113,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" onclick="cambioTablaGrafico('ua','FAME')">
+                            <a id='FAME' class="dropdown-item" onclick="cambioTablaGrafico('ua','FAME')">
                                 <h7><span>FAME</span></h7>
                             </a>
                         </li>
@@ -144,10 +144,16 @@
                             </a>
                         </li> -->
                         <li>
-                            <a class="dropdown-item" onclick="cambioTablaGrafico('categoria','D')">
-                                <h7><span>Decano/a</span></h7>
+                            <a class="dropdown-item" onclick="solo('FAAS');cambioTablaGrafico('categoria','D')">
+                                <h7><span>Decano/a FAAS</span></h7>
                             </a>
                         </li>
+                        <li>
+                            <a class="dropdown-item" onclick="solo('FAME');cambioTablaGrafico('categoria','D')">
+                                <h7><span>Decano/a FAME</span></h7>
+                            </a>
+                        </li>
+
                         <!-- <li>
                             <a class="dropdown-item" onclick="cambioTablaGrafico('categoria','CD')">
                                 <h7><span>Consejo Directivo</span></h7>
@@ -205,10 +211,15 @@
                 <h6 id="enviadoConfirmado" class="m-3"></h6>
             </div>
             <div class=" col align-self-center">
-                <small class="float-right">
+                <small style='text-align: right' class="float-right">
                     <h6 id="hora"></h6>
+
+                    <a class="d-print-none" id="vermesas" href="#" onclick="vermesas()">Ver estado de mesas</a>
+                    <a class="d-print-none" style="display: none" id="verresultados" href="#" onclick="verresultados()">Ver Resultados</a>
                 </small>
             </div>
+
+
         </div>
     </div>
     <div class="d-print-none container">
@@ -245,6 +256,7 @@
         </div>
     </div>
     <div class="container alert d-print-none">
+
         <h5 id='#ayuda'> Sistema de votación en la Universidad del Comahue</h5>
 
         <p>
@@ -357,7 +369,7 @@
 
     </script>
     <script src="js/Chart.min.js"></script>
-    <script src="js/manejoDeInfo.js?1">
+    <script src="js/manejoDeInfo.js?2">
 
     </script>
     <!--	<script src="js/jquery.table2excel.js"></script>-->
