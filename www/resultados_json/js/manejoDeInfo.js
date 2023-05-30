@@ -1,165 +1,169 @@
 var grafico = null;
 // var tipo = 'pie';// torta
 var titulo;
-var mostrar = false; // carteles fijos
+var mostrar = false;// carteles fijos
 
 $(function () {
-  json = categoria + "_" + ua + "_" + claustro + ".json";
-  llamadaAjax();
-  //setInterval(llamadaAjax, 6000);
+    json = categoria + "_" + ua + "_" + claustro + '.json';
+    llamadaAjax();
+    //setInterval(llamadaAjax, 6000);
+
 });
-function verresultados() {
-  json = categoria + "_" + ua + "_" + claustro + ".json";
-  llamadaAjax();
-  $("#vermesas").show();
-  $("#verresultados").hide();
+function verresultados(){
+    json = categoria + "_" + ua + "_" + claustro + '.json';
+    llamadaAjax();
+    $("#vermesas").show();
+    $("#verresultados").hide();
+
 }
-function vermesas() {
-  json = "TODO_MESAS.json";
-  //cambioGrafico();
-  llamadaAjax();
-  $("#vermesas").hide();
-  $("#verresultados").show();
+function vermesas(){
+    json = 'TODO_MESAS.json';
+    //cambioGrafico();
+    llamadaAjax();
+    $("#vermesas").hide();
+    $("#verresultados").show();
 }
 
 function solo(ua_seleccionar) {
-  if (ua != ua_seleccionar) {
-    ua = ua_seleccionar;
-    var combo = $("#" + ua_seleccionar);
-    var selText = combo.children("h7").html();
-    combo.parent("li").siblings().removeClass("active");
-    combo.parents(".nav-item").find(".selection").html(selText);
-    combo.parents("li").addClass("active");
-  }
+    if (ua != ua_seleccionar) {
+        ua =  ua_seleccionar;
+	var combo= $('#'+ ua_seleccionar);
+        var selText = combo.children("h7").html();
+        combo.parent('li').siblings().removeClass('active');
+        combo.parents('.nav-item').find('.selection').html(selText);
+        combo.parents('li').addClass("active");
+    }
+
 }
 
 function solo_FACE() {
-  if (ua != "FACE") {
-    ua = "FACE";
-    var selText = $("#FACE").children("h7").html();
-    $("#FACE").parent("li").siblings().removeClass("active");
-    $("#FACE").parents(".nav-item").find(".selection").html(selText);
-    $("#FACE").parents("li").addClass("active");
-  }
+    if (ua != 'FACE') {
+        ua = 'FACE';
+        var selText = $('#FACE').children("h7").html();
+        $('#FACE').parent('li').siblings().removeClass('active');
+        $('#FACE').parents('.nav-item').find('.selection').html(selText);
+        $('#FACE').parents('li').addClass("active");
+    }
+
 }
 function cambioTablaGrafico(opcion, valor) {
-  if (opcion == "ua") {
-    ua = valor;
-  } else if (opcion == "claustro") {
-    claustro = valor;
-  } else if (opcion == "categoria") {
-    categoria = valor;
-  } else console.log("Error variable inexistente");
-  json = categoria + "_" + ua + "_" + claustro + ".json";
-  // cambioGrafico();
-  llamadaAjax();
+    if (opcion == 'ua') {
+        ua = valor;
+    } else if (opcion == 'claustro') {
+        claustro = valor;
+    } else if (opcion == 'categoria') {
+        categoria = valor;
+    } else
+        console.log('Error variable inexistente');
+    json = categoria + "_" + ua + "_" + claustro + '.json';
+    // cambioGrafico();
+    llamadaAjax();
 }
 function llamadaAjax() {
-  $("#loader").show();
-  $("#refresh").hide();
-  $.ajax({
-    url: carpetajson + "/" + json,
-    dataType: "json",
-    cache: false,
-    complete: function (data) {
-      $("#loader").hide();
-      $("#refresh").show();
-    },
-    success: function (data) {
-      $("#alerta").hide();
-
-      actualizarTitulo(data);
-      actualizarTabla(data);
-      actualizarGrafico(data);
-    },
-    error: function (XMLHttpRequest, textStatus, errorThrown) {
-      borrar();
-    },
-  });
+    $('#loader').show();
+    $('#refresh').hide();
+    $.ajax({
+        url: carpetajson + '/' + json,
+        dataType: 'json',
+        cache: false,
+        complete: function (data) {
+            $('#loader').hide();
+            $('#refresh').show();
+        },
+        success: function (data) {
+            $('#alerta').hide();
+            
+            actualizarTitulo(data);
+            actualizarTabla(data);
+            actualizarGrafico(data);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            borrar();
+        }
+    });
 }
 function borrar() {
-  $("#contGrafico").hide();
-  $("#contTabla").hide();
-  $("#carteles").hide();
-  $("#alerta").show();
-  /*$('#pie').removeClass('position-relative');
+    $('#contGrafico').hide();
+    $('#contTabla').hide();
+    $('#carteles').hide();
+    $('#alerta').show();
+    /*$('#pie').removeClass('position-relative');
     $('#pie').addClass('fixed-bottom');*/
 }
 function actualizarTabla(data) {
-  $("#contTabla").show();
-  $("#tabla").bootstrapTable("destroy");
-  $("#tabla").bootstrapTable({
-    data: data.data,
-    columns: data.columns,
-  });
-  $("#tabla2").bootstrapTable("destroy");
-  document.getElementById("titulo2").innerHTML = "";
-  if (data.hasOwnProperty("data2")) {
-    document.getElementById("titulo2").innerHTML = data.titulo2;
-    $("#tabla2").bootstrapTable("destroy");
-    $("#tabla2").bootstrapTable({
-      data: data.data2,
-      columns: data.columns2,
+    $('#contTabla').show();
+    $('#tabla').bootstrapTable('destroy');
+    $('#tabla').bootstrapTable({
+        data: data.data,
+        columns: data.columns
     });
-  }
+    $('#tabla2').bootstrapTable('destroy');
+    document.getElementById('titulo2').innerHTML = "";
+    if (data.hasOwnProperty('data2')) {
+        document.getElementById('titulo2').innerHTML = data.titulo2;
+        $('#tabla2').bootstrapTable('destroy');
+        $('#tabla2').bootstrapTable({
+            data: data.data2,
+            columns: data.columns2
+        });
+    }
+
 }
 function actualizarGrafico(data) {
-  // var arregloTotal = carga(data);
-  $("#contGrafico").show();
-  if (grafico != null) {
-    grafico.destroy();
-  }
-  if (data.hasOwnProperty("titulo_grafico")) {
-    tituloGrafico = data.titulo_grafico;
-    mostrarGrafico = true;
-  } else {
-    tituloGrafico = "";
-    mostrarGrafico = false;
-  }
-  grafico = new Chart(document.getElementById("grafico"), {
-    type: "horizontalBar", // 'pie','horizontalBar',tipo
-    data: {
-      labels: data.labels,
-      datasets: [
-        {
-          backgroundColor: "#3498db", // arregloTotal[0],
-          borderColor: "#1a5276", // arregloTotal[1],
-          borderWidth: 2, // arregloTotal[2],
-          data: data.total,
+    // var arregloTotal = carga(data);
+    $('#contGrafico').show();
+    if (grafico != null) {
+        grafico.destroy();
+    }
+    if (data.hasOwnProperty('titulo_grafico'))
+    {
+        tituloGrafico = data.titulo_grafico;
+        mostrarGrafico = true;
+    } else
+    {
+        tituloGrafico = "";
+        mostrarGrafico = false;
+    }
+    grafico = new Chart(document.getElementById("grafico"), {
+        type: 'horizontalBar', // 'pie','horizontalBar',tipo
+        data: {
+            labels: data.labels,
+            datasets: [{
+                    backgroundColor: "#3498db", // arregloTotal[0],
+                    borderColor: "#1a5276", // arregloTotal[1],
+                    borderWidth: 2, // arregloTotal[2],
+                    data: data.total,
+                }]
         },
-      ],
-    },
-    options: {
-      responsive: true, //carteleria fija
-      showAllTooltips: mostrar, //carteleria fija
-      legend: {
-        display: false, // arregloTotal[3],
-        position: "top", // arregloTotal[4],
-      },
-      title: {
-        display: mostrarGrafico,
-        text: tituloGrafico,
-      },
-      scales: {
-        xAxes: [
-          {
-            ticks: {
-              beginAtZero: true,
+        options: {
+            responsive: true, //carteleria fija
+            showAllTooltips: mostrar, //carteleria fija
+            legend: {
+                display: false, // arregloTotal[3],
+                position: "top", // arregloTotal[4],
             },
-          },
-        ],
-      },
-      tooltips: {
-        callbacks: {
-          enabled: true,
-          mode: "single",
-          label: function (tooltipItems, data) {
-            return "";
-          },
+            title: {
+                display: mostrarGrafico,
+                text: tituloGrafico
+            },
+            scales: {
+                xAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+            },
+            tooltips: {
+                callbacks: {
+                    enabled: true,
+                    mode: 'single',
+                    label: function (tooltipItems, data) {
+                        return "";
+                    }
+                }
+            }
         },
-      },
-    },
-  });
+    });
 }
 /*
  * para mostrar carteles
@@ -217,7 +221,7 @@ function actualizarGrafico(data) {
  * color[i]= (tipo=='pie')?aux[i]:"#3498db"; } salida.push(color);//se
  * encuentran los colores que representan la lista [0]
  * salida.push(borderColor);//se encuentra el color del borde de cada porcion en
- * este caso black [1] salida.push(borderTam);//se encuentra el tamaÃ±o del borde
+ * este caso black [1] salida.push(borderTam);//se encuentra el tamaño del borde
  * de cada porcion en este caso es 2 [2] salida.push(display);//para la variable
  * display true para pie falso horizBar [3] salida.push(lado); //para la
  * posicion[4] return salida; } function arregloDeColore(){ var salida =
@@ -225,20 +229,22 @@ function actualizarGrafico(data) {
  * return salida; }
  */
 // selector
-$(".dropdown-menu").on("click", "li a", function () {
-  var selText = $(this).children("h7").html();
-  $(this).parent("li").siblings().removeClass("active");
-  $(this).parents(".nav-item").find(".selection").html(selText);
-  $(this).parents("li").addClass("active");
+$(".dropdown-menu").on('click', 'li a', function () {
+    var selText = $(this).children("h7").html();
+    $(this).parent('li').siblings().removeClass('active');
+    $(this).parents('.nav-item').find('.selection').html(selText);
+    $(this).parents('li').addClass("active");
 });
 
 function actualizarTitulo(data) {
-  $("#carteles").show();
-  document.getElementById("titulo").innerHTML = data.titulo;
-  document.getElementById("enviadoConfirmado").innerHTML = "Mesas Cargadas: " + data.enviadas + "</br>" + "Mesas Confirmadas: " + data.confirmadas;
-  document.getElementById("hora").innerHTML = "Actualizado a: " + data.fecha;
-  document.getElementById("tituloTabla").innerHTML = data.titulo;
-  titulo = data.titulo;
+    $('#carteles').show();
+    document.getElementById('titulo').innerHTML = data.titulo;
+    document.getElementById('enviadoConfirmado').innerHTML = "Mesas Cargadas: "
+            + data.enviadas + '</br>' + "Mesas Confirmadas: "
+            + data.confirmadas;
+    document.getElementById('hora').innerHTML = "Actualizado a: " + data.fecha;
+    document.getElementById('tituloTabla').innerHTML = data.titulo;
+    titulo = data.titulo;
 }
 /*
  * cambio de torta o barras function cambioGrafico(){ if (ua == 'TODO' &&
@@ -246,17 +252,19 @@ function actualizarTitulo(data) {
  * 'horizontalBar';} }
  */
 function exportarTabla() {
-  $("#tabla").table2excel({
-    name: titulo,
-    filename: titulo,
-  });
+    $("#tabla").table2excel({
+        name: titulo,
+        filename: titulo
+    });
 }
 $(document).ready(function () {
-  $(".btn-outline-primary:first").click(function () {
-    $(this).button("toggle");
-  });
+    $(".btn-outline-primary:first").click(function () {
+        $(this).button('toggle');
+    });
 });
-$("#mostrarCartel").on("click", function () {
-  mostrar = mostrar == true ? false : true;
-  llamadaAjax();
+$('#mostrarCartel').on('click', function () {
+    mostrar = mostrar == true ? false : true;
+    llamadaAjax();
 });
+
+ 
