@@ -22,11 +22,11 @@ class tp_gu_kena extends toba_tp_basico
 	function pre_contenido()
 	{
 		echo "<div class='login-titulo'>" . toba_recurso::imagen_proyecto("inicio.png", true);
-		echo "<div style='font-weight: bold; font-size:30px;'>2022</div>";
+		echo "<div style='font-weight: bold; font-size:30px;'>2023</div>";
 
 		//        echo "<div>".utf8_decode("versión")." ".toba::proyecto()->get_version()."</div>";
 		echo "<div><a style='color:blue;font-size:15px;' href='ord_1386_2013_46.pdf'>Ver " . utf8_decode('Ordenanza N°1386') . "</a></div>";
-		echo "<div><a style='color:blue;font-size:15px;' href='Instructivo carga electronica 2022 segunda vuelta.pdf'>Ver Instructivo</a></div>";
+		echo "<div><a style='color:blue;font-size:15px;' href='Instructivo carga electronica 2023.pdf'>Ver Instructivo</a></div>";
 		echo "</div>";
 		echo "<div align='center' class='cuerpo'>\n";
 	}
