@@ -11,7 +11,8 @@ include_once 'estado_mesas.php';
 // ubicarse www
 // para ejecutar toba item ejecutar -p gu_kena -t 10000050
 
-$fecha = '2022-06-14';
+$fecha = '2025-06-10';
+//$fecha = '2022-06-14';
 // $fecha = '2019-05-14';
 //$fecha = '2018-10-05';
 //$fecha = '2018-08-22';
