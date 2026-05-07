@@ -21,8 +21,11 @@ function datos_sup_claustro($fecha)
                         votos_totales.sigla as sigla_ue, votos_totales.id_claustro, votos_totales.claustro, 
                         votos_totales.id_nro_lista, votos_totales.lista, votos_totales.sigla_lista, 
                         votos_totales.total, empadronados.empadronados, votos_totales.cargos_csuperior,
-                        case when empadronados.empadronados <> 0 then 
-                                votos_totales.total/cast(empadronados.empadronados as decimal) 
+                        -- case when empadronados.empadronados <> 0 then 
+                        --         votos_totales.total/cast(empadronados.empadronados as decimal) 
+                        -- end ponderado,
+                        case when validos.votos_validos <> 0 then 
+                                votos_totales.total/cast(validos.votos_validos as decimal) 
                         end ponderado,
                         votos_blancos, votos_nulos, votos_recurridos 
                     from (select a.id_tipo, ue.id_nro_ue, ue.sigla, 
@@ -53,7 +56,20 @@ function datos_sup_claustro($fecha)
                 ) empadronados on empadronados.id_ue = votos_totales.id_nro_ue 
                             and empadronados.id_claustro = votos_totales.id_claustro
                             and empadronados.id_tipo = votos_totales.id_tipo
-                ) t
+-- Agregado
+
+		inner join (select a.id_tipo, s.id_ue, m.id_claustro, sum(cant_votos) as votos_validos
+                        from acta a
+                        inner join mesa m on m.id_mesa = a.de
+                        inner join sede s on s.id_sede = a.id_sede
+                        inner join voto_lista_csuperior vl on vl.id_acta = a.id_acta
+                        where m.estado > 1 and m.fecha = '$fecha'
+                        group by a.id_tipo, s.id_ue, m.id_claustro
+                ) validos on validos.id_ue = votos_totales.id_nro_ue
+                            and validos.id_claustro = votos_totales.id_claustro
+                            and validos.id_tipo = votos_totales.id_tipo
+--  Fin agregado
+	      ) t
                 group by id_tipo, claustro, id_claustro, lista, sigla_lista, cargos_csuperior
                 
             ) datos
